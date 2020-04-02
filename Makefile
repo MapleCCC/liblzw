@@ -1,10 +1,10 @@
-CC=gcc
-CFLAGS=-g
+CXX=g++
+CXXFLAGS=-g
 PROGS=lzw
 
 all: ${PROGS}
 
-lzw: lzw.c
+lzw: lzw.cpp
 
 test:
 	pytest test_lzw.py
