@@ -28,14 +28,14 @@ class Dict {
    public:
     Dict();
     ~Dict();
-    int length();
-    double load_factor();
+    int length() const;
+    double load_factor() const;
     void resize(int);
     void clear();
-    void set(T key, S value);
-    S get(T key);
-    bool contains(T key);
-    bool contains_value(S value);
+    void set(const T& key, const S& value);
+    S get(const T& key) const;
+    bool contains(const T& key) const;
+    bool contains_value(const S& value) const;
 
    private:
     int size;
@@ -65,13 +65,13 @@ Dict<T, S>::~Dict() {
 // Get error, why?
 template <class T, class S>
 inline int
-Dict<T, S>::length() {
+Dict<T, S>::length() const {
     return size;
 }
 
 template <class T, class S>
 inline double
-Dict<T, S>::load_factor() {
+Dict<T, S>::load_factor() const {
     return size * 1.0 / all_slot_num;
 }
 
@@ -114,7 +114,7 @@ find_bucket(Bucket<T, S>* entry, T key) {
 
 template <class T, class S>
 void
-Dict<T, S>::set(T key, S value) {
+Dict<T, S>::set(const T& key, const S& value) {
     int h = abs(key.hash()) % all_slot_num;
     Bucket<T, S>* slot = slots[h];
     Bucket<T, S>* p = find_bucket(slot, key);
@@ -139,7 +139,7 @@ Dict<T, S>::set(T key, S value) {
 
 template <class T, class S>
 S
-Dict<T, S>::get(T key) {
+Dict<T, S>::get(const T& key) const {
     int h = abs(key.hash()) % all_slot_num;
     Bucket<T, S>* p = find_bucket(slots[h], key);
     if (p == NULL) {
@@ -153,7 +153,7 @@ Dict<T, S>::get(T key) {
 // accelerate.
 template <class T, class S>
 bool
-Dict<T, S>::contains(T key) {
+Dict<T, S>::contains(const T& key) const {
     int h = abs(key.hash()) % all_slot_num;
     Bucket<T, S>* p = find_bucket(slots[h], key);
     return bool(p);
@@ -165,7 +165,7 @@ Dict<T, S>::contains(T key) {
 // probablistic data structure like bloom filter
 template <class T, class S>
 bool
-Dict<T, S>::contains_value(S value) {
+Dict<T, S>::contains_value(const S& value) const {
     for (int i = 0; i < all_slot_num; i++) {
         Bucket<T, S>* p = slots[i];
         while (p != NULL) {
