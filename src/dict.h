@@ -30,10 +30,12 @@ class Dict {
     ~Dict();
     int length() const;
     void clear();
+    void reserve(int);
     void set(const T& key, const S& value);
     S get(const T& key) const;
     bool contains(const T& key) const;
     bool contains_value(const S& value) const;
+    void statistics() const;
 
    private:
     int size;
@@ -42,6 +44,7 @@ class Dict {
     Bucket<T, S>** slots;
     // Dict<S, NULL> values;
     // bool is_values_cached;
+    // int collision_count;
 
     void resize(int);
     double load_factor() const;
@@ -163,7 +166,9 @@ Dict<T, S>::contains(const T& key) const {
 // Currently a naive linear search. May be expensive and inefficient for large
 // dict. Consider use another O(1) implementation. Trade space for time.
 // More optionally, we can trade not that much space for not that much time, use
-// probablistic data structure like bloom filter
+// probablistic data structure like bloom filter. If we can't find it in bloom
+// filter, it must not appear before. If we can find it in bloom filter, we need
+// to iterate over the slots to check if it really no appears.
 template <class T, class S>
 bool
 Dict<T, S>::contains_value(const S& value) const {
@@ -177,6 +182,13 @@ Dict<T, S>::contains_value(const S& value) const {
         }
     }
     return false;
+}
+
+template <class T, class S>
+void
+Dict<T, S>::statistics() const {
+    for (int i = 0; i < slots.size(); i++) {
+    }
 }
 
 #endif /* _DICT_H_ */
