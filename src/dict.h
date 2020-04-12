@@ -8,10 +8,10 @@
 // WARNING: template declaration and definition can't be separated into two
 // files.
 
-#define INIT_DICT_SLOT_NUM 10
+#define INIT_DICT_SLOT_NUM 8
 #define DICT_RESIZE_FACTOR \
     2  // Optionally we can dynamically change the value of DICT_RESIZE_FACTOR
-#define MAX_LOAD_FACTOR 0.5
+#define MAX_LOAD_FACTOR 2 / 3
 
 // Should we declare Bucket type inside Dict?
 template <class T, class S>
