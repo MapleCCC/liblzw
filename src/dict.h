@@ -29,8 +29,6 @@ class Dict {
     Dict();
     ~Dict();
     int length() const;
-    double load_factor() const;
-    void resize(int);
     void clear();
     void set(const T& key, const S& value);
     S get(const T& key) const;
@@ -44,6 +42,9 @@ class Dict {
     Bucket<T, S>** slots;
     // Dict<S, NULL> values;
     // bool is_values_cached;
+
+    void resize(int);
+    double load_factor() const;
 };
 
 template <class T, class S>
