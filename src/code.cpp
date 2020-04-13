@@ -22,7 +22,10 @@ Code::operator==(const int rhs) const {
 
 Code::operator int() const { return x; }
 
-Code::operator string() const { return int2str(x); }
+string
+Code::str() const {
+    return int2str(x);
+}
 
 bool
 operator==(const int lhs, const Code& rhs) {
@@ -37,5 +40,5 @@ operator<<(ostream& os, const Code& code) {
 
 string
 operator+(const string& s, const Code& code) {
-    return s + static_cast<string>(code);
+    return s + code.str();
 }

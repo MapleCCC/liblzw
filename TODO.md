@@ -1,3 +1,5 @@
+## TODO
+
 - Performance improvement. Profile to find performance hotspots. Use more advanced data structure to replace the naive hash table implementation.
 - Investigate hash table statistics (e.g., load factor, hit/miss rate)
 - Use more efficient hash algorithm
@@ -12,8 +14,13 @@
 - Add print to cerr before throwing exception
 - Use Pass-by-reference for some parameters
 - Use command `nm` to check object files' symbols.
-- Multiple inclusion guard
 - Add imported name as comment beside include directive
+- Add unit test for bitmap data structure.
+- Remove unused includes.
+
+## Done
+
+- Multiple inclusion guard
 - Template class can't separate declaration and definition into two files.
 - Don't use "using namespace std;" in header files
 - Don't use malloc in C++. It can't correctly handle class initialization.

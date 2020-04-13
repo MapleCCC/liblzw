@@ -13,8 +13,7 @@ class Code {
     bool operator==(const Code&) const;
     bool operator==(const int) const;
     operator int() const;
-    operator std::string()
-        const;  // so that static_cast<string>() is applicable to Code type
+    std::string str() const;
 
     // friend bool operator==(const int lhs, const Code& rhs);
     // friend std::ostream& operator<<(std::ostream& os, const Code& code);

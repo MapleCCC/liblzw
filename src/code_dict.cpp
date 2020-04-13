@@ -6,6 +6,7 @@
 using namespace std;
 
 CodeDict::CodeDict(int code_bitsize) {
+    cout << "Enter codedict constructor" << endl;
     if (code_bitsize <= 8) {
         throw runtime_error("Code bit size should be larger than 8");
     }
@@ -14,8 +15,11 @@ CodeDict::CodeDict(int code_bitsize) {
     size = 0;
 
     for (int i = 0; i < 256; i++) {
+        cout << "Begin " << i << "th iteration" << endl;
         storage.set(Bytes((unsigned char)i), Code(i));
+        cout << "End " << i << "th iteration" << endl;
     }
+    cout << "Quit codedict constructor" << endl;
 }
 
 void
@@ -55,4 +59,9 @@ CodeDict::add_new_code(Bytes item) {
     if (size == capacity) {
         clear();
     }
+}
+
+
+string CodeDict::str() const {
+    return storage.str();
 }
