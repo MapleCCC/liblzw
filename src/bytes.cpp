@@ -6,6 +6,20 @@
 
 using namespace std;
 
+static bool IS_ENABLED_BYTES_HASH_CACHE = false;
+
+// #define ENABLE_BYTES_HASH_CACHE() IS_ENABLED_BYTES_HASH_CACHE = true;
+// #define DISABLE_BYTES_HAHS_CACHE() IS_ENABLED_BYTES_HASH_CACHE = false;
+
+void
+ENABLE_BYTES_HASH_CACHE() {
+    IS_ENABLED_BYTES_HASH_CACHE = true;
+}
+void
+DISABLE_BYTES_HAHS_CACHE() {
+    IS_ENABLED_BYTES_HASH_CACHE = false;
+}
+
 Bytes::Bytes(const unsigned char c) { storage.push_back(c); }
 
 Bytes::Bytes(const char* s) {
@@ -53,7 +67,7 @@ Bytes::hash() const {
 }
 
 bool
-Bytes::operator==(const Bytes& rhs) {
+Bytes::operator==(const Bytes& rhs) const {
     // int len = length();
     // if (len != rhs.length()) return false;
     // for (int i = 0; i < len; i++) {
@@ -63,6 +77,11 @@ Bytes::operator==(const Bytes& rhs) {
     // }
     // return true;
     return storage == rhs.storage;
+}
+
+bool
+Bytes::operator!=(const Bytes& rhs) const {
+    return !operator==(rhs);
 }
 
 Bytes
@@ -85,7 +104,8 @@ Bytes::operator+(const unsigned char c) {
     return ret;
 }
 
-Bytes::operator std::string() const {
+string
+Bytes::str() const {
     string ret;
     ret.push_back('b');
     ret.push_back('\'');
@@ -99,13 +119,13 @@ Bytes::operator std::string() const {
     return ret;
 }
 
-std::string
-operator+(const std::string& s, const Bytes& bytes) {
-    return s + static_cast<string>(bytes);
+string
+operator+(const string& s, const Bytes& bytes) {
+    return s + bytes.str();
 }
 
-std::ostream&
+ostream&
 operator<<(ostream& os, const Bytes& bytes) {
-    os << static_cast<string>(bytes);
+    os << bytes.str();
     return os;
 }

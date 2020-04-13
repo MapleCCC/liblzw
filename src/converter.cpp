@@ -1,5 +1,6 @@
 #include "converter.h"
 
+#include <algorithm>
 #include <iostream>
 #include <stdexcept>
 

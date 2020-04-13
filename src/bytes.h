@@ -22,10 +22,11 @@ class Bytes {
     unsigned char get_first_byte() const;
     void push_back(unsigned char c);
     long long hash() const;
-    bool operator==(const Bytes& rhs);
+    bool operator==(const Bytes& rhs) const;
+    bool operator!=(const Bytes& rhs) const;
     Bytes operator+(const Bytes& rhs) const;
     Bytes operator+(const unsigned char c);
-    operator std::string() const;
+    std::string str() const;
     // friend std::string operator+(const std::string& s, const Bytes&
     // bytes); friend std::ostream& operator<<(std::ostream& os, const
     // Bytes& bytes);
@@ -36,5 +37,8 @@ class Bytes {
 
 std::string operator+(const std::string& s, const Bytes& bytes);
 std::ostream& operator<<(std::ostream& os, const Bytes& bytes);
+
+void ENABLE_BYTES_HASH_CACHE();
+void DISABLE_BYTES_HAHS_CACHE();
 
 #endif /* _BYTES_H_ */

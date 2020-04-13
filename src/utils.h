@@ -20,7 +20,7 @@ grouper(std::vector<T> v, int n) {
     std::vector<std::vector<T> > ret;
     int iteration = v.size() / n;
     for (int i = 0; i < iteration; i++) {
-        vector<T> subvector;
+        std::vector<T> subvector;
         for (int j = 0; j < n; j++) {
             subvector.push_back(v.at(i * n + j));
         }
@@ -32,7 +32,7 @@ grouper(std::vector<T> v, int n) {
 template <class T>
 std::string
 stringfy_vector(std::vector<T> v) {
-    string ret("[");
+    std::string ret("[");
     for (int i = 0; i < v.size(); i++) {
         ret += static_cast<std::string>(v.at(i));
         if (i != v.size() - 1) {
