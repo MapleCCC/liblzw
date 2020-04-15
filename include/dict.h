@@ -97,6 +97,11 @@ Dict<T, S>::load_factor() const {
     return size * 1.0 / capacity;
 }
 
+static inline bool
+is_power_of_2(unsigned x) {
+    return (x & (x - 1)) == 0;
+}
+
 // Everytime resize to twice as larger. Guarantee that capacity is always power
 // of two, which is useful when calculating remainder of hash value of keys.
 template <class T, class S>
@@ -113,6 +118,10 @@ Dict<T, S>::resize(unsigned new_capacity) {
     }
     if (new_capacity <= capacity) {
         return;
+    }
+    if (!is_power_of_2(new_capacity)) {
+        std::cerr << "Dict capacity has to be power of 2" << endl;
+        throw std::runtime_error("Dict capacity has to be power of 2");
     }
 
     std::cout << "5\n";
@@ -146,10 +155,25 @@ Dict<T, S>::clear() {
     size = 0;
 }
 
+static unsigned
+ceil_power_of_2(unsigned x) {
+    unsigned ret = 1;
+    while (ret < x) {
+        ret <<= 1;
+    }
+    return ret;
+}
+
 template <class T, class S>
 void
 Dict<T, S>::reserve(unsigned size) {
-    unsigned new_capacity = ceil(size * 1.0 / MAX_LOAD_FACTOR);
+    // Resize to new capacity that can, while maintaining ideal load factor,
+    // contain enough number of elements as specified in the argument.
+    // Note that current implementation design of dict is to ensure that
+    // capacity is always power of 2, so as to make it more efficient when
+    // conducting search operation.
+    cout << "reserved size: " << size << endl;
+    unsigned new_capacity = ceil_power_of_2(ceil(size * 1.0 / MAX_LOAD_FACTOR));
     resize(new_capacity);
 }
 
