@@ -13,6 +13,7 @@ CodeDict::CodeDict(int code_bitsize) {
 
     capacity = pow(2, code_bitsize) - 256 - 1;
     size = 0;
+    storage.reserve(pow(2, code_bitsize));
 
     for (int i = 0; i < 256; i++) {
         cout << "Begin " << i << "th iteration" << endl;
