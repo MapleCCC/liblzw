@@ -20,7 +20,7 @@
 #define INIT_DICT_CAPCITY 8
 #define DICT_RESIZE_FACTOR \
     2  // Optionally we can dynamically change the value of DICT_RESIZE_FACTOR
-#define MAX_LOAD_FACTOR 2 * 1.0 / 3
+#define MAX_LOAD_FACTOR (2 * 1.0 / 3)
 #define PERTURB_SHIFT 5
 
 // Should the macro COLLEFCT_STATISTICS_MODE defined in .cpp or .h?
