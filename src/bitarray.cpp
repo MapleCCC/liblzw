@@ -1,8 +1,8 @@
 #include "bitarray.h"
 
 #include <algorithm>
-#include <iostream>
 #include <cassert>
+#include <iostream>
 
 #include "converter.h"
 using namespace std;
@@ -125,7 +125,8 @@ Bitarray::pop_bytes_front(int n) {
     return bs;
 }
 
-Bitarray::operator string() const {
+string
+Bitarray::str() const {
     string ret;
     ret += "Bitarray(";
     for (int i = 0; i < storage.size(); i++) {
@@ -140,6 +141,6 @@ Bitarray::operator string() const {
 
 ostream&
 operator<<(ostream& os, const Bitarray& ba) {
-    os << static_cast<string>(ba);
+    os << ba.str();
     return os;
 }
