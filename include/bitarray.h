@@ -21,7 +21,7 @@ class Bitarray {
     void push_bytes_back(Bytes);
     Bytes pop_byte_front();
     Bytes pop_bytes_front(int n = 1);
-    operator std::string() const;
+    std::string str() const;
 
    private:
     std::vector<Bit> storage;
