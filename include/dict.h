@@ -8,7 +8,6 @@
 
 #include "bitmap.h"
 
-// TODO: add generic template
 // WARNING: template declaration and definition can't be separated into two
 // files.
 
@@ -19,7 +18,8 @@
 // calculating remainder of hash value of keys.
 #define INIT_DICT_CAPCITY 8
 #define DICT_RESIZE_FACTOR \
-    2  // Optionally we can dynamically change the value of DICT_RESIZE_FACTOR
+    2  // Optionally we can change the value of DICT_RESIZE_FACTOR in a dynamic
+       // manner
 #define MAX_LOAD_FACTOR (2 * 1.0 / 3)
 #define PERTURB_SHIFT 5
 
@@ -79,12 +79,9 @@ Dict<T, S>::Dict() : indexer(INIT_DICT_CAPCITY) {
 
 template <class T, class S>
 Dict<T, S>::~Dict() {
-    /* Don't know why delete statement cause crash. Before we figure out why,
- let's just comment it out and be careful with the unfreed memory. */
-    // delete[] slots;
+    delete[] slots;
 }
 
-// Get error, why?
 template <class T, class S>
 inline int
 Dict<T, S>::length() const {
@@ -107,7 +104,6 @@ is_power_of_2(unsigned x) {
 template <class T, class S>
 void
 Dict<T, S>::resize(unsigned new_capacity) {
-    std::cout << "Enter dict resize routine: " << new_capacity << std::endl;
     if (new_capacity <= size) {
         std::cerr
             << "Only allowed to resize to new size that's greater than the "
@@ -140,8 +136,6 @@ Dict<T, S>::resize(unsigned new_capacity) {
         }
     }
 
-    /* Don't know why delete statement cause crash. Before we figure out why,
-     let's just comment it out and be careful with the unfreed memory. */
     delete[] old_slots;
 }
 
@@ -170,12 +164,11 @@ Dict<T, S>::reserve(unsigned size) {
     // Note that current implementation design of dict is to ensure that
     // capacity is always power of 2, so as to make it more efficient when
     // conducting search operation.
-    cout << "reserved size: " << size << endl;
     unsigned new_capacity = ceil_power_of_2(ceil(size * 1.0 / MAX_LOAD_FACTOR));
     resize(new_capacity);
 }
 
-// Move to extra_exception.h
+// TODO: Move to extra_exception.h
 class KeyError : public std::exception {
    public:
     KeyError() {}
@@ -205,8 +198,8 @@ Dict<T, S>::find_bucket(const T& key) const {
         perturb = perturb >> PERTURB_SHIFT;
         index = (5 * index + 1 + perturb) & mask;
     }
-    // Can't find the bucket containing key, return next probe position.
-    // Found the bucket containing the key, return the bucket's index
+    // Either, can't find the bucket containing key, return next probe position.
+    // Or, found the bucket containing the key, return the bucket's index
     // position.
     return index;
 }
@@ -214,13 +207,7 @@ Dict<T, S>::find_bucket(const T& key) const {
 template <class T, class S>
 void
 Dict<T, S>::set(const T& key, const S& value) {
-    std::cout << "Enter dict set routine" << std::endl;
     unsigned index = find_bucket(key);
-    std::cout << "Find index: " << index << std::endl;
-    // if (index == -1) {
-    // std::cerr << "Dict doesn't have space for insertion" << std::endl;
-    // throw runtime_error("Dict doesn't have space for insertion");
-    // }
     if (indexer.get(index)) {
         slots[index].value = value;
     } else {
@@ -233,18 +220,12 @@ Dict<T, S>::set(const T& key, const S& value) {
             resize(capacity * DICT_RESIZE_FACTOR);
         }
     }
-    std::cout << "Finish dict set routine" << std::endl;
 }
 
-// FIXME: possible infinite loop
 template <class T, class S>
 S
 Dict<T, S>::get(const T& key) const {
     unsigned index = find_bucket(key);
-    // if (index == -1) {
-    // std::cerr << "Key not present in the dict" << std::endl;
-    // throw KeyError("Key not present in the dict");
-    // }
     if (indexer.get(index)) {
         return slots[index].value;
     } else {
@@ -253,21 +234,13 @@ Dict<T, S>::get(const T& key) const {
     }
 }
 
-// FIXME: possible infinite loop
 // If membership test is heavy operation, we can optionally use bloom filter
 // to accelerate.
 template <class T, class S>
 bool
 Dict<T, S>::contains(const T& key) const {
     unsigned index = find_bucket(key);
-    // if (index == -1) {
-    // return false;
-    // }
-    if (indexer.get(index)) {
-        return true;
-    } else {
-        return false;
-    }
+    return indexer.get(index);
 }
 
 // Currently a naive linear search. May be expensive and inefficient for
@@ -288,10 +261,7 @@ template <class T, class S>
 bool
 Dict<T, S>::contains_value(const S& value) const {
     for (int i = 0; i < capacity; i++) {
-        if (!indexer.get(i)) {
-            continue;
-        }
-        if (slots[i].value == value) {
+        if (indexer.get(i) && slots[i].value == value) {
             return true;
         }
     }
@@ -314,10 +284,9 @@ Dict<T, S>::str() const {
     std::string ret;
     ret += "{";
     for (int i = 0; i < capacity; i++) {
-        if (!indexer.get(i)) {
-            continue;
+        if (indexer.get(i)) {
+            ret += slots[i].key.str() + ":" + slots[i].value.str() + ", ";
         }
-        ret += slots[i].key.str() + ":" + slots[i].value.str() + ", ";
     }
     if (size) {
         ret.erase(ret.end() - 2, ret.end());
