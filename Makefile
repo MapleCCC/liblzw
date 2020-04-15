@@ -4,7 +4,7 @@
 # CXX=clang++
 # CXX=clang
 CXX=g++
-CXXFLAGS=-g --std=c++11 # -Wall # -Xclang -flto-visibility-public-std # -target x86_64-pc-windows-gnu
+CXXFLAGS=-g --std=c++11 -Iinclude # -Wall # -Xclang -flto-visibility-public-std # -target x86_64-pc-windows-gnu
 
 SRCS=$(wildcard src/*.cpp)
 OBJS=$(SRCS:.cpp=.o)

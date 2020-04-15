@@ -1,3 +1,5 @@
+#include "cli.h"
+
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
@@ -15,7 +17,7 @@ void compress(const string& lzwfile, const vector<string>* header);
 void decompress(const string& lzwfile);
 
 int
-main(int argc, char** argv) {
+cli(int argc, char** argv) {
     if (argc <= 2) {
         cerr << "Too few arguments." << endl;
         return EXIT_FAILURE;
