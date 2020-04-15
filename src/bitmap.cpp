@@ -76,13 +76,14 @@ Bitmap::get(unsigned index) const {
 void
 Bitmap::resize(unsigned new_size) {
     // We don't check whether resizing to the new_size leads to truncating
-    // existing bits stoarge. We leave the responsibility to user instead.
-    nbytes = ceil(new_size * 1.0 / 8);
-    storage = (unsigned char*)realloc(storage, nbytes * sizeof(*storage));
-    if (new_size > size) {
-        for (unsigned i = size; i < new_size; i++) {
+    // existing bits stoarge. We leave the responsibility to caller instead.
+    unsigned new_nbytes = ceil(new_size * 1.0 / 8);
+    storage = (unsigned char*)realloc(storage, new_nbytes * sizeof(*storage));
+    if (new_nbytes > nbytes) {
+        for (unsigned i = nbytes; i < new_nbytes; i++) {
             storage[i] = 0;
         }
     }
+    nbytes = new_nbytes;
     size = new_size;
 }
