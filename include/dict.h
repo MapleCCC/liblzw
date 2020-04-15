@@ -124,27 +124,25 @@ Dict<T, S>::resize(unsigned new_capacity) {
         throw std::runtime_error("Dict capacity has to be power of 2");
     }
 
-    std::cout << "5\n";
-    Bucket<T, S>* new_slots = new Bucket<T, S>[new_capacity];
-    for (unsigned i = 0; i < capacity; i++) {
-        if (!indexer.get(i)) {
-            continue;
+    Bucket<T, S>* old_slots = slots;
+    Bitmap old_indexer = indexer;
+    unsigned old_capacity = capacity;
+
+    slots = new Bucket<T, S>[new_capacity];
+    capacity = new_capacity;
+    size = 0;
+    indexer.reset();
+    indexer.resize(new_capacity);
+
+    for (int i = 0; i < old_capacity; i++) {
+        if (old_indexer.get(i)) {
+            set(old_slots[i].key, old_slots[i].value);
         }
-        new_slots[i].key = slots[i].key;
-        new_slots[i].value = slots[i].value;
     }
-    std::cout << "6\n";
-    std::cout << "About to execute delete" << std::endl;
+
     /* Don't know why delete statement cause crash. Before we figure out why,
      let's just comment it out and be careful with the unfreed memory. */
-    // delete[] slots;
-    std::cout << "7\n";
-    slots = new_slots;
-    std::cout << "8\n";
-    indexer.resize(new_capacity);
-    std::cout << "9\n";
-    capacity = new_capacity;
-    std::cout << "Finish dict resize routine" << std::endl;
+    delete[] old_slots;
 }
 
 template <class T, class S>
