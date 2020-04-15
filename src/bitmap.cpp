@@ -20,6 +20,15 @@ Bitmap::Bitmap(unsigned size) {
     }
 }
 
+Bitmap::Bitmap(const Bitmap& other) {
+    size = other.size;
+    nbytes = other.nbytes;
+    storage = (unsigned char*)malloc(nbytes * sizeof(*storage));
+    for (unsigned i = 0; i < nbytes; i++) {
+        storage[i] = other.storage[i];
+    }
+}
+
 Bitmap::~Bitmap() { free(storage); }
 
 void

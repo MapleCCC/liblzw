@@ -6,6 +6,7 @@
 class Bitmap {
    public:
     Bitmap(unsigned size);
+    Bitmap(const Bitmap& other);
     ~Bitmap();
     void reset();
     unsigned length() const;
