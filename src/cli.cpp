@@ -35,6 +35,7 @@ cli(int argc, char** argv) {
         }
         try {
             compress(lzwfile, header);
+            delete header;
         } catch (exception e) {
             cerr << "During compression, catched exception: " << e.what()
                  << endl;
