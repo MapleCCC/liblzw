@@ -84,7 +84,6 @@ LZWDecoder::_decode(vector<Code>::iterator& codes_itr) {
     vector<Bytes>* ret = new vector<Bytes>;
     // TODO: add heuristic: reserve reasonable space for vector, so as to reduce
     // overhead of resizing
-    ENABLE_BYTES_HASH_CACHE();
     Bytes prefix;
     for (;; codes_itr++) {
         Code code = *codes_itr;
@@ -107,6 +106,5 @@ LZWDecoder::_decode(vector<Code>::iterator& codes_itr) {
             prefix = current_word;
         }
     }
-    DISABLE_BYTES_HASH_CACHE();
     return ret;
 }

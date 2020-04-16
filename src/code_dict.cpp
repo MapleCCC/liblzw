@@ -21,6 +21,7 @@ CodeDict::CodeDict(int code_bitsize) {
 
 void
 CodeDict::clear() {
+    // TODO: should we add another call to storage.reserve() here?
     storage.clear();
     size = 0;
     for (int i = 0; i < 256; i++) {
@@ -58,7 +59,7 @@ CodeDict::add_new_code(Bytes item) {
     }
 }
 
-
-string CodeDict::str() const {
+string
+CodeDict::str() const {
     return storage.str();
 }

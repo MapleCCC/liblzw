@@ -195,7 +195,7 @@ test_bitarray() {
 }
 
 int
-_main() {
+main() {
     try {
         // string s = int2str(9);
         // cout << s << endl;

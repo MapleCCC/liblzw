@@ -20,6 +20,7 @@ main() {
     assert(d.contains(Bytes("10")));
     assert(d.get(Bytes("10")) == Code(100));
     assert(d.length() == 2);
+    cout << d.str() << endl;
     d.clear();
     assert(d.length() == 0);
 
