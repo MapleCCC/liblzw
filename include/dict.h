@@ -225,10 +225,9 @@ Dict<T, S>::get(const T& key) const {
 // If membership test is heavy operation, we can optionally use bloom filter
 // to accelerate.
 template <class T, class S>
-bool
+inline bool
 Dict<T, S>::contains(const T& key) const {
-    unsigned index = find_bucket(key);
-    return indexer.get(index);
+    return indexer.get(find_bucket(key));
 }
 
 // Currently a naive linear search. May be expensive and inefficient for
