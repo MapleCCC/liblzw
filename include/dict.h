@@ -116,7 +116,7 @@ Dict<T, S>::resize(unsigned new_capacity) {
         return;
     }
     if (!is_power_of_2(new_capacity)) {
-        std::cerr << "Dict capacity has to be power of 2" << endl;
+        std::cerr << "Dict capacity has to be power of 2" << std::endl;
         throw std::runtime_error("Dict capacity has to be power of 2");
     }
 
