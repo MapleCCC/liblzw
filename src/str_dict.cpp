@@ -12,15 +12,18 @@ StrDict::StrDict(int code_bitsize) {
     size = 0;
     for (int i = 0; i < 256; i++) {
         storage.set(Code(i), Bytes((unsigned char)i));
+        str_cache.add(Bytes((unsigned char)i));
     }
 }
 
 void
 StrDict::clear() {
     storage.clear();
+    str_cache.clear();
     size = 0;
     for (int i = 0; i < 256; i++) {
         storage.set(Code(i), Bytes((unsigned char)i));
+        str_cache.add(Bytes((unsigned char)i));
     }
 }
 
@@ -41,12 +44,13 @@ StrDict::get(Code key) {
 
 void
 StrDict::add_new_str(Bytes item) {
-    if (storage.contains_value(item)) {
+    if (str_cache.contains(item)) {
         // throw runtime_error("string already in StrDict: " + item);
         throw runtime_error("string already in StrDict: ");
     }
     storage.set(Code(size + 256), item);
     size++;
+    str_cache.add(item);
 
     if (size == capacity) {
         clear();
