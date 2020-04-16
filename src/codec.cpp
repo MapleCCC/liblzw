@@ -37,18 +37,13 @@ LZWEncoder::_encode(unsigned char* text, int text_size) {
     // TODO: add heuristic: reserve reasonable space for vector, so as to reduce
     // overhead of resizing
     for (int i = 0; i < text_size; i++) {
-        cout << "Encoding the " << i << "th text" << endl;
         // TODO: for lookup and retrieve from code dict, use stateful hash
         // algorithm object, to reduce hash recomputation cost.
         // This optimization could be done in Bytes class implementation level.
         Bytes current_word = prefix + text[i];
-        cout << "current_word: " << current_word << endl;
-        cout << "current code dict: " << code_dict.str() << endl;
         if (code_dict.contains(current_word)) {
-            cout << "enter contained branch" << endl;
             prefix = current_word;
         } else {
-            cout << "enter not contained branch" << endl;
             ret->push_back(code_dict.get(prefix));
             code_dict.add_new_code(current_word);
             prefix = text[i];
@@ -112,6 +107,6 @@ LZWDecoder::_decode(vector<Code>::iterator& codes_itr) {
             prefix = current_word;
         }
     }
-    DISABLE_BYTES_HAHS_CACHE();
+    DISABLE_BYTES_HASH_CACHE();
     return ret;
 }
