@@ -18,7 +18,7 @@ class Bytes {
     Bytes(const char*);
     Bytes(const std::string);
     unsigned char get(int index) const;
-    int length() const { return storage.size(); }
+    int length() const;
     unsigned char get_first_byte() const;
     void push_back(unsigned char c);
     long long hash() const;
@@ -40,5 +40,10 @@ std::ostream& operator<<(std::ostream& os, const Bytes& bytes);
 
 void ENABLE_BYTES_HASH_CACHE();
 void DISABLE_BYTES_HAHS_CACHE();
+
+inline int
+Bytes::length() const {
+    return storage.size();
+}
 
 #endif /* _BYTES_H_ */
