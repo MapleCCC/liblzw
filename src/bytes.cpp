@@ -72,14 +72,6 @@ Bytes::hash() const {
 
 bool
 Bytes::operator==(const Bytes& rhs) const {
-    // int len = length();
-    // if (len != rhs.length()) return false;
-    // for (int i = 0; i < len; i++) {
-    //     if (storage[i] != rhs.storage[i]) {
-    //         return false;
-    //     }
-    // }
-    // return true;
     return storage == rhs.storage;
 }
 

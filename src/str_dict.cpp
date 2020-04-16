@@ -21,6 +21,7 @@ StrDict::StrDict(int code_bitsize) {
 
 void
 StrDict::clear() {
+    // TODO: should we add another call to storage.reserve() here?
     storage.clear();
     str_cache.clear();
     size = 0;
@@ -30,6 +31,7 @@ StrDict::clear() {
     }
 }
 
+// inline
 bool
 StrDict::contains(Code item) {
     return storage.contains(item);

@@ -9,6 +9,9 @@
 #include "bitmap.h"
 #include "extra_except.h"
 
+// TODO: use template specialization to implement set data strcuture /
+// interface.
+
 // WARNING: template declaration and definition can't be separated into two
 // files.
 
@@ -145,6 +148,9 @@ Dict<T, S>::resize(unsigned new_capacity) {
     delete[] old_slots;
 }
 
+// Should we resize the dict to smaller memory when clear() is called?
+// Consult vector implementation:
+// https://stackoverflow.com/questions/18467624/what-does-the-standard-say-about-how-calling-clear-on-a-vector-changes-the-capac/18467916#18467916
 template <class T, class S>
 void
 Dict<T, S>::clear() {
