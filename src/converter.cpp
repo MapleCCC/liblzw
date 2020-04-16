@@ -4,7 +4,7 @@
 #include <iostream>
 #include <stdexcept>
 
-#include "utils.tpp" // grouper
+#include "utils.tpp"  // grouper
 using namespace std;
 
 vector<Bit>
@@ -45,7 +45,7 @@ int
 bits2int(const std::vector<Bit>& bits) {
     int ret = 0;
     for (int i = 0; i < bits.size(); i++) {
-        ret = ret * 2 + bits.at(i);
+        ret = (ret << 1) + bits.at(i);
     }
     return ret;
 }
@@ -54,8 +54,8 @@ vector<Bit>
 int2bits(int x) {
     vector<Bit> ret;
     while (x != 0) {
-        ret.push_back(x % 2);
-        x = x / 2;
+        ret.push_back(x & 1);
+        x = x >> 1;
     }
     reverse(ret.begin(), ret.end());
     return ret;
