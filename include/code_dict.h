@@ -10,6 +10,7 @@
 class CodeDict {
    public:
     CodeDict(int code_bitsize);
+    // ~CodeDict() { storage.statistics(); }
     void clear();
     bool contains(Bytes);
     Code get(Bytes);
