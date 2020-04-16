@@ -17,14 +17,11 @@ class Bytes {
     Bytes(const unsigned char);
     Bytes(const char*);
     Bytes(const std::string);
-    Bytes(const Bytes&);
     unsigned char get(int index) const;
     int length() const;
     unsigned char get_first_byte() const;
     void push_back(unsigned char c);
     long long hash() const;
-    Bytes& operator=(const Bytes&);
-    Bytes& operator=(Bytes&&);
     bool operator==(const Bytes& rhs) const;
     bool operator!=(const Bytes& rhs) const;
     Bytes operator+(const Bytes& rhs) const;
