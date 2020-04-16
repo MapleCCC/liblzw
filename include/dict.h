@@ -2,11 +2,11 @@
 #define _DICT_H_
 
 #include <cmath>
-#include <exception>
 #include <iostream>
 #include <stdexcept>
 
 #include "bitmap.h"
+#include "extra_except.h"
 
 // WARNING: template declaration and definition can't be separated into two
 // files.
@@ -167,18 +167,6 @@ Dict<T, S>::reserve(unsigned size) {
     unsigned new_capacity = ceil_power_of_2(ceil(size * 1.0 / MAX_LOAD_FACTOR));
     resize(new_capacity);
 }
-
-// TODO: Move to extra_exception.h
-class KeyError : public std::exception {
-   public:
-    KeyError() {}
-    KeyError(const std::string& msg_) throw() : msg(msg_) {}
-    virtual ~KeyError() throw() {}
-    const char* what() const throw() { return msg.c_str(); }
-
-   private:
-    const std::string msg;
-};
 
 template <class T, class S>
 unsigned
