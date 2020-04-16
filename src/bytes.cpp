@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#include "utils.tpp" // byte2hex
+#include "utils.tpp"  // byte2hex
 
 using namespace std;
 
@@ -38,6 +38,11 @@ Bytes::Bytes(const string s) {
     }
 }
 
+Bytes::Bytes(const Bytes& other) {
+    storage = other.storage;
+    hashcode = other.hashcode;
+}
+
 unsigned char
 Bytes::get(int index) const {
     if (index < 0 || index >= storage.size()) {
@@ -68,6 +73,26 @@ Bytes::update_hashcode(unsigned char c) {
 long long
 Bytes::hash() const {
     return hashcode;
+}
+
+// Turn out that operator= is not equal to returning new Bytes instance???!!!
+Bytes&
+Bytes::operator=(const Bytes& rhs) {
+    if (this != &rhs) {
+        storage = rhs.storage;
+        hashcode = rhs.hashcode;
+    }
+    return *this;
+}
+
+// move assignment operator
+Bytes&
+Bytes::operator=(Bytes&& rhs) {
+    if (this != &rhs) {
+        storage = rhs.storage;
+        hashcode = rhs.hashcode;
+    }
+    return *this;
 }
 
 bool
