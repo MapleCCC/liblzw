@@ -38,6 +38,7 @@ cli(int argc, char** argv) {
         } catch (exception e) {
             cerr << "During compression, catched exception: " << e.what()
                  << endl;
+            return EXIT_FAILURE;
         }
     } else if (!strcmp(argv[1], "-d")) {
         if (argc != 3) {
@@ -50,6 +51,7 @@ cli(int argc, char** argv) {
         } catch (exception e) {
             cerr << "During compression, catched exception: " << e.what()
                  << endl;
+            return EXIT_FAILURE;
         }
     } else {
         cerr << "Invalid arguments" << endl;
