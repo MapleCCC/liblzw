@@ -4,7 +4,7 @@
 #include <iostream>
 #include <stdexcept>
 
-#include "utils.h"
+#include "utils.tpp" // grouper
 using namespace std;
 
 vector<Bit>

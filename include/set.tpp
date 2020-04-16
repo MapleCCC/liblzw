@@ -1,6 +1,6 @@
 #include <cstdlib>
 
-#include "dict.h"
+#include "dict.tpp"
 
 class _dummy {};
 

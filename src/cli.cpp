@@ -8,7 +8,6 @@
 #include "code.h"
 #include "codec.h"
 #include "lzwfile.h"
-#include "utils.h"
 using namespace std;
 
 #define CODE_BITSIZE 12

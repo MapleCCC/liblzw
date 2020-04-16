@@ -3,8 +3,8 @@
 
 #include "bytes.h"
 #include "code.h"
-#include "dict.h"
-#include "set.h"
+#include "dict.tpp"
+#include "set.tpp"
 
 class StrDict {
    public:

@@ -7,10 +7,10 @@
 #include "code.h"
 #include "code_dict.h"
 #include "codec.h"
-#include "dict.h"
+#include "dict.tpp"
 #include "lzwfile.h"
 #include "str_dict.h"
-#include "utils.h"
+#include "utils.tpp"
 
 using namespace std;
 

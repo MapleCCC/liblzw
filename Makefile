@@ -65,10 +65,10 @@ ${BUILD_DIR}/%.o: ${SRC_DIR}/%.cpp
 
 # We have to specify prerequisite for str_dict and code_dict, because they rely on dict.tpp, a template header.
 
-${BUILD_DIR}/str_dict.o: ${SRC_DIR}/str_dict.cpp ${INC_DIR}/dict.h ${INC_DIR}/set.h # ${INC_DIR}/dict.tpp
+${BUILD_DIR}/str_dict.o: ${SRC_DIR}/str_dict.cpp ${INC_DIR}/dict.tpp ${INC_DIR}/set.tpp
 	${CXX} -c -o $@ $< ${CXXFLAGS} ${CPPFLAGS}
 
-${BUILD_DIR}/code_dict.o: ${SRC_DIR}/code_dict.cpp ${INC_DIR}/dict.h # ${INC_DIR}/dict.tpp
+${BUILD_DIR}/code_dict.o: ${SRC_DIR}/code_dict.cpp ${INC_DIR}/dict.tpp
 	${CXX} -c -o $@ $< ${CXXFLAGS} ${CPPFLAGS}
 
 # how to specify existence of directory, instead of regular file, as prerequisite
