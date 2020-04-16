@@ -8,8 +8,11 @@ StrDict::StrDict(int code_bitsize) {
     if (code_bitsize <= 8) {
         throw runtime_error("Code bit size should be larger than 8");
     }
+
     capacity = pow(2, code_bitsize) - 256 - 1;
     size = 0;
+    storage.reserve(pow(2, code_bitsize));
+
     for (int i = 0; i < 256; i++) {
         storage.set(Code(i), Bytes((unsigned char)i));
         str_cache.add(Bytes((unsigned char)i));
