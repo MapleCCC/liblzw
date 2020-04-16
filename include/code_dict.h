@@ -5,7 +5,7 @@
 
 #include "bytes.h"
 #include "code.h"
-#include "dict.h"
+#include "dict.tpp"
 
 class CodeDict {
    public:

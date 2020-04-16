@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#include "utils.h"
+#include "utils.tpp" // byte2hex
 
 using namespace std;
 

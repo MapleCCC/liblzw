@@ -8,7 +8,6 @@
 - Add CUHK academic honesty header
 - Release prebuild binary (static library, cli executable) and version-tagged source tarball.
 - Consider use .hpp instead of .h
-- Use .tpp as extension for templates
 - Add const modifier to member function that doesn't change member variables.
 - Choose semantic exception type
 - Custom exceptions
@@ -44,3 +43,4 @@
 - Don't use "using namespace std;" in header files
 - Don't use malloc in C++. It can't correctly handle class initialization.
 - [str_dict] Add str_cache to reduce string membership check from O(n) to O(1)
+- Use .tpp as extension for templates

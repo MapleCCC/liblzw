@@ -1,6 +1,6 @@
 #include "code.h"
 
-#include "utils.h"  // int2str
+#include "utils.tpp"  // int2str
 using namespace std;
 
 // For now, we are good with returning integer itself as its own hash value.
