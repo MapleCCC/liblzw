@@ -4,6 +4,7 @@
 #include <cmath>
 #include <iostream>
 #include <stdexcept>
+#include <vector>
 
 #include "bitmap.h"
 #include "extra_except.h"
@@ -47,8 +48,9 @@ class Dict {
     S get(const T& key) const;
     bool contains(const T& key) const;
     bool contains_value(const S& value) const;
-    void statistics() const;
     std::string str() const;
+
+    // void statistics() const;
 
    private:
     unsigned size;
@@ -57,24 +59,28 @@ class Dict {
     Bitmap indexer;
     // Dict<S, NULL> values;
     // bool is_values_cached;
-#if COLLECT_STATISTICS_MODE == 1
-    int collision_count;
-#endif
+    // #if COLLECT_STATISTICS_MODE == 1
+    //     static unsigned instance_count;
+    //     static std::vector<unsigned> collision_statistics;
+    //     static std::vector<unsigned> size_statistics;
+    //     static std::vector<unsigned> capacity_statistics;
+    // #endif
 
     void resize(unsigned new_capacity);
     double load_factor() const;
     unsigned find_bucket(const T& key) const;
 };
 
+// #if COLLECT_STATISTICS_MODE == 1
+// template <class T, class S>
+// unsigned Dict<T, S>::instance_count = 0;
+// #endif
+
 template <class T, class S>
 Dict<T, S>::Dict() : indexer(INIT_DICT_CAPCITY) {
     size = 0;
     capacity = INIT_DICT_CAPCITY;
     slots = new Bucket<T, S>[capacity];
-
-#if COLLECT_STATISTICS_MODE == 1
-    collision_count = 0;
-#endif
 }
 
 template <class T, class S>
@@ -171,6 +177,13 @@ Dict<T, S>::reserve(unsigned size) {
 template <class T, class S>
 unsigned
 Dict<T, S>::find_bucket(const T& key) const {
+    // #if COLLECT_STATISTICS_MODE == 1
+    //     instance_count++;
+    //     collision_statistics.push_back(0);
+    //     size_statistics.push_back(0);
+    //     capacity_statistics.push_back(0);
+    // #endif
+
     // We can be assured that the recurrence is going to iterate through all
     // slots. As long as that size < capacity, we will not go into infinite
     // loop.
@@ -181,11 +194,15 @@ Dict<T, S>::find_bucket(const T& key) const {
     unsigned index = h & mask;
     while (indexer.get(index) && slots[index].key != key) {
         // #if COLLECT_STATISTICS_MODE == 1
-        //         collision_count++;
+        //         collision_statistics[instance_count]++;
         // #endif
         perturb = perturb >> PERTURB_SHIFT;
         index = (5 * index + 1 + perturb) & mask;
     }
+    // #if COLLECT_STATISTICS_MODE == 1
+    //     size_statistics.at(instance_count) = size;
+    //     capacity_statistics.at(instance_count) = capacity;
+    // #endif
     // Either, can't find the bucket containing key, return next probe position.
     // Or, found the bucket containing the key, return the bucket's index
     // position.
@@ -255,15 +272,21 @@ Dict<T, S>::contains_value(const S& value) const {
     return false;
 }
 
-template <class T, class S>
-void
-Dict<T, S>::statistics() const {
-#if COLLECT_STATISTICS_MODE == 1
-    std::cout << "Collision count: " << collision_count << std::endl;
-#else
-    std::cout << "Collect-statistics-mode is not enabled" << std::endl;
-#endif
-}
+// // FIXME
+// template <class T, class S>
+// void
+// Dict<T, S>::statistics() const {
+// #if COLLECT_STATISTICS_MODE == 1
+//     for (int i = 0; i < instance_count; i++) {
+//         cout << "Size: " << size_statistics.at(instance_count)
+//              << ", Capacity: " << capacity_statistics.at(instance_count)
+//              << ", Collisions: " << collision_statistics.at(instance_count)
+//              << endl;
+//     }
+// #else
+//     std::cout << "Collect-statistics-mode is not enabled" << std::endl;
+// #endif
+// }
 
 template <class T, class S>
 std::string

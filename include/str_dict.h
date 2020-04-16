@@ -9,6 +9,7 @@
 class StrDict {
    public:
     StrDict(int code_bitsize);
+    // ~StrDict() { storage.statistics(); }
     void clear();
     bool contains(Code);
     Bytes get(Code);
