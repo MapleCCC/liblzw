@@ -6,33 +6,35 @@
 
 using namespace std;
 
-static bool IS_ENABLED_BYTES_HASH_CACHE = false;
+/* TODO: encapsulate intialize_hashcode and update_hashcode to standalone
+ * stateful hash object */
+// static void initialize_hashcode() {
+//     hashcode = 0;
+// }
 
-// #define ENABLE_BYTES_HASH_CACHE() IS_ENABLED_BYTES_HASH_CACHE = true;
-// #define DISABLE_BYTES_HAHS_CACHE() IS_ENABLED_BYTES_HASH_CACHE = false;
+Bytes::Bytes() { hashcode = 0; }
 
-void
-ENABLE_BYTES_HASH_CACHE() {
-    IS_ENABLED_BYTES_HASH_CACHE = true;
+Bytes::Bytes(const unsigned char c) {
+    hashcode = 0;
+    storage.push_back(c);
+    update_hashcode(c);
 }
-void
-DISABLE_BYTES_HAHS_CACHE() {
-    IS_ENABLED_BYTES_HASH_CACHE = false;
-}
-
-Bytes::Bytes(const unsigned char c) { storage.push_back(c); }
 
 Bytes::Bytes(const char* s) {
+    hashcode = 0;
     int i = 0;
     while (s[i] != '\0') {
         storage.push_back((unsigned char)s[i]);
+        update_hashcode((unsigned char)s[i]);
         i++;
     }
 }
 
 Bytes::Bytes(const string s) {
+    hashcode = 0;
     for (unsigned int i = 0; i < s.length(); i++) {
         storage.push_back(s[i]);
+        update_hashcode(s[i]);
     }
 }
 
@@ -51,19 +53,21 @@ Bytes::get_first_byte() const {
     return storage[0];
 }
 
-// inline
 void
 Bytes::push_back(unsigned char c) {
     storage.push_back(c);
+    update_hashcode(c);
+}
+
+// algorithmic detail is inside update_hashcode()
+void
+Bytes::update_hashcode(unsigned char c) {
+    hashcode = hashcode * 31 + c;
 }
 
 long long
 Bytes::hash() const {
-    long long h = 0;
-    for (unsigned int i = 0; i < storage.size(); i++) {
-        h = h * 31 + storage.at(i);
-    }
-    return h;
+    return hashcode;
 }
 
 bool
@@ -90,6 +94,10 @@ Bytes::operator+(const Bytes& rhs) const {
     ret.storage = storage;
     ret.storage.insert(ret.storage.end(), rhs.storage.begin(),
                        rhs.storage.end());
+    ret.hashcode = hashcode;
+    for (int i = 0; i < rhs.storage.size(); i++) {
+        ret.update_hashcode(rhs.storage[i]);
+    }
     return ret;
 }
 
@@ -101,6 +109,8 @@ Bytes::operator+(const unsigned char c) {
     Bytes ret;
     ret.storage = storage;
     ret.storage.push_back(c);
+    ret.hashcode = hashcode;
+    ret.update_hashcode(c);
     return ret;
 }
 

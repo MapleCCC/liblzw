@@ -13,7 +13,7 @@
 // chars.
 class Bytes {
    public:
-    Bytes() {}
+    Bytes();
     Bytes(const unsigned char);
     Bytes(const char*);
     Bytes(const std::string);
@@ -33,13 +33,13 @@ class Bytes {
 
    private:
     std::vector<unsigned char> storage;
+    long long hashcode;
+
+    void update_hashcode(unsigned char);
 };
 
 std::string operator+(const std::string& s, const Bytes& bytes);
 std::ostream& operator<<(std::ostream& os, const Bytes& bytes);
-
-void ENABLE_BYTES_HASH_CACHE();
-void DISABLE_BYTES_HAHS_CACHE();
 
 inline int
 Bytes::length() const {
