@@ -62,19 +62,11 @@ cli(int argc, char** argv) {
 void
 compress(const string& lzwfile, const vector<string>* header) {
     write_lzwfile_header(lzwfile, header);
-    cout << "1\n";
     LZWEncoder encoder(CODE_BITSIZE);
-    cout << "2\n";
     lzwfile_codes_writer writer(lzwfile, CODE_BITSIZE);
-    cout << "3\n";
-    cout << "header->size(): " << header->size() << endl;
 
     for (int i = 0; i < header->size(); i++) {
         vector<Code>* codes = encoder.encode_file(header->at(i));
-        cout << "The result of encode " << header->at(i) << endl;
-        for (int i = 0; i < codes->size(); i++) {
-            cout << "Code: " << codes->at(i) << endl;
-        }
         writer.write(codes);
         delete codes;
     }
@@ -83,7 +75,6 @@ compress(const string& lzwfile, const vector<string>* header) {
 
 void
 decompress(const string& lzwfile) {
-    cout << "Enter decompress branch\n";
     vector<string>* header = read_lzwfile_header(lzwfile);
     LZWDecoder decoder(CODE_BITSIZE);
     vector<Code>* codes = read_lzwfile_codes(lzwfile, CODE_BITSIZE);
