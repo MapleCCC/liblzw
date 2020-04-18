@@ -31,6 +31,12 @@ Bytes::Bytes(const Bytes& other) {
     hashcode = other.hashcode;
 }
 
+Bytes::Bytes(Bytes&& other) {
+    hashcode = other.hashcode;
+    storage = other.storage;
+    other.storage = NULL;
+}
+
 Bytes::~Bytes() { delete storage; }
 
 unsigned char
@@ -71,10 +77,16 @@ Bytes::hash() const {
 
 Bytes&
 Bytes::operator=(const Bytes& rhs) {
-    if (this != &rhs) {
-        *storage = *(rhs.storage);
-        hashcode = rhs.hashcode;
-    }
+    hashcode = rhs.hashcode;
+    *storage = *(rhs.storage);
+    return *this;
+}
+
+Bytes&
+Bytes::operator=(Bytes&& rhs) {
+    hashcode = rhs.hashcode;
+    storage = rhs.storage;
+    rhs.storage = NULL;
     return *this;
 }
 
