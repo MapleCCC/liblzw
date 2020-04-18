@@ -9,9 +9,6 @@
 #include "bitmap.h"
 #include "extra_except.h"
 
-// TODO: use template specialization to implement set data strcuture /
-// interface.
-
 // WARNING: template declaration and definition can't be separated into two
 // files.
 
@@ -30,7 +27,6 @@
 // Should the macro COLLEFCT_STATISTICS_MODE defined in .cpp or .h?
 #define COLLECT_STATISTICS_MODE 1
 
-// Should we declare Bucket type inside Dict?
 template <class T, class S>
 struct Bucket {
     T key;
@@ -52,6 +48,8 @@ class Dict {
     bool contains(const T& key) const;
     bool contains_value(const S& value) const;
     std::string str() const;
+    std::vector<T> keys() const;
+    std::vector<S> values() const;
 
     // void statistics() const;
 
@@ -72,6 +70,19 @@ class Dict {
     void resize(unsigned new_capacity);
     double load_factor() const;
     unsigned find_bucket(const T& key) const;
+
+    // class KeyView {
+    //     public:
+    //     KeyView();
+    //     private:
+
+    // };
+    // class ValueView {
+    //     public:
+    //     ValueView();
+    //     private:
+
+    // };
 };
 
 // #if COLLECT_STATISTICS_MODE == 1
@@ -308,6 +319,35 @@ Dict<T, S>::str() const {
         ret.erase(ret.end() - 2, ret.end());
     }
     ret += "}";
+    return ret;
+}
+
+// TODO: provide view-like object.
+// TODO: Set like.
+// TODO: Insertion order.
+template <class T, class S>
+std::vector<T>
+Dict<T, S>::keys() const {
+    std::vector<T> ret;
+    for (unsigned i = 0; i < capacity; i++) {
+        if (indexer.get(i)) {
+            ret.push_back(slots[i].key);
+        }
+    }
+    return ret;
+}
+
+// TODO: provide view-like object.
+// TODO: Insertion order.
+template <class T, class S>
+std::vector<S>
+Dict<T, S>::values() const {
+    std::vector<S> ret;
+    for (unsigned i = 0; i < capacity; i++) {
+        if (indexer.get(i)) {
+            ret.push_back(slots[i].value);
+        }
+    }
     return ret;
 }
 
