@@ -55,25 +55,25 @@ LZWEncoder::_encode(unsigned char* text, int text_size) {
     return ret;
 }
 
-LZWDecoder::LZWDecoder(int code_bitsize) : str_dict(code_bitsize) {
-    virtual_eof = pow(2, code_bitsize) - 1;
-}
 
 void
-LZWDecoder::decode_file(std::string filename,
-                        lzwfile_codes_reader& code_reader) {
+decode_file(std::string filename, lzwfile_codes_reader& code_reader,
+            unsigned code_bitsize) {
     ofstream f(filename.c_str(), ios::out | ios::binary);
     if (!f.is_open()) {
         cerr << "Can't open file: " << filename << endl;
         throw runtime_error("Can't open file: " + filename);
     }
 
+    int virtual_eof = pow(2, code_bitsize) - 1;
+
+    LZWDecoder decoder(code_bitsize);
     while (!code_reader.eof()) {
         Code code = code_reader.read();
         if (code == virtual_eof) {
             break;
         }
-        Bytes bytes = _decode(code);
+        Bytes bytes = decoder.decode(code);
         // TODO: make IO more efficient. Chunk by chunk, instead of byte by
         // byte.
         for (unsigned i = 0; i < bytes.length(); i++) {
@@ -84,8 +84,10 @@ LZWDecoder::decode_file(std::string filename,
     f.close();
 }
 
+LZWDecoder::LZWDecoder(unsigned code_bitsize) : str_dict(code_bitsize) {}
+
 Bytes
-LZWDecoder::_decode(Code code) {
+LZWDecoder::decode(Code code) {
     // TODO: fix typo sufix to suffix.
     if (str_dict.contains(code)) {
         Bytes sufix = str_dict.get(code);
