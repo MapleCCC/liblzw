@@ -15,7 +15,6 @@ using namespace std;
 void
 Bytes::init() {
     hashcode = 0;
-    storage = new vector<unsigned char>;
 }
 
 Bytes::Bytes() { init(); }
@@ -27,40 +26,32 @@ Bytes::Bytes(unsigned char c) {
 
 Bytes::Bytes(const Bytes& other) {
     init();
-    *storage = *(other.storage);
-    hashcode = other.hashcode;
-}
-
-Bytes::Bytes(Bytes&& other) {
-    hashcode = other.hashcode;
     storage = other.storage;
-    other.storage = NULL;
+    hashcode = other.hashcode;
 }
-
-Bytes::~Bytes() { delete storage; }
 
 unsigned char
 Bytes::get(unsigned index) const {
-    if (index >= storage->size()) {
-        cerr << "bytes length is " << storage->size()
+    if (index >= storage.size()) {
+        cerr << "bytes length is " << storage.size()
              << ", but try to index: " << index << endl;
         throw out_of_range("Index out of range");
     }
-    return storage->at(index);
+    return storage.at(index);
 }
 
 unsigned char
 Bytes::get_first_byte() const {
-    if (!storage->size()) {
+    if (!storage.size()) {
         cerr << "Can't get first byte of an empty byte string" << endl;
         throw out_of_range("Index out of range");
     }
-    return storage->at(0);
+    return storage.at(0);
 }
 
 void
 Bytes::push_back(unsigned char c) {
-    storage->push_back(c);
+    storage.push_back(c);
     update_hashcode(c);
 }
 
@@ -78,35 +69,27 @@ Bytes::hash() const {
 Bytes&
 Bytes::operator=(const Bytes& rhs) {
     hashcode = rhs.hashcode;
-    *storage = *(rhs.storage);
-    return *this;
-}
-
-Bytes&
-Bytes::operator=(Bytes&& rhs) {
-    hashcode = rhs.hashcode;
     storage = rhs.storage;
-    rhs.storage = NULL;
     return *this;
 }
 
 bool
 Bytes::operator==(const Bytes& rhs) const {
-    return *storage == *(rhs.storage);
+    return storage == rhs.storage;
 }
 
 bool
 Bytes::operator!=(const Bytes& rhs) const {
-    return *storage != *(rhs.storage);
+    return storage != rhs.storage;
 }
 
 Bytes
 Bytes::operator+(const Bytes& rhs) const {
     Bytes ret(*this);
-    ret.storage->insert(ret.storage->end(), rhs.storage->begin(),
-                        rhs.storage->end());
-    for (unsigned i = 0; i < rhs.storage->size(); i++) {
-        ret.update_hashcode(rhs.storage->at(i));
+    ret.storage.insert(ret.storage.end(), rhs.storage.begin(),
+                        rhs.storage.end());
+    for (unsigned i = 0; i < rhs.storage.size(); i++) {
+        ret.update_hashcode(rhs.storage.at(i));
     }
     return ret;
 }
@@ -127,10 +110,10 @@ Bytes::str() const {
     string ret;
     ret.push_back('b');
     ret.push_back('\'');
-    for (unsigned i = 0; i < storage->size(); i++) {
+    for (unsigned i = 0; i < storage.size(); i++) {
         ret.push_back('\\');
         ret.push_back('x');
-        unsigned char byte = storage->at(i);
+        unsigned char byte = storage.at(i);
         ret += byte2hex(byte);
     }
     ret.push_back('\'');
