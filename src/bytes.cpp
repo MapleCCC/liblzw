@@ -12,20 +12,15 @@ using namespace std;
 //     hashcode = 0;
 // }
 
-void
-Bytes::init() {
-    hashcode = 0;
-}
-
-Bytes::Bytes() { init(); }
+Bytes::Bytes() { hashcode = 0; }
 
 Bytes::Bytes(unsigned char c) {
-    init();
+    hashcode = 0;
     push_back(c);
 }
 
 Bytes::Bytes(const Bytes& other) {
-    init();
+    hashcode = 0;
     storage = other.storage;
     hashcode = other.hashcode;
 }
@@ -87,7 +82,7 @@ Bytes
 Bytes::operator+(const Bytes& rhs) const {
     Bytes ret(*this);
     ret.storage.insert(ret.storage.end(), rhs.storage.begin(),
-                        rhs.storage.end());
+                       rhs.storage.end());
     for (unsigned i = 0; i < rhs.storage.size(); i++) {
         ret.update_hashcode(rhs.storage.at(i));
     }
