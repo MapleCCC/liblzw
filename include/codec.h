@@ -7,8 +7,8 @@
 #include "bytes.h"
 #include "code.h"
 #include "code_dict.h"
-#include "str_dict.h"
 #include "lzwfile.h"
+#include "str_dict.h"
 
 class LZWEncoder {
    public:
@@ -31,8 +31,9 @@ class LZWDecoder {
    private:
     StrDict str_dict;
     int virtual_eof;
+    Bytes prefix;
     // Caller is responsible to rememebr to delete the returned vector
-    std::vector<Bytes>* _decode(lzwfile_codes_reader& code_reader);
+    Bytes _decode(Code code);
 };
 
 #endif /* _CODEC_H_ */
