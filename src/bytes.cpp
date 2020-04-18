@@ -117,6 +117,7 @@ Bytes::str() const {
 
 ostream&
 operator<<(ostream& os, const Bytes& bytes) {
-    os << bytes.str();
+    os.write((char*)&(bytes.storage)[0],
+             bytes.storage.size() * sizeof(unsigned char));
     return os;
 }
