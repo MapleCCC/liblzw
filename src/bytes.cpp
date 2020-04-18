@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#include "utils.tpp" // byte2hex
+#include "utils.tpp"  // byte2hex
 
 using namespace std;
 
@@ -12,57 +12,56 @@ using namespace std;
 //     hashcode = 0;
 // }
 
-Bytes::Bytes() { hashcode = 0; }
-
-Bytes::Bytes(const unsigned char c) {
+void
+Bytes::init() {
     hashcode = 0;
-    storage.push_back(c);
-    update_hashcode(c);
+    storage = new vector<unsigned char>;
 }
 
-Bytes::Bytes(const char* s) {
-    hashcode = 0;
-    int i = 0;
-    while (s[i] != '\0') {
-        storage.push_back((unsigned char)s[i]);
-        update_hashcode((unsigned char)s[i]);
-        i++;
-    }
+Bytes::Bytes() { init(); }
+
+Bytes::Bytes(unsigned char c) {
+    init();
+    push_back(c);
 }
 
-Bytes::Bytes(const string s) {
-    hashcode = 0;
-    for (unsigned int i = 0; i < s.length(); i++) {
-        storage.push_back(s[i]);
-        update_hashcode(s[i]);
-    }
+Bytes::Bytes(const Bytes& other) {
+    init();
+    *storage = *(other.storage);
+    hashcode = other.hashcode;
 }
+
+Bytes::~Bytes() { delete storage; }
 
 unsigned char
-Bytes::get(int index) const {
-    if (index < 0 || index >= storage.size()) {
-        cerr << "bytes length is " << storage.size()
+Bytes::get(unsigned index) const {
+    if (index >= storage->size()) {
+        cerr << "bytes length is " << storage->size()
              << ", but try to index: " << index << endl;
         throw out_of_range("Index out of range");
     }
-    return storage.at(index);
+    return storage->at(index);
 }
 
 unsigned char
 Bytes::get_first_byte() const {
-    return storage[0];
+    if (!storage->size()) {
+        cerr << "Can't get first byte of an empty byte string" << endl;
+        throw out_of_range("Index out of range");
+    }
+    return storage->at(0);
 }
 
 void
 Bytes::push_back(unsigned char c) {
-    storage.push_back(c);
+    storage->push_back(c);
     update_hashcode(c);
 }
 
 // algorithmic detail is inside update_hashcode()
 void
 Bytes::update_hashcode(unsigned char c) {
-    hashcode = hashcode * 31 + c;
+    hashcode = (hashcode << 4) - hashcode + c;
 }
 
 long long
@@ -70,39 +69,44 @@ Bytes::hash() const {
     return hashcode;
 }
 
+Bytes&
+Bytes::operator=(const Bytes& rhs) {
+    if (this != &rhs) {
+        *storage = *(rhs.storage);
+        hashcode = rhs.hashcode;
+    }
+    return *this;
+}
+
 bool
 Bytes::operator==(const Bytes& rhs) const {
-    return storage == rhs.storage;
+    return *storage == *(rhs.storage);
 }
 
 bool
 Bytes::operator!=(const Bytes& rhs) const {
-    return !operator==(rhs);
+    return *storage != *(rhs.storage);
 }
 
 Bytes
 Bytes::operator+(const Bytes& rhs) const {
-    Bytes ret;
-    ret.storage = storage;
-    ret.storage.insert(ret.storage.end(), rhs.storage.begin(),
-                       rhs.storage.end());
-    ret.hashcode = hashcode;
-    for (int i = 0; i < rhs.storage.size(); i++) {
-        ret.update_hashcode(rhs.storage[i]);
+    Bytes ret(*this);
+    ret.storage->insert(ret.storage->end(), rhs.storage->begin(),
+                        rhs.storage->end());
+    for (unsigned i = 0; i < rhs.storage->size(); i++) {
+        ret.update_hashcode(rhs.storage->at(i));
     }
     return ret;
 }
 
 // Copy and return-by-value may be too expensive. Investigate profile result to
 // see if here suffices performance hotspot. Try adopting immutable data
-// structure as internal storage mechanism to reduce space cost.
+// structure as internal storage mechanism to reduce space cost. Or use move
+// semantic to avoid the cost of creating and copying temporaries.
 Bytes
 Bytes::operator+(const unsigned char c) {
-    Bytes ret;
-    ret.storage = storage;
-    ret.storage.push_back(c);
-    ret.hashcode = hashcode;
-    ret.update_hashcode(c);
+    Bytes ret(*this);
+    ret.push_back(c);
     return ret;
 }
 
@@ -111,19 +115,14 @@ Bytes::str() const {
     string ret;
     ret.push_back('b');
     ret.push_back('\'');
-    for (int i = 0; i < storage.size(); i++) {
+    for (unsigned i = 0; i < storage->size(); i++) {
         ret.push_back('\\');
         ret.push_back('x');
-        unsigned char byte = storage[i];
+        unsigned char byte = storage->at(i);
         ret += byte2hex(byte);
     }
     ret.push_back('\'');
     return ret;
-}
-
-string
-operator+(const string& s, const Bytes& bytes) {
-    return s + bytes.str();
 }
 
 ostream&
