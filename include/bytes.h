@@ -34,7 +34,6 @@ class Bytes {
     std::vector<unsigned char> storage;
     long long hashcode;
 
-    void init();
     void update_hashcode(unsigned char);
 };
 
