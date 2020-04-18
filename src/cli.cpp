@@ -67,7 +67,7 @@ compress(const string& lzwfile, const vector<string>* header) {
     LZWEncoder encoder(CODE_BITSIZE);
     lzwfile_codes_writer writer(lzwfile, CODE_BITSIZE);
 
-    for (int i = 0; i < header->size(); i++) {
+    for (unsigned i = 0; i < header->size(); i++) {
         vector<Code>* codes = encoder.encode_file(header->at(i));
         writer.write(codes);
         delete codes;
@@ -81,7 +81,7 @@ decompress(const string& lzwfile) {
     LZWDecoder decoder(CODE_BITSIZE);
     vector<Code>* codes = read_lzwfile_codes(lzwfile, CODE_BITSIZE);
     vector<Code>::iterator codes_itr = codes->begin();
-    for (int i = 0; i < header->size(); i++) {
+    for (unsigned i = 0; i < header->size(); i++) {
         decoder.decode_file(header->at(i), codes_itr);
     }
     delete header;

@@ -8,22 +8,16 @@ class Code {
    public:
     Code(int x = 0) : x(x) {}
     // no setter method. Immutable type.
-    int get() const { return x; }
+    int unbox() const { return x; }
     long hash() const;
     bool operator==(const Code&) const;
-    bool operator==(const int) const;
-    operator int() const;
+    bool operator!=(const Code&) const;
     std::string str() const;
-
-    // friend bool operator==(const int lhs, const Code& rhs);
-    // friend std::ostream& operator<<(std::ostream& os, const Code& code);
 
    private:
     int x;
 };
 
-bool operator==(const int lhs, const Code& rhs);
 std::ostream& operator<<(std::ostream& os, const Code& code);
-std::string operator+(const std::string s, const Code code);
 
 #endif /* _CODE_H_ */

@@ -33,7 +33,7 @@ template <class T>
 std::string
 stringfy_vector(std::vector<T> v) {
     std::string ret("[");
-    for (int i = 0; i < v.size(); i++) {
+    for (unsigned i = 0; i < v.size(); i++) {
         ret += static_cast<std::string>(v.at(i));
         if (i != v.size() - 1) {
             ret += ", ";

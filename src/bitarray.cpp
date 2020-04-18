@@ -10,8 +10,8 @@ using namespace std;
 Bitarray::Bitarray(const vector<Bit>& bits) : storage(bits) {}
 
 Bit
-Bitarray::get(int index) const {
-    if (index < 0 || index >= storage.size()) {
+Bitarray::get(unsigned index) const {
+    if (index >= storage.size()) {
         cerr << "Index out of range" << endl;
         throw runtime_error("Index out of range");
     }
@@ -20,10 +20,9 @@ Bitarray::get(int index) const {
 
 // start is closed, stop is open
 Bitarray
-Bitarray::slice(int start, int stop) {
+Bitarray::slice(unsigned start, unsigned stop) const {
     // FIXME: the boundary conditions for valid slice indices
-    if (start > stop || start < 0 || start > storage.size() || stop < 0 ||
-        stop > storage.size()) {
+    if (start > stop || start > storage.size() || stop > storage.size()) {
         cerr << "Buffer's length is " << this->length() << endl;
         cerr << "Slice invalid: start: " << start << " stop: " << stop << endl;
         throw runtime_error("Slice invalid");
@@ -41,11 +40,11 @@ Bitarray::slice(int start, int stop) {
 }
 
 Bitarray
-Bitarray::slice(int stop) {
+Bitarray::slice(unsigned stop) const {
     return slice(0, stop);
 }
 
-int
+unsigned
 Bitarray::length() const {
     return storage.size();
 }
@@ -78,7 +77,7 @@ Bitarray::from_int(int x, int bit_size = -1) {
     if (bit_size == -1) {
         bit_size = bits.size();
     } else {
-        if (bit_size < bits.size()) {
+        if (bit_size < (signed)bits.size()) {
             cerr << "Overflow Error" << endl;
             // TODO: more informative error message
             throw overflow_error("Overflow Error");
@@ -112,7 +111,7 @@ Bitarray::pop_byte_front() {
 }
 
 Bytes
-Bitarray::pop_bytes_front(int n) {
+Bitarray::pop_bytes_front(unsigned n) {
     if (storage.size() < n * 8) {
         cerr << "pop bytes number exceeds bitarray's containing bytes' number"
              << endl;
@@ -129,7 +128,7 @@ string
 Bitarray::str() const {
     string ret;
     ret += "Bitarray(";
-    for (int i = 0; i < storage.size(); i++) {
+    for (unsigned i = 0; i < storage.size(); i++) {
         ret += storage[i] ? '1' : '0';
         if (i != storage.size() - 1) {
             ret += ", ";

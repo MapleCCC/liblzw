@@ -53,7 +53,7 @@ write_lzwfile_header(const string& lzwfile, const vector<string>* header) {
         throw runtime_error("Can't open file: " + lzwfile);
     }
 
-    for (int i = 0; i < header->size(); i++) {
+    for (unsigned i = 0; i < header->size(); i++) {
         ofs << header->at(i) << endl;
     }
     ofs << endl;
@@ -61,7 +61,7 @@ write_lzwfile_header(const string& lzwfile, const vector<string>* header) {
 }
 
 vector<Code>*
-read_lzwfile_codes(string lzwfile, int code_size) {
+read_lzwfile_codes(string lzwfile, unsigned code_size) {
     ifstream f(lzwfile, ios::in | ios::binary);
     if (!f.is_open()) {
         cerr << "Can't open file: " << lzwfile << endl;
@@ -113,9 +113,9 @@ lzwfile_codes_writer::lzwfile_codes_writer(const string& lzwfile,
 
 void
 lzwfile_codes_writer::write(const vector<Code>* codes) {
-    for (int i = 0; i < codes->size(); i++) {
+    for (unsigned i = 0; i < codes->size(); i++) {
         Code code = codes->at(i);
-        buffer = buffer + Bitarray::from_int(code, code_size);
+        buffer = buffer + Bitarray::from_int(code.unbox(), code_size);
 
         while (buffer.length() >= 8) {
             Bytes byte = buffer.pop_byte_front();

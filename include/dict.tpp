@@ -139,7 +139,7 @@ Dict<T, S>::resize(unsigned new_capacity) {
     indexer.reset();
     indexer.resize(new_capacity);
 
-    for (int i = 0; i < old_capacity; i++) {
+    for (unsigned i = 0; i < old_capacity; i++) {
         if (old_indexer.get(i)) {
             set(old_slots[i].key, old_slots[i].value);
         }
@@ -270,7 +270,7 @@ Dict<T, S>::contains(const T& key) const {
 template <class T, class S>
 bool
 Dict<T, S>::contains_value(const S& value) const {
-    for (int i = 0; i < capacity; i++) {
+    for (unsigned i = 0; i < capacity; i++) {
         if (indexer.get(i) && slots[i].value == value) {
             return true;
         }
@@ -299,7 +299,7 @@ std::string
 Dict<T, S>::str() const {
     std::string ret;
     ret += "{";
-    for (int i = 0; i < capacity; i++) {
+    for (unsigned i = 0; i < capacity; i++) {
         if (indexer.get(i)) {
             ret += slots[i].key.str() + ":" + slots[i].value.str() + ", ";
         }

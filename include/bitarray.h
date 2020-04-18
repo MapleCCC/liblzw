@@ -11,16 +11,16 @@ class Bitarray {
    public:
     Bitarray() {}
     Bitarray(const std::vector<Bit>& bits);
-    Bit get(int index) const;
-    Bitarray slice(int start, int stop);
-    Bitarray slice(int start);
-    int length() const;
+    Bit get(unsigned index) const;
+    Bitarray slice(unsigned start, unsigned stop) const;
+    Bitarray slice(unsigned start) const;
+    unsigned length() const;
     Bitarray operator+(const Bitarray& rhs);
     int to_int();
     static Bitarray from_int(int x, int bit_size);
     void push_bytes_back(Bytes);
     Bytes pop_byte_front();
-    Bytes pop_bytes_front(int n = 1);
+    Bytes pop_bytes_front(unsigned n = 1);
     std::string str() const;
 
    private:
