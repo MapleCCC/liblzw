@@ -55,7 +55,6 @@ LZWEncoder::_encode(unsigned char* text, int text_size) {
     return ret;
 }
 
-
 void
 decode_file(std::string filename, lzwfile_codes_reader& code_reader,
             unsigned code_bitsize) {
@@ -73,12 +72,7 @@ decode_file(std::string filename, lzwfile_codes_reader& code_reader,
         if (code == virtual_eof) {
             break;
         }
-        Bytes bytes = decoder.decode(code);
-        // TODO: make IO more efficient. Chunk by chunk, instead of byte by
-        // byte.
-        for (unsigned i = 0; i < bytes.length(); i++) {
-            f << bytes.get(i);
-        }
+        f << decoder.decode(code);
     }
 
     f.close();

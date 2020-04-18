@@ -30,14 +30,14 @@ class Bytes {
     Bytes operator+(const unsigned char c);
     std::string str() const;
 
+    friend std::ostream& operator<<(std::ostream& os, const Bytes& bytes);
+
    private:
     std::vector<unsigned char> storage;
     long long hashcode;
 
     void update_hashcode(unsigned char);
 };
-
-std::ostream& operator<<(std::ostream& os, const Bytes& bytes);
 
 inline unsigned
 Bytes::length() const {
