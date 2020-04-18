@@ -18,6 +18,7 @@ class Bytes {
     Bytes();
     Bytes(unsigned char);
     Bytes(const Bytes&);
+    Bytes(Bytes&&);
     ~Bytes();
     unsigned char get(unsigned index) const;
     unsigned length() const;
@@ -25,6 +26,7 @@ class Bytes {
     void push_back(unsigned char c);
     long long hash() const;
     Bytes& operator=(const Bytes&);
+    Bytes& operator=(Bytes&&);
     bool operator==(const Bytes& rhs) const;
     bool operator!=(const Bytes& rhs) const;
     Bytes operator+(const Bytes& rhs) const;
