@@ -16,29 +16,17 @@ Code::operator==(const Code& rhs) const {
 }
 
 bool
-Code::operator==(const int rhs) const {
-    return x == rhs;
+Code::operator!=(const Code& rhs) const {
+    return x != rhs.x;
 }
-
-Code::operator int() const { return x; }
 
 string
 Code::str() const {
     return int2str(x);
 }
 
-bool
-operator==(const int lhs, const Code& rhs) {
-    return lhs == rhs.get();
-}
-
 ostream&
 operator<<(ostream& os, const Code& code) {
-    os << code.get();
+    os << code.unbox();
     return os;
-}
-
-string
-operator+(const string& s, const Code& code) {
-    return s + code.str();
 }

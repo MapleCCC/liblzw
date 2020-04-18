@@ -13,7 +13,7 @@ std::vector<std::string>* read_lzwfile_header(std::string lzwfile);
 void write_lzwfile_header(const std::string& lzwfile,
                           const std::vector<std::string>* header);
 // Caller is reponsible to remember to delete the returned vector
-std::vector<Code>* read_lzwfile_codes(std::string lzwfile, int code_size);
+std::vector<Code>* read_lzwfile_codes(std::string lzwfile, unsigned code_size);
 
 class lzwfile_codes_writer {
    public:

@@ -69,9 +69,9 @@ LZWDecoder::decode_file(std::string filename,
     }
 
     vector<Bytes>* buf = _decode(codes_itr);
-    for (int i = 0; i < buf->size(); i++) {
+    for (unsigned i = 0; i < buf->size(); i++) {
         Bytes bytes = buf->at(i);
-        for (int i = 0; i < bytes.length(); i++) {
+        for (unsigned i = 0; i < bytes.length(); i++) {
             f << bytes.get(i);
         }
     }

@@ -10,7 +10,7 @@ using namespace std;
 vector<Bit>
 bytes2bits(const Bytes& bytes) {
     vector<Bit> ret;
-    for (int i = 0; i < bytes.length(); i++) {
+    for (unsigned i = 0; i < bytes.length(); i++) {
         unsigned char byte = bytes.get(i);
         int x = (int)byte;
         vector<Bit> bits = int2bits(x);
@@ -33,7 +33,7 @@ bits2bytes(const std::vector<Bit>& bits) {
     }
     Bytes ret;
     vector<vector<Bit> > eight_bits = grouper(bits, 8);
-    for (int i = 0; i < eight_bits.size(); i++) {
+    for (unsigned i = 0; i < eight_bits.size(); i++) {
         vector<Bit> eight_bit = eight_bits.at(i);
         Bytes byte((unsigned char)bits2int(eight_bit));
         ret = ret + byte;
@@ -44,7 +44,7 @@ bits2bytes(const std::vector<Bit>& bits) {
 int
 bits2int(const std::vector<Bit>& bits) {
     int ret = 0;
-    for (int i = 0; i < bits.size(); i++) {
+    for (unsigned i = 0; i < bits.size(); i++) {
         ret = (ret << 1) + bits.at(i);
     }
     return ret;
