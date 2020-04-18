@@ -8,6 +8,7 @@
 #include "code.h"
 #include "code_dict.h"
 #include "str_dict.h"
+#include "lzwfile.h"
 
 class LZWEncoder {
    public:
@@ -25,13 +26,13 @@ class LZWEncoder {
 class LZWDecoder {
    public:
     LZWDecoder(int code_bitsize);
-    void decode_file(std::string filename, std::vector<Code>::iterator& codes_itr);
+    void decode_file(std::string filename, lzwfile_codes_reader& code_reader);
 
    private:
     StrDict str_dict;
     int virtual_eof;
     // Caller is responsible to rememebr to delete the returned vector
-    std::vector<Bytes>* _decode(std::vector<Code>::iterator& codes_itr);
+    std::vector<Bytes>* _decode(lzwfile_codes_reader& code_reader);
 };
 
 #endif /* _CODEC_H_ */

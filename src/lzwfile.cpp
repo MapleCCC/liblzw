@@ -60,42 +60,54 @@ write_lzwfile_header(const string& lzwfile, const vector<string>* header) {
     ofs.close();
 }
 
-vector<Code>*
-read_lzwfile_codes(string lzwfile, unsigned code_size) {
-    ifstream f(lzwfile, ios::in | ios::binary);
-    if (!f.is_open()) {
+lzwfile_codes_reader::lzwfile_codes_reader(string lzwfile, unsigned code_size) {
+    this->code_size = code_size;
+
+    file_handle.open(lzwfile, ios::in | ios::binary);
+    if (!file_handle.is_open()) {
         cerr << "Can't open file: " << lzwfile << endl;
         throw runtime_error("Can't open file: " + lzwfile);
     }
 
     // Skip through the header
-    string line = _readline(f);
+    string line = _readline(file_handle);
     while (!line.empty()) {
-        line = _readline(f);
+        line = _readline(file_handle);
+    }
+}
+
+Code
+lzwfile_codes_reader::read() {
+    if (eof()) {
+        cerr << "Can't read from lzwfile anymore. EOF reached." << endl;
+        throw runtime_error("Can't read from lzwfile anymore. EOF reached.");
     }
 
-    // Now read codes
-    vector<Code>* ret = new vector<Code>;
-    Bitarray buffer;
-    // WARNING: don't use f.good() or f.eof(), as they only return error when we
-    // have already read past the end of file. Stupid C!
-    while (f.peek() != EOF) {
+    while (buffer.length() < code_size) {
         unsigned char byte;
         /* WARNING: don't use >> operator. Instead, use get() method. Otherwise
            it will ignore bytes who when decoded to ASCII are whitespace
            characters */
         // f >> byte;
-        byte = f.get();
+        byte = file_handle.get();
         buffer.push_bytes_back(byte);
-
-        while (buffer.length() >= code_size) {
-            Code code = buffer.slice(code_size).to_int();
-            buffer = buffer.slice(code_size, buffer.length());
-            ret->push_back(code);
-        }
     }
-    f.close();
-    return ret;
+
+    Code code = buffer.slice(code_size).to_int();
+    buffer = buffer.slice(code_size, buffer.length());
+    return code;
+}
+
+bool
+lzwfile_codes_reader::eof() {
+    // WARNING: don't use f.good() or f.eof(), as they only return error
+    // when we have already read past the end of file. Stupid C!
+    return file_handle.peek() == EOF;
+}
+
+void
+lzwfile_codes_reader::close() {
+    file_handle.close();
 }
 
 lzwfile_codes_writer::lzwfile_codes_writer(const string& lzwfile,

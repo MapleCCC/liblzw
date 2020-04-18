@@ -61,14 +61,14 @@ LZWDecoder::LZWDecoder(int code_bitsize) : str_dict(code_bitsize) {
 
 void
 LZWDecoder::decode_file(std::string filename,
-                        vector<Code>::iterator& codes_itr) {
+                        lzwfile_codes_reader& code_reader) {
     ofstream f(filename.c_str(), ios::out | ios::binary);
     if (!f.is_open()) {
         cerr << "Can't open file: " << filename << endl;
         throw runtime_error("Can't open file: " + filename);
     }
 
-    vector<Bytes>* buf = _decode(codes_itr);
+    vector<Bytes>* buf = _decode(code_reader);
     for (unsigned i = 0; i < buf->size(); i++) {
         Bytes bytes = buf->at(i);
         for (unsigned i = 0; i < bytes.length(); i++) {
@@ -80,15 +80,14 @@ LZWDecoder::decode_file(std::string filename,
 }
 
 vector<Bytes>*
-LZWDecoder::_decode(vector<Code>::iterator& codes_itr) {
+LZWDecoder::_decode(lzwfile_codes_reader& code_reader) {
     vector<Bytes>* ret = new vector<Bytes>;
     // TODO: add heuristic: reserve reasonable space for vector, so as to reduce
     // overhead of resizing
     Bytes prefix;
-    for (;; codes_itr++) {
-        Code code = *codes_itr;
+    while (1) {
+        Code code = code_reader.read();
         if (code == virtual_eof) {
-            codes_itr++;
             break;
         }
 
