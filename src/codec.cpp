@@ -88,14 +88,13 @@ LZWDecoder::LZWDecoder(unsigned code_bitsize) : str_dict(code_bitsize) {}
 
 Bytes
 LZWDecoder::decode(Code code) {
-    // TODO: fix typo sufix to suffix.
     if (str_dict.contains(code)) {
-        Bytes sufix = str_dict.get(code);
+        Bytes suffix = str_dict.get(code);
         if (prefix.length()) {
-            str_dict.add_new_str(prefix + sufix.get_first_byte());
+            str_dict.add_new_str(prefix + suffix.get_first_byte());
         }
-        prefix = sufix;
-        return sufix;
+        prefix = suffix;
+        return suffix;
     } else {
         Bytes current_word = prefix + prefix.get_first_byte();
         str_dict.add_new_str(current_word);
