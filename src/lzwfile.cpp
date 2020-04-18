@@ -78,12 +78,13 @@ lzwfile_codes_reader::lzwfile_codes_reader(string lzwfile, unsigned code_size) {
 
 Code
 lzwfile_codes_reader::read() {
-    if (eof()) {
-        cerr << "Can't read from lzwfile anymore. EOF reached." << endl;
-        throw runtime_error("Can't read from lzwfile anymore. EOF reached.");
-    }
-
     while (buffer.length() < code_size) {
+        if (file_handle.peek() == EOF) {
+            cerr << "Can't read from lzwfile anymore. EOF reached." << endl;
+            throw runtime_error(
+                "Can't read from lzwfile anymore. EOF reached.");
+        }
+
         unsigned char byte;
         /* WARNING: don't use >> operator. Instead, use get() method. Otherwise
            it will ignore bytes who when decoded to ASCII are whitespace
