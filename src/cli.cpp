@@ -81,13 +81,12 @@ void
 decompress(const string& lzwfile) {
     vector<string>* header = read_lzwfile_header(lzwfile);
     LZWDecoder decoder(CODE_BITSIZE);
-    vector<Code>* codes = read_lzwfile_codes(lzwfile, CODE_BITSIZE);
-    vector<Code>::iterator codes_itr = codes->begin();
+    lzwfile_codes_reader code_reader(lzwfile, CODE_BITSIZE);
     for (unsigned i = 0; i < header->size(); i++) {
         cout << "Deflating " << header->at(i) << endl;
-        decoder.decode_file(header->at(i), codes_itr);
+        decoder.decode_file(header->at(i), code_reader);
     }
     delete header;
-    delete codes;
+    code_reader.close();
     cout << "Finish decompression" << endl;
 }
