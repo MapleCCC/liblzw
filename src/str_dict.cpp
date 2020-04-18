@@ -2,6 +2,8 @@
 
 #include <cmath>
 #include <stdexcept>
+
+#include "set.tpp"
 using namespace std;
 
 StrDict::StrDict(int code_bitsize) {
@@ -15,7 +17,6 @@ StrDict::StrDict(int code_bitsize) {
 
     for (int i = 0; i < 256; i++) {
         storage.set(Code(i), Bytes((unsigned char)i));
-        str_cache.add(Bytes((unsigned char)i));
     }
 }
 
@@ -23,11 +24,9 @@ void
 StrDict::clear() {
     // TODO: should we add another call to storage.reserve() here?
     storage.clear();
-    str_cache.clear();
     size = 0;
     for (int i = 0; i < 256; i++) {
         storage.set(Code(i), Bytes((unsigned char)i));
-        str_cache.add(Bytes((unsigned char)i));
     }
 }
 
@@ -49,15 +48,25 @@ StrDict::get(Code key) {
 
 void
 StrDict::add_new_str(Bytes item) {
-    if (str_cache.contains(item)) {
-        // throw runtime_error("string already in StrDict: " + item);
-        throw runtime_error("string already in StrDict: ");
-    }
     storage.set(Code(size + 256), item);
     size++;
-    str_cache.add(item);
 
     if (size == capacity) {
+        check_duplicate_str();
         clear();
+    }
+}
+
+void
+StrDict::check_duplicate_str() {
+    vector<Bytes> strings = storage.values();
+    Set<Bytes> set;
+    for (unsigned i = 0; i < strings.size(); i++) {
+        Bytes b = strings[i];
+        if (set.contains(b)) {
+            cerr << "Duplicate strings present in StrDict" << endl;
+            throw runtime_error("Duplicate strings present in StrDict");
+        }
+        set.add(strings[i]);
     }
 }

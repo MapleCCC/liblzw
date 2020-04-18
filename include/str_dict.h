@@ -4,7 +4,6 @@
 #include "bytes.h"
 #include "code.h"
 #include "dict.tpp"
-#include "set.tpp"
 
 class StrDict {
    public:
@@ -19,7 +18,8 @@ class StrDict {
     Dict<Code, Bytes> storage;
     int capacity;
     int size;
-    Set<Bytes> str_cache;
+
+    void check_duplicate_str();
 };
 
 #endif /* _STR_DICT_H_ */
