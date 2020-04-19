@@ -61,7 +61,7 @@ test_code_dict() {
 
     cd.clear();
 
-    for (int i = 0; i < pow(2, 12) - 256 - 1; i++) {
+    for (int i = 0; i < (1 << 12) - 256 - 1; i++) {
         cd.add_new_code("1" + int2str(i));
     }
     cd.add_new_code("2301");
@@ -95,7 +95,7 @@ test_str_dict() {
 
     sd.clear();
 
-    for (int i = 0; i < pow(2, 12) - 256 - 1; i++) {
+    for (int i = 0; i < (1 << 12) - 256 - 1; i++) {
         sd.add_new_str("1" + int2str(i));
     }
     sd.add_new_str("2301");
