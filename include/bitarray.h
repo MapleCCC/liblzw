@@ -4,27 +4,26 @@
 #include <iostream>
 #include <vector>
 
+#include "bigint.h"
 #include "bit.h"
 #include "bytes.h"
 
 class Bitarray {
    public:
-    Bitarray() {}
-    Bitarray(const std::vector<Bit>& bits);
-    Bit get(unsigned index) const;
+    Bitarray();
     Bitarray slice(unsigned start, unsigned stop) const;
-    Bitarray slice(unsigned start) const;
+    Bitarray slice(unsigned stop) const;
     unsigned length() const;
-    Bitarray operator+(const Bitarray& rhs);
+    Bitarray& operator+=(const Bitarray& rhs);
     int to_int();
     static Bitarray from_int(int x, int bit_size);
     void push_bytes_back(Bytes);
-    Bytes pop_byte_front();
-    Bytes pop_bytes_front(unsigned n = 1);
+    unsigned char pop_byte_front();
     std::string str() const;
 
    private:
-    std::vector<Bit> storage;
+    BigInt x;
+    unsigned size;
 };
 
 std::ostream& operator<<(std::ostream& os, const Bitarray& ba);

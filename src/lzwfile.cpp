@@ -128,11 +128,11 @@ void
 lzwfile_codes_writer::write(const vector<Code>* codes) {
     for (unsigned i = 0; i < codes->size(); i++) {
         Code code = codes->at(i);
-        buffer = buffer + Bitarray::from_int(code.unbox(), code_size);
+        buffer += Bitarray::from_int(code.unbox(), code_size);
 
         while (buffer.length() >= 8) {
-            Bytes byte = buffer.pop_byte_front();
-            file_handle << byte.get(0);
+            unsigned char byte = buffer.pop_byte_front();
+            file_handle << byte;
         }
     }
 }
@@ -141,8 +141,8 @@ void
 lzwfile_codes_writer::close() {
     if (buffer.length()) {
         buffer.push_bytes_back((unsigned char)0);
-        Bytes byte = buffer.pop_byte_front();
-        file_handle << byte.get(0);
+        unsigned char byte = buffer.pop_byte_front();
+        file_handle << byte;
     }
     file_handle.close();
 }

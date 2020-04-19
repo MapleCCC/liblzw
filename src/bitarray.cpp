@@ -7,36 +7,26 @@
 #include "converter.h"
 using namespace std;
 
-Bitarray::Bitarray(const vector<Bit>& bits) : storage(bits) {}
-
-Bit
-Bitarray::get(unsigned index) const {
-    if (index >= storage.size()) {
-        cerr << "Index out of range" << endl;
-        throw runtime_error("Index out of range");
-    }
-    return storage.at(index);
-}
+Bitarray::Bitarray() {
+    x = 0;
+    size = 0;
+};
 
 // start is closed, stop is open
 Bitarray
 Bitarray::slice(unsigned start, unsigned stop) const {
     // FIXME: the boundary conditions for valid slice indices
-    if (start > stop || start > storage.size() || stop > storage.size()) {
+    if (!(start <= stop && start <= size && stop <= size)) {
         cerr << "Buffer's length is " << this->length() << endl;
         cerr << "Slice invalid: start: " << start << " stop: " << stop << endl;
         throw runtime_error("Slice invalid");
     }
 
-    // Will it be faster to insert than double construction?
-    // Bitarray new_bitarray(vector<Bit>(storage.begin() + start,
-    // storage.begin()+stop));
-    Bitarray new_bitarray;
-    new_bitarray.storage.insert(new_bitarray.storage.end(),
-                                storage.begin() + start,
-                                storage.begin() + stop);
-    assert(new_bitarray.length() == stop - start);
-    return new_bitarray;
+    Bitarray ret;
+    unsigned mask = (1 << (stop - start)) - 1;
+    ret.x = (x >> (size - stop)) & mask;
+    ret.size = stop - start;
+    return ret;
 }
 
 Bitarray
@@ -46,93 +36,91 @@ Bitarray::slice(unsigned stop) const {
 
 unsigned
 Bitarray::length() const {
-    return storage.size();
+    return size;
 }
 
-Bitarray
-Bitarray::operator+(const Bitarray& rhs) {
-    Bitarray new_bitarray;
-    new_bitarray.storage.insert(new_bitarray.storage.end(), storage.begin(),
-                                storage.end());
-    new_bitarray.storage.insert(new_bitarray.storage.end(), rhs.storage.begin(),
-                                rhs.storage.end());
-    return new_bitarray;
+Bitarray&
+Bitarray::operator+=(const Bitarray& rhs) {
+    if ((size + rhs.size) > MAX_BIG_INT_BIT_SIZE) {
+        cerr << "Bitarray Overflow when Bitarray::operator+=" << endl;
+        throw overflow_error("Bitarray Overflow when Bitarray::operator+=");
+    }
+
+    x = (x << rhs.size) + rhs.x;
+    size += rhs.size;
+    return *this;
 }
 
 int
 Bitarray::to_int() {
-    return bits2int(storage);
+    return x;
+}
+
+static unsigned
+bit_length(unsigned x) {
+    unsigned length = 0;
+    unsigned temp = 1;
+    while (temp < x) {
+        temp <<= 1;
+        length++;
+    }
+    return length;
 }
 
 Bitarray
-// Bitarray::from_int(int x, int bit_size) {
 Bitarray::from_int(int x, int bit_size = -1) {
     if (x < 0) {
         cerr << "Negative integer is not supported yet" << endl;
         throw runtime_error("Negative integer is not supported yet");
     }
 
-    vector<Bit> bits = int2bits(x);
+    unsigned canonical_bit_length = bit_length(x);
 
     if (bit_size == -1) {
-        bit_size = bits.size();
+        bit_size = canonical_bit_length;
     } else {
-        if (bit_size < (signed)bits.size()) {
-            cerr << "Overflow Error" << endl;
+        if (bit_size < (signed)canonical_bit_length) {
+            cerr << "Overflow Error when calling from_int" << endl;
             // TODO: more informative error message
-            throw overflow_error("Overflow Error");
+            throw overflow_error("Overflow Error when calling from_int");
         }
     }
 
-    // FIXME: don't know why here has error?
-    // for (int i = 0; i < (bit_size - bits.size()); i++) {
-    int pad_zero_num = bit_size - bits.size();
-    for (int i = 0; i < pad_zero_num; i++) {
-        bits.insert(bits.begin(), ZERO);
-    }
-
-    Bitarray ret(bits);
+    Bitarray ret;
+    ret.x = x;
+    ret.size = bit_size;
     return ret;
 }
 
 void
 Bitarray::push_bytes_back(Bytes bytes) {
-    vector<Bit> bits = bytes2bits(bytes);
-    storage.insert(storage.end(), bits.begin(), bits.end());
+    for (unsigned i = 0; i < bytes.length(); i++) {
+        unsigned char byte = bytes.get(i);
+        x = (x << 8) + byte;
+        size += 8;
+    }
 }
 
-Bytes
+unsigned char
 Bitarray::pop_byte_front() {
-    if (storage.size() < 8) {
+    if (size < 8) {
         cerr << "pop byte from bitarray with less than 8 bits" << endl;
         throw runtime_error("pop byte from bitarray with less than 8 bits");
     }
-    return pop_bytes_front(1);
-}
 
-Bytes
-Bitarray::pop_bytes_front(unsigned n) {
-    if (storage.size() < n * 8) {
-        cerr << "pop bytes number exceeds bitarray's containing bytes' number"
-             << endl;
-        throw runtime_error(
-            "pop bytes number exceeds bitarray's containing bytes' number");
-    }
-    Bytes bs =
-        bits2bytes(vector<Bit>(storage.begin(), storage.begin() + 8 * n));
-    storage = vector<Bit>(storage.begin() + 8 * n, storage.end());
-    return bs;
+    unsigned char ret = x >> (size - 8);
+    x &= (1 << (size - 8)) - 1;
+    size -= 8;
+    return ret;
 }
 
 string
 Bitarray::str() const {
     string ret;
     ret += "Bitarray(";
-    for (unsigned i = 0; i < storage.size(); i++) {
-        ret += storage[i] ? '1' : '0';
-        if (i != storage.size() - 1) {
-            ret += ", ";
-        }
+    for (unsigned i = 0; i < size; i++) {
+        unsigned mask = 1 << (size - i - 1);
+        ret += (x & mask) ? '1' : '0';
     }
     ret += ")";
     return ret;
