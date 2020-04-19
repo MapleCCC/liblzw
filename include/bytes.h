@@ -4,13 +4,6 @@
 #include <string>
 #include <vector>
 
-// [DEPRECATED] Don't try to print Bytes, because it contains unsigned char
-// data, some of which is non-printable. Thumb of rule is to not misuse binary
-// data as ASCII text, although in some situations they are interchangeable. For
-// safety, it's best to avoid doing that.
-
-// TODO: implement move semantic to improve performance in many situations
-
 // Bytes type is merely a semantic thin abstraction over vector of unsigned
 // chars.
 class Bytes {

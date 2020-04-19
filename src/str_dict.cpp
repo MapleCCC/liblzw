@@ -41,8 +41,7 @@ StrDict::get(Code key) {
     try {
         return storage.get(key);
     } catch (out_of_range e) {
-        // throw out_of_range("Code not present in StrDict: " + key);
-        throw out_of_range("Code not present in StrDict: ");
+        throw out_of_range("Code not present in StrDict: " + key.str());
     }
 }
 
@@ -52,21 +51,21 @@ StrDict::add_new_str(Bytes item) {
     size++;
 
     if (size == capacity) {
-        check_duplicate_str();
+        // check_duplicate_str();
         clear();
     }
 }
 
-void
-StrDict::check_duplicate_str() {
-    vector<Bytes> strings = storage.values();
-    Set<Bytes> set;
-    for (unsigned i = 0; i < strings.size(); i++) {
-        Bytes b = strings[i];
-        if (set.contains(b)) {
-            cerr << "Duplicate strings present in StrDict" << endl;
-            throw runtime_error("Duplicate strings present in StrDict");
-        }
-        set.add(strings[i]);
-    }
-}
+// void
+// StrDict::check_duplicate_str() {
+//     vector<Bytes> strings = storage.values();
+//     Set<Bytes> set;
+//     for (unsigned i = 0; i < strings.size(); i++) {
+//         Bytes b = strings[i];
+//         if (set.contains(b)) {
+//             cerr << "Duplicate strings present in StrDict" << endl;
+//             throw runtime_error("Duplicate strings present in StrDict");
+//         }
+//         set.add(strings[i]);
+//     }
+// }
