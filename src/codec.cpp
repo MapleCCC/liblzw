@@ -1,13 +1,12 @@
 #include "codec.h"
 
-#include <cmath>
 #include <fstream>
 #include <iostream>
 #include <stdexcept>
 using namespace std;
 
 LZWEncoder::LZWEncoder(int code_bitsize) : code_dict(code_bitsize) {
-    virtual_eof = pow(2, code_bitsize) - 1;
+    virtual_eof = (1 << code_bitsize) - 1;
 }
 
 vector<Code>*
@@ -64,7 +63,7 @@ decode_file(std::string filename, lzwfile_codes_reader& code_reader,
         throw runtime_error("Can't open file: " + filename);
     }
 
-    int virtual_eof = pow(2, code_bitsize) - 1;
+    int virtual_eof = (1 << code_bitsize) - 1;
 
     LZWDecoder decoder(code_bitsize);
     while (!code_reader.eof()) {
