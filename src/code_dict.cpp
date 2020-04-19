@@ -39,16 +39,14 @@ CodeDict::get(Bytes key) {
     try {
         return storage.get(key);
     } catch (out_of_range) {
-        // throw out_of_range("code is missing for string: " + key);
-        throw out_of_range("code is missing for string: ");
+        throw out_of_range("code is missing for string: " + key.str());
     }
 }
 
 void
 CodeDict::add_new_code(Bytes item) {
     if (contains(item)) {
-        // throw runtime_error(item + " already in code dict");
-        throw runtime_error(" already in code dict");
+        throw runtime_error(item.str() + " already in code dict");
     }
 
     storage.set(item, Code(size + 256));

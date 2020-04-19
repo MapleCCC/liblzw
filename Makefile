@@ -13,9 +13,9 @@ PROGS=${BUILD_DIR}/lzw
 # CXX=clang++-3.8
 # CXX=clang
 CXX=clang++
-CXXFLAGS=-pg # -fprofile-arcs -ftest-coverage
+# CXXFLAGS=-pg # -fprofile-arcs -ftest-coverage
 # CXXFLAGS=-Ofast -Wall -Wextra -pedantic
-# CXXFLAGS=-g -Wall -Wextra -pedantic
+CXXFLAGS=-g -Wall -Wextra -pedantic
 # -Xclang -flto-visibility-public-std # -target x86_64-pc-windows-gnu
 # CXX=g++
 # CXXFLAGS=-pg -fprofile-arcs -ftest-coverage
@@ -54,8 +54,9 @@ integrate-test: ${BUILD_DIR}/lzw # ${PROGS}
 ${BUILD_DIR}/lzw: lzw.cpp ${BUILD_DIR}/liblzw.a
 	${CXX} -o $@ $^ ${CXXFLAGS} ${CPPFLAGS}
 
-${BUILD_DIR}/%: ${TEST_DIR}/%.cpp ${BUILD_DIR}/liblzw.a
-	${CXX} -o $@ $^ ${CXXFLAGS} ${CPPFLAGS}
+${BUILD_DIR}/%: ${TEST_DIR}/%.cpp
+	concat $< -o ${addsuffix -concated.cpp, $<} -I ${INC_DIR} -S ${SRC_DIR}
+	${CXX} -o $@ ${addsuffix -concated.cpp, $<} ${CXXFLAGS} ${CPPFLAGS}
 
 ${BUILD_DIR}/liblzw.a: ${OBJS}
 	${AR} ${ARFLAGS} $@ $^
@@ -84,8 +85,8 @@ prof:
 concat:
 	concat lzw.cpp -I include -S src
 	# g++ -Ofast -static-libstdc++ --std=c++11 -Wall -Wextra concated.cpp -o build/lzw
-	g++ -pg -Ofast -static-libstdc++ --std=c++11 -Wall -Wextra concated.cpp -o build/lzw
-	# g++ --std=c++11 -static-libstdc++ -Wall -Wextra -g concated.cpp -o build/lzw
+	# g++ -pg -Ofast -static-libstdc++ --std=c++11 -Wall -Wextra concated.cpp -o build/lzw
+	g++ --std=c++11 -static-libstdc++ -Wall -Wextra -g concated.cpp -o build/lzw
 
 clean:
 	rm -rf ${BUILD_DIR}/*
