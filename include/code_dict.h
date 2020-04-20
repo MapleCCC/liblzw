@@ -2,10 +2,10 @@
 #define _CODE_DICT_H_
 
 #include <string>
+#include <unordered_map>
 
 #include "bytes.h"
 #include "code.h"
-#include "dict.tpp"
 
 class CodeDict {
    public:
@@ -18,7 +18,7 @@ class CodeDict {
     std::string str() const;
 
    private:
-    Dict<Bytes, Code> storage;
+    std::unordered_map<Bytes, Code> storage;
     int capacity;
     int size;
 };

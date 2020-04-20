@@ -17,7 +17,7 @@ StrDict::StrDict(int code_bitsize) {
     storage.reserve(1 << code_bitsize);
 
     for (int i = 0; i < 256; i++) {
-        storage.set(Code(i), Bytes(1, (unsigned char)i));
+        storage[Code(i)] = Bytes(1, (unsigned char)i);
     }
 }
 
@@ -27,20 +27,20 @@ StrDict::clear() {
     storage.clear();
     size = 0;
     for (int i = 0; i < 256; i++) {
-        storage.set(Code(i), Bytes(1, (unsigned char)i));
+        storage[Code(i)] = Bytes(1, (unsigned char)i);
     }
 }
 
 // inline
 bool
 StrDict::contains(Code item) {
-    return storage.contains(item);
+    return storage.count(item);
 }
 
 Bytes
 StrDict::get(Code key) {
     try {
-        return storage.get(key);
+        return storage[key];
     } catch (out_of_range e) {
         throw out_of_range("Code not present in StrDict: " + int2str(key));
     }
@@ -48,7 +48,7 @@ StrDict::get(Code key) {
 
 void
 StrDict::add_new_str(Bytes item) {
-    storage.set(Code(size + 256), item);
+    storage[Code(size + 256)] = item;
     size++;
 
     if (size == capacity) {
@@ -71,7 +71,10 @@ StrDict::check_duplicate_str() {
     }
 }
 
+// TODO
 string
 StrDict::str() const {
-    return storage.str();
+    // return storage.str();
+    cerr << "Not Implemented Yet" << endl;
+    throw runtime_error("Not Implemented Yet");
 }

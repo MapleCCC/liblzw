@@ -1,5 +1,6 @@
 #include "code_dict.h"
 
+#include <iostream>  // cerr
 #include <stdexcept>
 
 using namespace std;
@@ -14,7 +15,7 @@ CodeDict::CodeDict(int code_bitsize) {
     storage.reserve(1 << code_bitsize);
 
     for (int i = 0; i < 256; i++) {
-        storage.set(Bytes(1, (unsigned char)i), Code(i));
+        storage[Bytes(1, (unsigned char)i)] = Code(i);
     }
 }
 
@@ -24,19 +25,19 @@ CodeDict::clear() {
     storage.clear();
     size = 0;
     for (int i = 0; i < 256; i++) {
-        storage.set(Bytes(1, (unsigned char)i), Code(i));
+        storage[Bytes(1, (unsigned char)i)] = Code(i);
     }
 }
 
 inline bool
 CodeDict::contains(Bytes item) {
-    return storage.contains(item);
+    return storage.count(item);
 }
 
 Code
 CodeDict::get(Bytes key) {
     try {
-        return storage.get(key);
+        return storage[key];
     } catch (out_of_range) {
         throw out_of_range("code is missing for string: " + key);
     }
@@ -48,7 +49,7 @@ CodeDict::add_new_code(Bytes item) {
         throw runtime_error(item + " already in code dict");
     }
 
-    storage.set(item, Code(size + 256));
+    storage[item] = Code(size + 256);
     size += 1;
 
     if (size == capacity) {
@@ -56,7 +57,10 @@ CodeDict::add_new_code(Bytes item) {
     }
 }
 
+// TODO
 string
 CodeDict::str() const {
-    return storage.str();
+    // return storage.str();
+    cerr << "Not Implemented Yet" << endl;
+    throw runtime_error("Not Implemented Yet");
 }
