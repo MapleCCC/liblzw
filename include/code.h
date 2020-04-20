@@ -6,14 +6,4 @@
 
 typedef int Code;
 
-namespace std {
-template <>
-struct hash<Code> {
-    size_t operator()(const Code c) { return int_hasher(c); }
-
-   private:
-    hash<int> int_hasher;
-};
-}  // namespace std
-
 #endif /* _CODE_H_ */
