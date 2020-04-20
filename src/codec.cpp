@@ -66,11 +66,9 @@ decode_file(std::string filename, lzwfile_codes_reader& code_reader,
     Code virtual_eof((1 << code_bitsize) - 1);
 
     LZWDecoder decoder(code_bitsize);
-    while (!code_reader.eof()) {
-        Code code = code_reader.read();
-        if (code == virtual_eof) {
-            break;
-        }
+
+    Code code;
+    while ((code = code_reader.read()) != virtual_eof) {
         f << decoder.decode(code);
     }
 
