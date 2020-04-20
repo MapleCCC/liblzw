@@ -14,7 +14,7 @@ CodeDict::CodeDict(int code_bitsize) {
     storage.reserve(1 << code_bitsize);
 
     for (int i = 0; i < 256; i++) {
-        storage.set(Bytes((unsigned char)i), Code(i));
+        storage.set(Bytes(1, (unsigned char)i), Code(i));
     }
 }
 
@@ -24,7 +24,7 @@ CodeDict::clear() {
     storage.clear();
     size = 0;
     for (int i = 0; i < 256; i++) {
-        storage.set(Bytes((unsigned char)i), Code(i));
+        storage.set(Bytes(1, (unsigned char)i), Code(i));
     }
 }
 
@@ -38,14 +38,14 @@ CodeDict::get(Bytes key) {
     try {
         return storage.get(key);
     } catch (out_of_range) {
-        throw out_of_range("code is missing for string: " + key.str());
+        throw out_of_range("code is missing for string: " + key);
     }
 }
 
 void
 CodeDict::add_new_code(Bytes item) {
     if (contains(item)) {
-        throw runtime_error(item.str() + " already in code dict");
+        throw runtime_error(item + " already in code dict");
     }
 
     storage.set(item, Code(size + 256));

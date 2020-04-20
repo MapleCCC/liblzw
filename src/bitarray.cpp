@@ -94,7 +94,7 @@ Bitarray::from_int(int x, int bit_size = -1) {
 void
 Bitarray::push_bytes_back(Bytes bytes) {
     for (unsigned i = 0; i < bytes.length(); i++) {
-        unsigned char byte = bytes.get(i);
+        unsigned char byte = bytes[i];
         x = (x << 8) + byte;
         size += 8;
     }
@@ -121,7 +121,7 @@ Bitarray::str() const {
         unsigned mask = 1 << (size - i - 1);
         ret += (x & mask) ? '1' : '0';
     }
-    ret += ")";
+    ret += ')';
     return ret;
 }
 

@@ -4,6 +4,7 @@
 #include <cmath>
 #include <functional>
 #include <iostream>
+#include <sstream>
 #include <stdexcept>
 #include <vector>
 
@@ -311,10 +312,12 @@ template <class T, class S>
 std::string
 Dict<T, S>::str() const {
     std::string ret;
+    std::stringstream ss;
     ret += "{";
     for (unsigned i = 0; i < capacity; i++) {
         if (indexer.get(i)) {
-            ret += slots[i].key.str() + ":" + slots[i].value.str() + ", ";
+            ss << slots[i].key << ":" << slots[i].value << ", ";
+            ret += ss.str();
         }
     }
     if (size) {
