@@ -4,7 +4,6 @@
 #include <cassert>
 #include <iostream>
 
-#include "converter.h"
 using namespace std;
 
 Bitarray::Bitarray() {
