@@ -69,3 +69,8 @@ StrDict::add_new_str(Bytes item) {
 //         set.add(strings[i]);
 //     }
 // }
+
+string
+StrDict::str() const {
+    return storage.str();
+}
