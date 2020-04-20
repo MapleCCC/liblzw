@@ -5,7 +5,7 @@
 
 using namespace std;
 
-CodeDict::CodeDict(int code_bitsize) {
+CodeDict::CodeDict(unsigned code_bitsize) {
     if (code_bitsize <= 8) {
         throw runtime_error("Code bit size should be larger than 8");
     }

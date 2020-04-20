@@ -9,7 +9,7 @@
 
 class StrDict {
    public:
-    StrDict(int code_bitsize);
+    StrDict(unsigned code_bitsize);
     // ~StrDict() { storage.statistics(); }
     void clear();
     bool contains(Code);
@@ -19,8 +19,8 @@ class StrDict {
 
    private:
     std::unordered_map<Code, Bytes> storage;
-    int capacity;
-    int size;
+    unsigned capacity;
+    unsigned size;
 
     void check_duplicate_str();
 };

@@ -7,7 +7,7 @@
 #include "utils.tpp"
 using namespace std;
 
-StrDict::StrDict(int code_bitsize) {
+StrDict::StrDict(unsigned code_bitsize) {
     if (code_bitsize <= 8) {
         throw runtime_error("Code bit size should be larger than 8");
     }
@@ -51,6 +51,7 @@ StrDict::get(Code key) {
 
 void
 StrDict::add_new_str(Bytes item) {
+    // cout << "New string length: " << item.length() << endl;
     storage[Code(size + 256)] = item;
     size++;
 

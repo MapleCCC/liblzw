@@ -80,13 +80,16 @@ cov:
 	gcov ${SRCS}
 
 prof:
-	gprof ${PROGS}.exe gmon.out > prof_result
+	# gprof ${PROGS}.exe gmon.out > prof_result
+	gprof -l ${PROGS}.exe gmon.out > prof_result
+	code prof_result
 
 concat:
 	concat lzw.cpp -I include -S src
 	# g++ -Ofast -static-libstdc++ --std=c++11 -Wall -Wextra concated.cpp -o build/lzw
-	# g++ -pg -Ofast -static-libstdc++ --std=c++11 -Wall -Wextra concated.cpp -o build/lzw
-	g++ --std=c++11 -static-libstdc++ -Wall -Wextra -g concated.cpp -o build/lzw
+	g++ -pg -g -Ofast -static-libstdc++ --std=c++11 -Wall -Wextra concated.cpp -o build/lzw
+	# g++ -pg -g -static-libstdc++ --std=c++11 -Wall -Wextra concated.cpp -o build/lzw
+	# g++ --std=c++11 -static-libstdc++ -Wall -Wextra -g concated.cpp -o build/lzw
 
 clean:
 	rm -rf ${BUILD_DIR}/*
