@@ -39,7 +39,7 @@ LZWEncoder::_encode(unsigned char* text, int text_size) {
         // TODO: for lookup and retrieve from code dict, use stateful hash
         // algorithm object, to reduce hash recomputation cost.
         // This optimization could be done in Bytes class implementation level.
-        Bytes current_word = prefix + text[i];
+        Bytes current_word = prefix + (char)text[i];
         if (code_dict.contains(current_word)) {
             prefix = current_word;
         } else {
@@ -63,7 +63,7 @@ decode_file(std::string filename, lzwfile_codes_reader& code_reader,
         throw runtime_error("Can't open file: " + filename);
     }
 
-    int virtual_eof = (1 << code_bitsize) - 1;
+    Code virtual_eof((1 << code_bitsize) - 1);
 
     LZWDecoder decoder(code_bitsize);
     while (!code_reader.eof()) {
@@ -84,12 +84,12 @@ LZWDecoder::decode(Code code) {
     if (str_dict.contains(code)) {
         Bytes suffix = str_dict.get(code);
         if (prefix.length()) {
-            str_dict.add_new_str(prefix + suffix.get_first_byte());
+            str_dict.add_new_str(prefix + suffix[0]);
         }
         prefix = suffix;
         return suffix;
     } else {
-        Bytes current_word = prefix + prefix.get_first_byte();
+        Bytes current_word = prefix + prefix[0];
         str_dict.add_new_str(current_word);
         prefix = current_word;
         return current_word;

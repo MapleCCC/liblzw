@@ -3,6 +3,7 @@
 #include <stdexcept>
 
 #include "set.tpp"
+#include "utils.tpp"
 using namespace std;
 
 StrDict::StrDict(int code_bitsize) {
@@ -15,7 +16,7 @@ StrDict::StrDict(int code_bitsize) {
     storage.reserve(1 << code_bitsize);
 
     for (int i = 0; i < 256; i++) {
-        storage.set(Code(i), Bytes((unsigned char)i));
+        storage.set(Code(i), Bytes(1, (unsigned char)i));
     }
 }
 
@@ -25,7 +26,7 @@ StrDict::clear() {
     storage.clear();
     size = 0;
     for (int i = 0; i < 256; i++) {
-        storage.set(Code(i), Bytes((unsigned char)i));
+        storage.set(Code(i), Bytes(1, (unsigned char)i));
     }
 }
 
@@ -40,7 +41,7 @@ StrDict::get(Code key) {
     try {
         return storage.get(key);
     } catch (out_of_range e) {
-        throw out_of_range("Code not present in StrDict: " + key.str());
+        throw out_of_range("Code not present in StrDict: " + int2str(key));
     }
 }
 

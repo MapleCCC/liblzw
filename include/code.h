@@ -4,27 +4,15 @@
 #include <functional>
 #include <iostream>
 
-// Code type is merely a thin abstraction over int type
-class Code {
-   public:
-    Code(int x = 0) : x(x) {}
-    // no setter method. Immutable type.
-    int unbox() const { return x; }
-    long hash() const;
-    bool operator==(const Code&) const;
-    bool operator!=(const Code&) const;
-    std::string str() const;
-
-   private:
-    int x;
-};
-
-std::ostream& operator<<(std::ostream& os, const Code& code);
+typedef int Code;
 
 namespace std {
 template <>
 struct hash<Code> {
-    size_t operator()(const Code c) { return c.hash(); }
+    size_t operator()(const Code c) { return int_hasher(c); }
+
+   private:
+    hash<int> int_hasher;
 };
 }  // namespace std
 
