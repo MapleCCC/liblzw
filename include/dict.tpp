@@ -2,6 +2,7 @@
 #define _DICT_H_
 
 #include <cmath>
+#include <functional>
 #include <iostream>
 #include <stdexcept>
 #include <vector>
@@ -58,6 +59,7 @@ class Dict {
     unsigned capacity;
     Bucket<T, S>* slots;
     Bitmap indexer;
+    std::hash<T> hasher;
     // Dict<S, NULL> values;
     // bool is_values_cached;
     // #if COLLECT_STATISTICS_MODE == 1
@@ -206,7 +208,7 @@ Dict<T, S>::find_bucket(const T& key) const {
     // loop.
     unsigned mask = capacity - 1;
     // wrap hash() call inside abs(), only positive value is needed
-    unsigned h = std::abs(key.hash());
+    unsigned h = std::abs(hasher(key));
     unsigned perturb = h;
     unsigned index = h & mask;
     while (indexer.get(index) && slots[index].key != key) {

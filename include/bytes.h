@@ -1,6 +1,7 @@
 #ifndef _BYTES_H_
 #define _BYTES_H_
 
+#include <functional>
 #include <string>
 #include <vector>
 
@@ -31,6 +32,13 @@ class Bytes {
 
     void update_hashcode(unsigned char);
 };
+
+namespace std {
+template <>
+struct hash<Bytes> {
+    size_t operator()(const Bytes& b) { return b.hash(); }
+};
+}  // namespace std
 
 inline unsigned
 Bytes::length() const {
