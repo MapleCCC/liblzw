@@ -1,6 +1,8 @@
 #ifndef _STR_DICT_H_
 #define _STR_DICT_H_
 
+#include <string>
+
 #include "bytes.h"
 #include "code.h"
 #include "dict.tpp"
@@ -13,6 +15,7 @@ class StrDict {
     bool contains(Code);
     Bytes get(Code);
     void add_new_str(Bytes);
+    std::string str() const;
 
    private:
     Dict<Code, Bytes> storage;
