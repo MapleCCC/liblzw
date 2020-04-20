@@ -1,7 +1,6 @@
 #ifndef _DICT_H_
 #define _DICT_H_
 
-#include <cmath>
 #include <functional>
 #include <iostream>
 #include <sstream>
@@ -208,8 +207,7 @@ Dict<T, S>::find_bucket(const T& key) const {
     // slots. As long as that size < capacity, we will not go into infinite
     // loop.
     unsigned mask = capacity - 1;
-    // wrap hash() call inside abs(), only positive value is needed
-    unsigned h = std::abs(hasher(key));
+    unsigned h = hasher(key);
     unsigned perturb = h;
     unsigned index = h & mask;
     while (indexer.get(index) && slots[index].key != key) {
