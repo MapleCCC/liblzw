@@ -37,14 +37,17 @@
 - Add \[SCOPE\] before every entry in TODO.md
 - Project idea: script to auto-generate Makefile
 - Push to GitHub upstream.
-- Remeber to use flag -static-libstdc++ when compiling C++ in MinGW Windows
+- Remeber to use flag -static-libstdc++ when compiling C++ in MinGW Windows environment.
 - Restructure project layout. #include "lzw/utils.h" instead of #include "utils.h"
 - Reimplement Bytes and Bitarray data strcutre. Use more efficient implementation.
 - Use C++11 move semantic to improve performance in vector resize process.
-- Use std::copy, std::hash, std::move, std::memcpy;
+- Use std::copy, std::hash, std::move, std::memcpy, std::map, std::swap.
 - Implement variants of LZW algorithm. E.g., code size, code table whether to reuse. Encode algorithm parameters to lzwfile and let decode logic automatically inspect it.
 - The canonical copy-assignment operator is expected to perform no action on self-assignment. Ref: https://en.cppreference.com/w/cpp/language/operators
 - Other overloaded operator also some of them expect no action performed on self-assignment. Ref: https://en.cppreference.com/w/cpp/language/operators
+- Write README. Elaborate on algorithmic details.
+- Use immutable data structure to improve space efficiency.
+
 
 ## Done
 
@@ -54,3 +57,10 @@
 - Don't use malloc in C++. It can't correctly handle class initialization.
 - [str_dict] Add str_cache to reduce string membership check from O(n) to O(1)
 - Use .tpp as extension for templates
+- Use std::string and specialized std::hash<std::string> function object to replace wrapper type Bytes.
+- Use int and specialized std::hash<int> function object ot replace wrapper type Code.
+
+
+## Archive
+
+- Use std::bitset to replace self-made bitmap data structure.

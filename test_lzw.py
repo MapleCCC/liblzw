@@ -14,7 +14,7 @@ from LZW.utils import ascii2byte, is_equal_file
 
 EXAMPLE_EXE = os.path.join(os.getcwd(), "lzw_example_win.exe")
 # EXPERIMENT_EXE = os.path.join(os.getcwd(), "lzw.exe")
-EXPERIMENT_EXE = os.path.join(os.getcwd(), "lzw")
+EXPERIMENT_EXE = os.path.join(os.getcwd(), "build", "lzw")
 BASELINE_EXE = os.path.join(os.getcwd(), "LZW", "__main__.py")
 
 MAX_TEST_FILE_LEN = 10000

@@ -6,7 +6,7 @@
 #include "utils.tpp"
 using namespace std;
 
-StrDict::StrDict(int code_bitsize) {
+StrDict::StrDict(unsigned code_bitsize) {
     if (code_bitsize <= 8) {
         throw runtime_error("Code bit size should be larger than 8");
     }

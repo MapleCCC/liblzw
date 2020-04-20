@@ -9,7 +9,7 @@
 
 class CodeDict {
    public:
-    CodeDict(int code_bitsize);
+    CodeDict(unsigned code_bitsize);
     // ~CodeDict() { storage.statistics(); }
     void clear();
     bool contains(Bytes);
@@ -19,8 +19,8 @@ class CodeDict {
 
    private:
     Dict<Bytes, Code> storage;
-    int capacity;
-    int size;
+    unsigned capacity;
+    unsigned size;
 };
 
 #endif /* _CODE_DICT_H_ */
