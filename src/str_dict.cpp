@@ -23,8 +23,11 @@ StrDict::StrDict(int code_bitsize) {
 
 void
 StrDict::clear() {
-    // TODO: should we add another call to storage.reserve() here?
     storage.clear();
+    // reverse after clear. Standard doesn't provide guarantee that calling
+    // clear() doesn't change capacity. Ref:
+    // https://stackoverflow.com/questions/18467624/what-does-the-standard-say-about-how-calling-clear-on-a-vector-changes-the-capac
+    storage.reserve(capacity + 256 + 1);
     size = 0;
     for (int i = 0; i < 256; i++) {
         storage[Code(i)] = Bytes(1, (unsigned char)i);
