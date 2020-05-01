@@ -19,6 +19,7 @@ FileEncoder::encode_file(string filename, lzwfile_codes_writer& code_writer) {
         throw runtime_error("Can't open file: " + filename);
     }
 
+    raw_encoder.flush();
     Code code;
     Bytes byte;
     while (fp.peek() != EOF) {
@@ -53,11 +54,12 @@ LZWEncoder::encode(Bytes byte) {
 
 Code
 LZWEncoder::flush() {
+    Code ret = -1;
     if (prefix.length()) {
-        return code_dict.get(prefix);
-    } else {
-        return -1;
+        ret = code_dict.get(prefix);
+        prefix.clear();
     }
+    return ret;
 }
 
 FileDecoder::FileDecoder(unsigned code_bitsize) : raw_decoder(code_bitsize) {
@@ -73,10 +75,12 @@ FileDecoder::decode_file(std::string filename,
         throw runtime_error("Can't open file: " + filename);
     }
 
+    raw_decoder.flush();
     Code code;
     while ((code = code_reader.read()) != virtual_eof) {
         f << raw_decoder.decode(code);
     }
+    raw_decoder.flush();
 
     f.close();
 }
@@ -98,4 +102,9 @@ LZWDecoder::decode(Code code) {
         prefix = current_word;
         return current_word;
     }
+}
+
+void
+LZWDecoder::flush() {
+    prefix.clear();
 }

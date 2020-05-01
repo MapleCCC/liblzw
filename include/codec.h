@@ -35,6 +35,7 @@ class LZWDecoder {
    public:
     LZWDecoder(unsigned code_bitsize);
     Bytes decode(Code code);
+    void flush();
 
    private:
     StrDict str_dict;
