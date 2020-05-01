@@ -11,6 +11,7 @@ template <class T>
 std::vector<std::vector<T> > grouper(std::vector<T> v, int n);
 template <class T>
 std::string stringfy_vector(std::vector<T> v);
+std::string raw_str_repr(std::string s);
 
 // Discard leftover elements
 // Alternative implementation is to padded with user-supplied fill value

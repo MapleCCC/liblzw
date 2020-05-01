@@ -62,3 +62,14 @@ is_two_files_identical(string filename1, string filename2) {
     }
     return true;
 }
+
+std::string
+raw_str_repr(std::string s) {
+    std::string ret = "\"";
+    for (int i = 0; i < s.size(); i++) {
+        unsigned char c = s[i];
+        ret += "\\x" + byte2hex(c);
+    }
+    ret += "\"";
+    return ret;
+}
