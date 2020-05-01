@@ -66,7 +66,7 @@ is_two_files_identical(string filename1, string filename2) {
 std::string
 raw_str_repr(std::string s) {
     std::string ret = "\"";
-    for (int i = 0; i < s.size(); i++) {
+    for (unsigned i = 0; i < s.size(); i++) {
         unsigned char c = s[i];
         ret += "\\x" + byte2hex(c);
     }
