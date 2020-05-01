@@ -29,8 +29,8 @@ class lzwfile_codes_reader {
 class lzwfile_codes_writer {
    public:
     lzwfile_codes_writer(const std::string& lzwfile, int code_size);
+    ~lzwfile_codes_writer();
     void write(const std::vector<Code>* codes);
-    void close();
 
    private:
     Bitarray buffer;
