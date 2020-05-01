@@ -19,16 +19,24 @@ FileEncoder::encode_file(string filename, lzwfile_codes_writer& code_writer) {
         throw runtime_error("Can't open file: " + filename);
     }
 
+    Code code;
+    Bytes byte;
     while (fp.peek() != EOF) {
-        Bytes byte = Bytes(1, (unsigned char)fp.get());
-        raw_encoder.encode(byte, code_writer);
+        byte = Bytes(1, (unsigned char)fp.get());
+        if ((code = raw_encoder.encode(byte)) != -1) {
+            code_writer.write(code);
+        }
     }
-    raw_encoder.flush(code_writer);
+    if ((code = raw_encoder.flush()) != -1) {
+        code_writer.write(code);
+    }
+
     code_writer.write(virtual_eof);
 }
 
-void
-LZWEncoder::encode(Bytes byte, lzwfile_codes_writer& code_writer) {
+Code
+LZWEncoder::encode(Bytes byte) {
+    Code ret = -1;
     // TODO: for lookup and retrieve from code dict, use stateful hash
     // algorithm object, to reduce hash recomputation cost.
     // This optimization could be done in Bytes class implementation level.
@@ -36,16 +44,19 @@ LZWEncoder::encode(Bytes byte, lzwfile_codes_writer& code_writer) {
     if (code_dict.contains(current_word)) {
         prefix = current_word;
     } else {
-        code_writer.write(code_dict.get(prefix));
+        ret = code_dict.get(prefix);
         code_dict.add_new_code(current_word);
         prefix = byte;
     }
+    return ret;
 }
 
-void
-LZWEncoder::flush(lzwfile_codes_writer& code_writer) {
+Code
+LZWEncoder::flush() {
     if (prefix.length()) {
-        code_writer.write(code_dict.get(prefix));
+        return code_dict.get(prefix);
+    } else {
+        return -1;
     }
 }
 
