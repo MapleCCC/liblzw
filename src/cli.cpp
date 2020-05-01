@@ -7,10 +7,9 @@
 
 #include "code.h"
 #include "codec.h"
+#include "config.h"
 #include "lzwfile.h"
 using namespace std;
-
-#define CODE_BITSIZE 12
 
 void compress(const string& lzwfile, const vector<string>* header);
 void decompress(const string& lzwfile);
