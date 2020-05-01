@@ -13,16 +13,18 @@ FileEncoder::FileEncoder(unsigned code_bitsize) : raw_encoder(code_bitsize) {
 
 void
 FileEncoder::encode_file(string filename, lzwfile_codes_writer& code_writer) {
-    ifstream fp(filename.c_str(), ios::in | ios::binary);
+    ifstream fp(filename.c_str(), ios::in | ios::binary | ios::ate);
     if (!fp.is_open()) {
         cerr << "Can't open file: " << filename << endl;
         throw runtime_error("Can't open file: " + filename);
     }
+    unsigned file_size = fp.tellg();
+    fp.seekg(0, ios::beg);
 
     raw_encoder.flush();
     Code code;
     Bytes byte;
-    while (fp.peek() != EOF) {
+    for (unsigned i = 0; i < file_size; i++) {
         byte = Bytes(1, (unsigned char)fp.get());
         if ((code = raw_encoder.encode(byte)) != -1) {
             code_writer.write(code);
