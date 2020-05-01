@@ -5,12 +5,14 @@
 #include <stdexcept>
 using namespace std;
 
-LZWEncoder::LZWEncoder(unsigned code_bitsize) : code_dict(code_bitsize) {
+LZWEncoder::LZWEncoder(unsigned code_bitsize) : code_dict(code_bitsize) {}
+
+FileEncoder::FileEncoder(unsigned code_bitsize) : raw_encoder(code_bitsize) {
     virtual_eof = (1 << code_bitsize) - 1;
 }
 
 void
-LZWEncoder::encode_file(string filename, lzwfile_codes_writer& code_writer) {
+FileEncoder::encode_file(string filename, lzwfile_codes_writer& code_writer) {
     ifstream fp(filename.c_str(), ios::in | ios::binary);
     if (!fp.is_open()) {
         cerr << "Can't open file: " << filename << endl;
@@ -19,13 +21,9 @@ LZWEncoder::encode_file(string filename, lzwfile_codes_writer& code_writer) {
 
     while (fp.peek() != EOF) {
         Bytes byte = Bytes(1, (unsigned char)fp.get());
-        encode(byte, code_writer);
+        raw_encoder.encode(byte, code_writer);
     }
-
-    if (prefix.length()) {
-        code_writer.write(code_dict.get(prefix));
-    }
-
+    raw_encoder.flush(code_writer);
     code_writer.write(virtual_eof);
 }
 
@@ -41,6 +39,13 @@ LZWEncoder::encode(Bytes byte, lzwfile_codes_writer& code_writer) {
         code_writer.write(code_dict.get(prefix));
         code_dict.add_new_code(current_word);
         prefix = byte;
+    }
+}
+
+void
+LZWEncoder::flush(lzwfile_codes_writer& code_writer) {
+    if (prefix.length()) {
+        code_writer.write(code_dict.get(prefix));
     }
 }
 

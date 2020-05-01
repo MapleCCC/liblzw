@@ -13,14 +13,22 @@
 class LZWEncoder {
    public:
     LZWEncoder(unsigned code_bitsize);
-    void encode_file(std::string filename, lzwfile_codes_writer& code_writer);
+    void encode(Bytes byte, lzwfile_codes_writer& code_writer);
+    void flush(lzwfile_codes_writer& code_writer);
 
    private:
     CodeDict code_dict;
     Bytes prefix;
-    Code virtual_eof;
+};
 
-    void encode(Bytes byte, lzwfile_codes_writer& code_writer);
+class FileEncoder {
+   public:
+    FileEncoder(unsigned code_bitsize);
+    void encode_file(std::string filename, lzwfile_codes_writer& code_writer);
+
+   private:
+    LZWEncoder raw_encoder;
+    Code virtual_eof;
 };
 
 class LZWDecoder {
