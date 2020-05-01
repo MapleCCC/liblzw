@@ -13,8 +13,8 @@
 class LZWEncoder {
    public:
     LZWEncoder(unsigned code_bitsize);
-    void encode(Bytes byte, lzwfile_codes_writer& code_writer);
-    void flush(lzwfile_codes_writer& code_writer);
+    Code encode(Bytes byte);
+    Code flush();
 
    private:
     CodeDict code_dict;
