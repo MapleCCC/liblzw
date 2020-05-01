@@ -121,6 +121,15 @@ lzwfile_codes_writer::lzwfile_codes_writer(const string& lzwfile,
     }
 }
 
+lzwfile_codes_writer::~lzwfile_codes_writer() {
+    if (buffer.length()) {
+        buffer.push_bytes_back(Bytes(1, (unsigned char)0));
+        unsigned char byte = buffer.pop_byte_front();
+        file_handle << byte;
+    }
+    file_handle.close();
+}
+
 void
 lzwfile_codes_writer::write(const vector<Code>* codes) {
     for (unsigned i = 0; i < codes->size(); i++) {
@@ -132,14 +141,4 @@ lzwfile_codes_writer::write(const vector<Code>* codes) {
             file_handle << byte;
         }
     }
-}
-
-void
-lzwfile_codes_writer::close() {
-    if (buffer.length()) {
-        buffer.push_bytes_back(Bytes(1, (unsigned char)0));
-        unsigned char byte = buffer.pop_byte_front();
-        file_handle << byte;
-    }
-    file_handle.close();
 }

@@ -27,11 +27,19 @@ class LZWDecoder {
    public:
     LZWDecoder(unsigned code_bitsize);
     Bytes decode(Code code);
-    void decode_file(std::string filename, lzwfile_codes_reader& code_reader);
 
    private:
     StrDict str_dict;
     Bytes prefix;
+};
+
+class FileDecoder {
+   public:
+    FileDecoder(unsigned code_bitsize);
+    void decode_file(std::string filename, lzwfile_codes_reader& code_reader);
+
+   private:
+    LZWDecoder raw_decoder;
     Code virtual_eof;
 };
 
