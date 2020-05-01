@@ -64,12 +64,12 @@ void
 compress(const string& lzwfile, const vector<string>* header) {
     write_lzwfile_header(lzwfile, header);
 
-    LZWEncoder encoder(CODE_BITSIZE);
+    FileEncoder file_encoder(CODE_BITSIZE);
     lzwfile_codes_writer code_writer(lzwfile, CODE_BITSIZE);
 
     for (unsigned i = 0; i < header->size(); i++) {
         cout << "Compressing " << header->at(i) << endl;
-        encoder.encode_file(header->at(i), code_writer);
+        file_encoder.encode_file(header->at(i), code_writer);
     }
     cout << "Finish compression" << endl;
 }
