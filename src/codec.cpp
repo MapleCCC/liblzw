@@ -5,53 +5,43 @@
 #include <stdexcept>
 using namespace std;
 
-LZWEncoder::LZWEncoder(int code_bitsize) : code_dict(code_bitsize) {
+LZWEncoder::LZWEncoder(unsigned code_bitsize) : code_dict(code_bitsize) {
     virtual_eof = (1 << code_bitsize) - 1;
 }
 
-vector<Code>*
-LZWEncoder::encode_file(string filename) {
-    ifstream f(filename.c_str(), ios::in | ios::binary | ios::ate);
-    if (!f.is_open()) {
+void
+LZWEncoder::encode_file(string filename, lzwfile_codes_writer& code_writer) {
+    ifstream fp(filename.c_str(), ios::in | ios::binary);
+    if (!fp.is_open()) {
         cerr << "Can't open file: " << filename << endl;
         throw runtime_error("Can't open file: " + filename);
     }
-    int file_size = f.tellg();
-    unsigned char* buf = new unsigned char[file_size];
-    f.seekg(0, ios::beg);
-    // It's strange that C++ decides to use char instead of unsigned char to
-    // store byte data. We use reinterpret_cast to workaround it.
-    f.read(reinterpret_cast<char*>(buf), file_size);
-    f.close();
-    vector<Code>* ret = _encode(buf, file_size);
-    ret->push_back(virtual_eof);
-    delete[] buf;
-    return ret;
+
+    while (fp.peek() != EOF) {
+        Bytes byte = Bytes(1, (unsigned char)fp.get());
+        encode(byte, code_writer);
+    }
+
+    if (prefix.length()) {
+        code_writer.write(code_dict.get(prefix));
+    }
+
+    code_writer.write(virtual_eof);
 }
 
-vector<Code>*
-LZWEncoder::_encode(unsigned char* text, int text_size) {
-    Bytes prefix;
-    vector<Code>* ret = new vector<Code>;
-    // TODO: add heuristic: reserve reasonable space for vector, so as to reduce
-    // overhead of resizing
-    for (int i = 0; i < text_size; i++) {
-        // TODO: for lookup and retrieve from code dict, use stateful hash
-        // algorithm object, to reduce hash recomputation cost.
-        // This optimization could be done in Bytes class implementation level.
-        Bytes current_word = prefix + (char)text[i];
-        if (code_dict.contains(current_word)) {
-            prefix = current_word;
-        } else {
-            ret->push_back(code_dict.get(prefix));
-            code_dict.add_new_code(current_word);
-            prefix = text[i];
-        }
+void
+LZWEncoder::encode(Bytes byte, lzwfile_codes_writer& code_writer) {
+    // TODO: for lookup and retrieve from code dict, use stateful hash
+    // algorithm object, to reduce hash recomputation cost.
+    // This optimization could be done in Bytes class implementation level.
+    Bytes current_word = prefix + byte;
+    if (code_dict.contains(current_word)) {
+        prefix = current_word;
+    } else {
+        code_writer.write(code_dict.get(prefix));
+        code_dict.add_new_code(current_word);
+        prefix = byte;
     }
-    if (prefix.length()) {
-        ret->push_back(code_dict.get(prefix));
-    }
-    return ret;
 }
 
 FileDecoder::FileDecoder(unsigned code_bitsize) : raw_decoder(code_bitsize) {

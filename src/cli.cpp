@@ -63,14 +63,13 @@ cli(int argc, char** argv) {
 void
 compress(const string& lzwfile, const vector<string>* header) {
     write_lzwfile_header(lzwfile, header);
+
     LZWEncoder encoder(CODE_BITSIZE);
-    lzwfile_codes_writer writer(lzwfile, CODE_BITSIZE);
+    lzwfile_codes_writer code_writer(lzwfile, CODE_BITSIZE);
 
     for (unsigned i = 0; i < header->size(); i++) {
         cout << "Compressing " << header->at(i) << endl;
-        vector<Code>* codes = encoder.encode_file(header->at(i));
-        writer.write(codes);
-        delete codes;
+        encoder.encode_file(header->at(i), code_writer);
     }
     cout << "Finish compression" << endl;
 }
