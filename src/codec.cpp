@@ -55,27 +55,25 @@ LZWEncoder::_encode(unsigned char* text, int text_size) {
 }
 
 void
-decode_file(std::string filename, lzwfile_codes_reader& code_reader,
-            unsigned code_bitsize) {
+LZWDecoder::decode_file(std::string filename,
+                        lzwfile_codes_reader& code_reader) {
     ofstream f(filename.c_str(), ios::out | ios::binary);
     if (!f.is_open()) {
         cerr << "Can't open file: " << filename << endl;
         throw runtime_error("Can't open file: " + filename);
     }
 
-    Code virtual_eof((1 << code_bitsize) - 1);
-
-    LZWDecoder decoder(code_bitsize);
-
     Code code;
     while ((code = code_reader.read()) != virtual_eof) {
-        f << decoder.decode(code);
+        f << decode(code);
     }
 
     f.close();
 }
 
-LZWDecoder::LZWDecoder(unsigned code_bitsize) : str_dict(code_bitsize) {}
+LZWDecoder::LZWDecoder(unsigned code_bitsize) : str_dict(code_bitsize) {
+    virtual_eof = (1 << code_bitsize) - 1;
+}
 
 Bytes
 LZWDecoder::decode(Code code) {

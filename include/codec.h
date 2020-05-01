@@ -23,17 +23,16 @@ class LZWEncoder {
     std::vector<Code>* _encode(unsigned char* text, int text_size);
 };
 
-void decode_file(std::string filename, lzwfile_codes_reader& code_reader,
-                 unsigned code_size);
-
 class LZWDecoder {
    public:
     LZWDecoder(unsigned code_bitsize);
     Bytes decode(Code code);
+    void decode_file(std::string filename, lzwfile_codes_reader& code_reader);
 
    private:
     StrDict str_dict;
     Bytes prefix;
+    Code virtual_eof;
 };
 
 #endif /* _CODEC_H_ */
