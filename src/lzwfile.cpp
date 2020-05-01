@@ -76,6 +76,8 @@ lzwfile_codes_reader::lzwfile_codes_reader(string lzwfile, unsigned code_size) {
     }
 }
 
+lzwfile_codes_reader::~lzwfile_codes_reader() { file_handle.close(); }
+
 Code
 lzwfile_codes_reader::read() {
     while (buffer.length() < code_size) {
@@ -104,11 +106,6 @@ lzwfile_codes_reader::eof() {
     // WARNING: don't use f.good() or f.eof(), as they only return error
     // when we have already read past the end of file. Stupid C!
     return file_handle.peek() == EOF;
-}
-
-void
-lzwfile_codes_reader::close() {
-    file_handle.close();
 }
 
 lzwfile_codes_writer::lzwfile_codes_writer(const string& lzwfile,

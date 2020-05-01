@@ -87,6 +87,5 @@ decompress(const string& lzwfile) {
         decoder.decode_file(header->at(i), code_reader);
     }
     delete header;
-    code_reader.close();
     cout << "Finish decompression" << endl;
 }

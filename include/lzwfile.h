@@ -16,9 +16,9 @@ void write_lzwfile_header(const std::string& lzwfile,
 class lzwfile_codes_reader {
    public:
     lzwfile_codes_reader(std::string lzwfile, unsigned code_size);
+    ~lzwfile_codes_reader();
     Code read();
     bool eof();
-    void close();
 
    private:
     Bitarray buffer;
