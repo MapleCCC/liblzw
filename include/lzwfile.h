@@ -28,14 +28,14 @@ class lzwfile_codes_reader {
 
 class lzwfile_codes_writer {
    public:
-    lzwfile_codes_writer(const std::string& lzwfile, int code_size);
+    lzwfile_codes_writer(std::string lzwfile, unsigned code_size);
     ~lzwfile_codes_writer();
-    void write(const std::vector<Code>* codes);
+    void write(Code code);
 
    private:
     Bitarray buffer;
     std::ofstream file_handle;
-    int code_size;
+    unsigned code_size;
 };
 
 #endif /* _LZWFILE_H_ */

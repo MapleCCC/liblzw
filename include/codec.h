@@ -12,15 +12,15 @@
 
 class LZWEncoder {
    public:
-    LZWEncoder(int code_bitsize);
-    // Caller is responsible to remember to delete the returned vector
-    std::vector<Code>* encode_file(std::string filename);
+    LZWEncoder(unsigned code_bitsize);
+    void encode_file(std::string filename, lzwfile_codes_writer& code_writer);
 
    private:
     CodeDict code_dict;
-    int virtual_eof;
-    // Caller is responsible to remember to delete the returned vector
-    std::vector<Code>* _encode(unsigned char* text, int text_size);
+    Bytes prefix;
+    Code virtual_eof;
+
+    void encode(Bytes byte, lzwfile_codes_writer& code_writer);
 };
 
 class LZWDecoder {

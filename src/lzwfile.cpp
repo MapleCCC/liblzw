@@ -108,8 +108,7 @@ lzwfile_codes_reader::eof() {
     return file_handle.peek() == EOF;
 }
 
-lzwfile_codes_writer::lzwfile_codes_writer(const string& lzwfile,
-                                           int code_size) {
+lzwfile_codes_writer::lzwfile_codes_writer(string lzwfile, unsigned code_size) {
     this->code_size = code_size;
 
     // write from the end, assuming that the file already has header but not
@@ -123,6 +122,7 @@ lzwfile_codes_writer::lzwfile_codes_writer(const string& lzwfile,
 
 lzwfile_codes_writer::~lzwfile_codes_writer() {
     if (buffer.length()) {
+        //! Flush the leftover bits
         buffer.push_bytes_back(Bytes(1, (unsigned char)0));
         unsigned char byte = buffer.pop_byte_front();
         file_handle << byte;
@@ -131,14 +131,11 @@ lzwfile_codes_writer::~lzwfile_codes_writer() {
 }
 
 void
-lzwfile_codes_writer::write(const vector<Code>* codes) {
-    for (unsigned i = 0; i < codes->size(); i++) {
-        Code code = codes->at(i);
-        buffer += Bitarray::from_int(code, code_size);
+lzwfile_codes_writer::write(Code code) {
+    buffer += Bitarray::from_int(code, code_size);
 
-        while (buffer.length() >= 8) {
-            unsigned char byte = buffer.pop_byte_front();
-            file_handle << byte;
-        }
+    while (buffer.length() >= 8) {
+        unsigned char byte = buffer.pop_byte_front();
+        file_handle << byte;
     }
 }
