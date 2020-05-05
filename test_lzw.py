@@ -50,7 +50,7 @@ def test_integrate(l: List[bytes], tmp_path: Path) -> None:
         test_file.write_bytes(s)
 
     subprocess.run(
-        [EXPERIMENT_EXE, "-c", "a.lzw"] + list(map(str, test_files))
+        [EXPERIMENT_EXE, "-c", "a.lzw"] + [str(x) for x in test_files]
     ).check_returncode()
 
     for test_file in test_files:
