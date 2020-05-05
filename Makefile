@@ -94,4 +94,6 @@ concat:
 clean:
 	rm -rf ${BUILD_DIR}/*
 
-.PHONY: all rebuild build-test unit-test integrate-test cov prof concat clean
+zip:
+
+.PHONY: all rebuild build-test unit-test integrate-test cov prof concat clean zip

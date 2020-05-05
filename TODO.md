@@ -36,10 +36,13 @@
 - Implement variants of LZW algorithm. E.g., code size, code table whether to reuse. Encode algorithm parameters to lzwfile and let decode logic automatically inspect it.
 - The canonical copy-assignment operator is expected to perform no action on self-assignment. Ref: https://en.cppreference.com/w/cpp/language/operators
 - Other overloaded operator also some of them expect no action performed on self-assignment. Ref: https://en.cppreference.com/w/cpp/language/operators
-- Write README. Elaborate on algorithmic details.
+- Write README. Elaborate on algorithmic details. Elaborate on analysis of computational complexity.
 - Use immutable data structure to improve space efficiency.
 - Use VSCode C/C++ extension's rename functionality to rename Code to int and Bytes to string.
 - Try to use and master VSCode C/C++ extension's debug functionality.
+- Compare speed of LZW.py and liblzw
+- Wrap liblzw into CPython extension. Remove subprocess call overhead when testing using Python Hypothesis framework.
+  - Consider using Cython to fast prototype CPython extension.
 
 
 ## Done

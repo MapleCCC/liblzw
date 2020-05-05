@@ -31,7 +31,7 @@ void
 StrDict::clear() {
     // TODO: should we add another call to storage.reserve() here?
 
-    cout << "Statistics: " << statistics() << endl;
+    // cout << "Statistics: " << statistics() << endl;
 
     storage.clear();
     size = 0;
@@ -42,12 +42,12 @@ StrDict::clear() {
 
 // inline
 bool
-StrDict::contains(Code item) {
+StrDict::contains(Code item) const {
     return storage.contains(item);
 }
 
 Bytes
-StrDict::get(Code key) {
+StrDict::get(Code key) const {
     try {
         return storage.get(key);
     } catch (out_of_range e) {
