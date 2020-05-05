@@ -9,12 +9,16 @@ from typing import List
 from hypothesis import example, given, settings
 from hypothesis.strategies import binary, builds, lists
 
-from LZW.utils import ascii2byte, is_equal_file
+# TODO: compare speed of Python implem and C++ implem of LZW algorithm
+# TODO: deploy pytest-subtesthack
+# TODO: randomize test file names
+# TODO: randomize lzw file names
+# TODO: draw histogram to visualize speed vs text size. (time complexity)
+# TODO: update Pytest and plugins
+# TODO: use pathlib to simplify code
 
 EXAMPLE_EXE = os.path.join(os.getcwd(), "lzw_example_win.exe")
-# EXPERIMENT_EXE = os.path.join(os.getcwd(), "lzw.exe")
 EXPERIMENT_EXE = os.path.join(os.getcwd(), "build", "lzw")
-BASELINE_EXE = os.path.join(os.getcwd(), "LZW", "__main__.py")
 
 MAX_TEST_FILE_LEN = 10000
 MAX_NUM_TEST_FILES = 3  # TODO: increase number of test files
@@ -25,10 +29,7 @@ TEST_FILES_BUILD_STRATEGY = lists(
 )
 
 # All possible one-length bytes
-VALID_CHARSET = [ascii2byte(i) for i in range(256)]
-OVERFLOW_TEST_EXAMPLE_STRATEGY = builds(
-    lambda: b"".join(b"".join(sample(VALID_CHARSET, k=256)) for _ in range(20))
-)
+VALID_CHARSET = [i.to_bytes(1, "big") for i in range(256)]
 EXAMPLE_TEXT_TEST_CODE_DICT_OVERFLOW = b"".join(
     b"".join(sample(VALID_CHARSET, k=256)) for _ in range(20)
 )
@@ -37,7 +38,7 @@ EXAMPLE_TEXT_TEST_CODE_DICT_OVERFLOW = b"".join(
 @given(l=TEST_FILES_BUILD_STRATEGY)
 @example(l=[EXAMPLE_TEXT_TEST_CODE_DICT_OVERFLOW] * 3)
 @settings(deadline=None)
-def test_integration(l: List[bytes], tmp_path: Path) -> None:
+def test_integrate(l: List[bytes], tmp_path: Path) -> None:
     # We need to intentionally create a unique subpath for each function invocation
     # Because every hypothesis' example of the test function share the same
     # tmp_path fixture instance, which is undesirable for some test cases.
@@ -58,4 +59,4 @@ def test_integration(l: List[bytes], tmp_path: Path) -> None:
     subprocess.run([EXPERIMENT_EXE, "-d", "a.lzw"]).check_returncode()
 
     for test_file in test_files:
-        assert is_equal_file(test_file, test_file + "old", mode="rb")
+        assert open(test_file, "rb").read() == open(test_file + "old", "rb").read()
