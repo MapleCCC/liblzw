@@ -44,7 +44,7 @@ CodeDict::contains(Bytes item) const {
 Code
 CodeDict::get(Bytes key) const {
     try {
-        return storage[key];
+        return storage.at(key);
     } catch (out_of_range) {
         throw out_of_range("code is missing for string: " + key);
     }

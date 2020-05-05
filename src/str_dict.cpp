@@ -51,7 +51,7 @@ StrDict::contains(Code item) const {
 Bytes
 StrDict::get(Code key) const {
     try {
-        return storage[key];
+        return storage.at(key);
     } catch (out_of_range e) {
         throw out_of_range("Code not present in StrDict: " + int2str(key));
     }
