@@ -25,9 +25,6 @@
 #define MAX_LOAD_FACTOR (2 * 1.0 / 3)
 #define PERTURB_SHIFT 5
 
-// Should the macro COLLEFCT_STATISTICS_MODE defined in .cpp or .h?
-#define COLLECT_STATISTICS_MODE 1
-
 template <class T, class S>
 struct Bucket {
     T key;
@@ -60,14 +57,6 @@ class Dict {
     Bucket<T, S>* slots;
     Bitmap indexer;
     std::hash<T> hasher;
-    // Dict<S, NULL> values;
-    // bool is_values_cached;
-    // #if COLLECT_STATISTICS_MODE == 1
-    //     static unsigned instance_count;
-    //     static std::vector<unsigned> collision_statistics;
-    //     static std::vector<unsigned> size_statistics;
-    //     static std::vector<unsigned> capacity_statistics;
-    // #endif
 
     void resize(unsigned new_capacity);
     double load_factor() const;
@@ -86,11 +75,6 @@ class Dict {
 
     // };
 };
-
-// #if COLLECT_STATISTICS_MODE == 1
-// template <class T, class S>
-// unsigned Dict<T, S>::instance_count = 0;
-// #endif
 
 template <class T, class S>
 Dict<T, S>::Dict() : indexer(INIT_DICT_CAPCITY) {
@@ -196,13 +180,6 @@ Dict<T, S>::reserve(unsigned size) {
 template <class T, class S>
 unsigned
 Dict<T, S>::find_bucket(const T& key) const {
-    // #if COLLECT_STATISTICS_MODE == 1
-    //     instance_count++;
-    //     collision_statistics.push_back(0);
-    //     size_statistics.push_back(0);
-    //     capacity_statistics.push_back(0);
-    // #endif
-
     // We can be assured that the recurrence is going to iterate through all
     // slots. As long as that size < capacity, we will not go into infinite
     // loop.
@@ -211,16 +188,9 @@ Dict<T, S>::find_bucket(const T& key) const {
     unsigned perturb = h;
     unsigned index = h & mask;
     while (indexer.get(index) && slots[index].key != key) {
-        // #if COLLECT_STATISTICS_MODE == 1
-        //         collision_statistics[instance_count]++;
-        // #endif
         perturb = perturb >> PERTURB_SHIFT;
         index = (5 * index + 1 + perturb) & mask;
     }
-    // #if COLLECT_STATISTICS_MODE == 1
-    //     size_statistics.at(instance_count) = size;
-    //     capacity_statistics.at(instance_count) = capacity;
-    // #endif
     // Either, can't find the bucket containing key, return next probe position.
     // Or, found the bucket containing the key, return the bucket's index
     // position.
