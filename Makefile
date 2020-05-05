@@ -49,7 +49,7 @@ unit-test: build-test
 	./runall.py ${TEST_PROGS}
 
 integrate-test: ${BUILD_DIR}/lzw # ${PROGS}
-	pytest test_lzw.py
+	pytest test_integrate.py
 
 ${BUILD_DIR}/lzw: lzw.cpp ${BUILD_DIR}/liblzw.a
 	${CXX} -o $@ $^ ${CXXFLAGS} ${CPPFLAGS}
