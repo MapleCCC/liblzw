@@ -22,11 +22,12 @@ CodeDict::CodeDict(unsigned code_bitsize) {
 
 void
 CodeDict::clear() {
-    // TODO: should we add another call to storage.reserve() here?
-
     // cout << "Statistics: " << statistics() << endl;
 
     storage.clear();
+    // Reserve after clear. There is no guarantee that calling Dict::clear()
+    // won't shrink the underlying memory allocation.
+    storage.reserve(capacity + 256 + 1);
     size = 0;
     for (int i = 0; i < 256; i++) {
         storage.set(Bytes(1, (unsigned char)i), Code(i));
