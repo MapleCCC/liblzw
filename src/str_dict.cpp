@@ -3,6 +3,7 @@
 #include <iostream>  // cerr, cout
 #include <sstream>
 #include <stdexcept>
+#include <vector>
 
 #include "set.tpp"
 #include "utils.tpp"
@@ -67,19 +68,19 @@ StrDict::add_new_str(Bytes item) {
     }
 }
 
-// void
-// StrDict::check_duplicate_str() {
-//     vector<Bytes> strings = storage.values();
-//     Set<Bytes> set;
-//     for (unsigned i = 0; i < strings.size(); i++) {
-//         Bytes b = strings[i];
-//         if (set.contains(b)) {
-//             cerr << "Duplicate strings present in StrDict" << endl;
-//             throw runtime_error("Duplicate strings present in StrDict");
-//         }
-//         set.add(strings[i]);
-//     }
-// }
+void
+StrDict::check_duplicate_str() {
+    vector<Bytes> strings = storage.values();
+    Set<Bytes> set;
+    for (unsigned i = 0; i < strings.size(); i++) {
+        Bytes b = strings[i];
+        if (set.contains(b)) {
+            cerr << "Duplicate strings present in StrDict" << endl;
+            throw runtime_error("Duplicate strings present in StrDict");
+        }
+        set.add(strings[i]);
+    }
+}
 
 string
 StrDict::str() const {
