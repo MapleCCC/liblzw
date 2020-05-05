@@ -39,6 +39,7 @@ class Dict {
     Dict();
     ~Dict();
     int length() const;
+    double load_factor() const;
     void clear();
     void reserve(unsigned);
     void set(const T& key, const S& value);
@@ -59,7 +60,6 @@ class Dict {
     std::hash<T> hasher;
 
     void resize(unsigned new_capacity);
-    double load_factor() const;
     unsigned find_bucket(const T& key) const;
 
     // class KeyView {
