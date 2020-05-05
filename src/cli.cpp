@@ -57,7 +57,7 @@ cli(int argc, char** argv) {
         return EXIT_FAILURE;
     }
 
-    return 0;
+    return EXIT_SUCCESS;
 }
 
 void
@@ -79,10 +79,12 @@ decompress(const string& lzwfile) {
     vector<string>* header = read_lzwfile_header(lzwfile);
     FileDecoder file_decoder(CODE_BITSIZE);
     lzwfile_codes_reader code_reader(lzwfile, CODE_BITSIZE);
+
     for (unsigned i = 0; i < header->size(); i++) {
         cout << "Deflating " << header->at(i) << endl;
         file_decoder.decode_file(header->at(i), code_reader);
     }
+
     delete header;
     cout << "Finish decompression" << endl;
 }

@@ -81,6 +81,9 @@ lzwfile_codes_reader::~lzwfile_codes_reader() { file_handle.close(); }
 Code
 lzwfile_codes_reader::read() {
     while (buffer.length() < code_size) {
+        //! Optimize Candidate: remove EOF check to accelerate performance.
+        //! Tradeoff robustness for performance. Assume caller is consenting
+        //! adult, and reposible for passing in valid arguments.
         if (file_handle.peek() == EOF) {
             cerr << "Can't read from lzwfile anymore. EOF reached." << endl;
             throw runtime_error(

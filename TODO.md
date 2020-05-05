@@ -38,7 +38,8 @@
 - Other overloaded operator also some of them expect no action performed on self-assignment. Ref: https://en.cppreference.com/w/cpp/language/operators
 - Write README. Elaborate on algorithmic details.
 - Use immutable data structure to improve space efficiency.
-- Use VSCode C/C++ extension' s rename functionality to rename Code to int and Bytes to string.
+- Use VSCode C/C++ extension's rename functionality to rename Code to int and Bytes to string.
+- Try to use and master VSCode C/C++ extension's debug functionality.
 
 
 ## Done

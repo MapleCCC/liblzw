@@ -6,6 +6,11 @@
 #include "utils.tpp"
 using namespace std;
 
+//! Optimize Candidate: pre-cache INIT_STORAGE to save overhead.
+//! StrDict::clear() assigns INIT_STORAGE to StrDict::storage, instead of
+//! recomputing everytime.
+// Dict<Code, Bytes> INIT_STORAGE;
+
 StrDict::StrDict(unsigned code_bitsize) {
     if (code_bitsize <= 8) {
         throw runtime_error("Code bit size should be larger than 8");
@@ -51,7 +56,8 @@ StrDict::add_new_str(Bytes item) {
     size++;
 
     if (size == capacity) {
-        // check_duplicate_str();
+        //! Optimize Candidate: remove duplicate check to accelerate performance
+        check_duplicate_str();
         clear();
     }
 }

@@ -15,6 +15,9 @@ Bitarray::Bitarray() {
 Bitarray
 Bitarray::slice(unsigned start, unsigned stop) const {
     // FIXME: the boundary conditions for valid slice indices
+    //! Optimize Candidate: remove boundary check to accelerate performance.
+    //! Tradeoff robustness for performance. Assume caller is consenting adult,
+    //! and reposible for passing in valid arguments.
     if (!(start <= stop && start <= size && stop <= size)) {
         cerr << "Buffer's length is " << this->length() << endl;
         cerr << "Slice invalid: start: " << start << " stop: " << stop << endl;

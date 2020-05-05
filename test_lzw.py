@@ -80,6 +80,10 @@ def test_compression(l: List[bytes], tmp_path: Path) -> None:
 
     subprocess.run([EXPERIMENT_EXE, "-c", "a.lzw"] + test_files).check_returncode()
 
+    lzw_compress("b.lzw", test_files)
+
+    assert is_equal_file("a.lzw", "b.lzw", mode="rb")
+
     for test_file in test_files:
         shutil.move(test_file, test_file + "old")
 
