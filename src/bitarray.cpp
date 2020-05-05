@@ -120,9 +120,10 @@ string
 Bitarray::str() const {
     string ret;
     ret += "Bitarray(";
+    unsigned mask = 1 << (size - 1);
     for (unsigned i = 0; i < size; i++) {
-        unsigned mask = 1 << (size - i - 1);
         ret += (x & mask) ? '1' : '0';
+        mask >>= 1;
     }
     ret += ')';
     return ret;
