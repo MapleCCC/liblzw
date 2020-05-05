@@ -11,8 +11,8 @@ class CodeDict {
    public:
     CodeDict(unsigned code_bitsize);
     void clear();
-    bool contains(Bytes);
-    Code get(Bytes);
+    bool contains(Bytes) const;
+    Code get(Bytes) const;
     void add_new_code(Bytes);
     std::string str() const;
     std::string statistics() const;

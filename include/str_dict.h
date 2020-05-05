@@ -11,8 +11,8 @@ class StrDict {
    public:
     StrDict(unsigned code_bitsize);
     void clear();
-    bool contains(Code);
-    Bytes get(Code);
+    bool contains(Code) const;
+    Bytes get(Code) const;
     void add_new_str(Bytes);
     std::string str() const;
     std::string statistics() const;

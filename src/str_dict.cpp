@@ -29,7 +29,7 @@ StrDict::StrDict(unsigned code_bitsize) {
 
 void
 StrDict::clear() {
-    cout << "Statistics: " << statistics() << endl;
+    // cout << "Statistics: " << statistics() << endl;
 
     storage.clear();
     // reverse after clear. Standard doesn't provide guarantee that calling
@@ -44,12 +44,12 @@ StrDict::clear() {
 
 // inline
 bool
-StrDict::contains(Code item) {
+StrDict::contains(Code item) const {
     return storage.count(item);
 }
 
 Bytes
-StrDict::get(Code key) {
+StrDict::get(Code key) const {
     try {
         return storage[key];
     } catch (out_of_range e) {

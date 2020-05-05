@@ -1,5 +1,4 @@
 import os
-import shutil
 import subprocess
 import uuid
 from pathlib import Path
@@ -7,7 +6,7 @@ from random import sample
 from typing import List
 
 from hypothesis import example, given, settings
-from hypothesis.strategies import binary, builds, lists
+from hypothesis.strategies import binary, lists
 
 # TODO: compare speed of Python implem and C++ implem of LZW algorithm
 # TODO: deploy pytest-subtesthack
@@ -35,7 +34,7 @@ EXAMPLE_TEXT_TEST_CODE_DICT_OVERFLOW = b"".join(
 
 
 @given(l=TEST_FILES_BUILD_STRATEGY)
-@example(l=[EXAMPLE_TEXT_TEST_CODE_DICT_OVERFLOW] * 3)
+@example(l=[EXAMPLE_TEXT_TEST_CODE_DICT_OVERFLOW] * MAX_NUM_TEST_FILES)
 @settings(deadline=None)
 def test_integrate(l: List[bytes], tmp_path: Path) -> None:
     # We need to intentionally create a unique subpath for each function invocation
