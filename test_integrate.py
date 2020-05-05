@@ -1,6 +1,7 @@
 import os
 import subprocess
 import uuid
+from operator import methodcaller
 from pathlib import Path
 from random import sample
 from typing import List
@@ -15,11 +16,11 @@ from hypothesis.strategies import binary, lists
 # TODO: draw histogram to visualize speed vs text size. (time complexity)
 # TODO: update Pytest and plugins
 
-EXAMPLE_EXE = os.path.join(os.getcwd(), "lzw_example_win.exe")
-EXPERIMENT_EXE = os.path.join(os.getcwd(), "build", "lzw")
+EXECUTABLE = os.path.join(os.getcwd(), "build", "lzw.exe")
 
-MAX_TEST_FILE_LEN = 10000
-MAX_NUM_TEST_FILES = 3  # TODO: increase number of test files
+# TODO: increase number of test files
+MAX_TEST_FILE_LEN = 100  # 10000
+MAX_NUM_TEST_FILES = 3  # 10
 
 
 TEST_FILES_BUILD_STRATEGY = lists(
@@ -49,13 +50,12 @@ def test_integrate(l: List[bytes], tmp_path: Path) -> None:
         test_file.write_bytes(s)
 
     subprocess.run(
-        [EXPERIMENT_EXE, "-c", "a.lzw"] + [str(x) for x in test_files]
+        [EXECUTABLE, "-c", "a.lzw"] + [str(x) for x in test_files]
     ).check_returncode()
 
-    for test_file in test_files:
-        test_file.unlink()
+    map(methodcaller("unlink"), test_files)
 
-    subprocess.run([EXPERIMENT_EXE, "-d", "a.lzw"]).check_returncode()
+    subprocess.run([EXECUTABLE, "-d", "a.lzw"]).check_returncode()
 
     for test_file, s in zip(test_files, l):
         assert test_file.read_bytes() == s
