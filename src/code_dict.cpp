@@ -1,5 +1,7 @@
 #include "code_dict.h"
 
+#include <iostream>  // cerr, cout
+#include <sstream>
 #include <stdexcept>
 
 using namespace std;
@@ -21,6 +23,9 @@ CodeDict::CodeDict(unsigned code_bitsize) {
 void
 CodeDict::clear() {
     // TODO: should we add another call to storage.reserve() here?
+
+    cout << "Statistics: " << statistics() << endl;
+
     storage.clear();
     size = 0;
     for (int i = 0; i < 256; i++) {
@@ -59,4 +64,16 @@ CodeDict::add_new_code(Bytes item) {
 string
 CodeDict::str() const {
     return storage.str();
+}
+
+//! TODO: visualize stat in histogram
+string
+CodeDict::statistics() const {
+    stringstream ss;
+    // ss << "Totally " << << " buckets\n";
+    // ss << empty << " buckets are empty; ";
+    // ss << occupied << " buckets contain elements; ";
+    // ss << "Current load factor " << << endl;
+    string ret = ss.str();
+    return ret;
 }

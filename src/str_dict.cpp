@@ -1,5 +1,7 @@
 #include "str_dict.h"
 
+#include <iostream>  // cerr, cout
+#include <sstream>
 #include <stdexcept>
 
 #include "set.tpp"
@@ -28,6 +30,9 @@ StrDict::StrDict(unsigned code_bitsize) {
 void
 StrDict::clear() {
     // TODO: should we add another call to storage.reserve() here?
+
+    cout << "Statistics: " << statistics() << endl;
+
     storage.clear();
     size = 0;
     for (int i = 0; i < 256; i++) {
@@ -79,4 +84,16 @@ StrDict::add_new_str(Bytes item) {
 string
 StrDict::str() const {
     return storage.str();
+}
+
+//! TODO: visualize stat in histogram
+string
+StrDict::statistics() const {
+    stringstream ss;
+    // ss << "Totally " << << " buckets\n";
+    // ss << empty << " buckets are empty; ";
+    // ss << occupied << " buckets contain elements; ";
+    // ss << "Current load factor " << << endl;
+    string ret = ss.str();
+    return ret;
 }
