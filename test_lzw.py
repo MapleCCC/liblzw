@@ -15,7 +15,6 @@ from hypothesis.strategies import binary, builds, lists
 # TODO: randomize lzw file names
 # TODO: draw histogram to visualize speed vs text size. (time complexity)
 # TODO: update Pytest and plugins
-# TODO: use pathlib to simplify code
 
 EXAMPLE_EXE = os.path.join(os.getcwd(), "lzw_example_win.exe")
 EXPERIMENT_EXE = os.path.join(os.getcwd(), "build", "lzw")
@@ -46,17 +45,18 @@ def test_integrate(l: List[bytes], tmp_path: Path) -> None:
     subpath.mkdir()
     os.chdir(subpath)
 
-    test_files = [f"file{i}" for i in range(len(l))]
+    test_files = [Path(f"file{i}") for i in range(len(l))]
     for test_file, s in zip(test_files, l):
-        with open(test_file, "wb") as f:
-            f.write(s)
+        test_file.write_bytes(s)
 
-    subprocess.run([EXPERIMENT_EXE, "-c", "a.lzw"] + test_files).check_returncode()
+    subprocess.run(
+        [EXPERIMENT_EXE, "-c", "a.lzw"] + list(map(str, test_files))
+    ).check_returncode()
 
     for test_file in test_files:
-        shutil.move(test_file, test_file + "old")
+        test_file.unlink()
 
     subprocess.run([EXPERIMENT_EXE, "-d", "a.lzw"]).check_returncode()
 
-    for test_file in test_files:
-        assert open(test_file, "rb").read() == open(test_file + "old", "rb").read()
+    for test_file, s in zip(test_files, l):
+        assert test_file.read_bytes() == s
