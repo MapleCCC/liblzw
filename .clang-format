@@ -1,0 +1,6 @@
+Language: Cpp
+BasedOnStyle: Google
+IndentWidth: 4
+AlwaysBreakAfterReturnType: TopLevelDefinitions
+SortIncludes: true
+IncludeBlocks: Regroup
