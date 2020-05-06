@@ -1,6 +1,7 @@
 #ifndef _STR_DICT_H_
 #define _STR_DICT_H_
 
+#include <iostream>
 #include <string>
 
 #include "bytes.h"
@@ -10,6 +11,7 @@
 class StrDict {
    public:
     StrDict(unsigned code_bitsize);
+    // ~StrDict() { std::cout << statistics() << std::endl; };
     void clear();
     bool contains(Code) const;
     Bytes get(Code) const;

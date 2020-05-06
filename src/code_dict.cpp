@@ -1,7 +1,6 @@
 #include "code_dict.h"
 
 #include <iostream>  // cerr, cout
-#include <sstream>
 #include <stdexcept>
 
 using namespace std;
@@ -71,11 +70,5 @@ CodeDict::str() const {
 //! TODO: visualize stat in histogram
 string
 CodeDict::statistics() const {
-    stringstream ss;
-    // ss << "Totally " << << " buckets\n";
-    // ss << empty << " buckets are empty; ";
-    // ss << occupied << " buckets contain elements; ";
-    // ss << "Current load factor " << << endl;
-    string ret = ss.str();
-    return ret;
+    return storage.statistics();
 }

@@ -1,6 +1,7 @@
 #ifndef _CODE_DICT_H_
 #define _CODE_DICT_H_
 
+#include <iostream>
 #include <string>
 
 #include "bytes.h"
@@ -10,6 +11,7 @@
 class CodeDict {
    public:
     CodeDict(unsigned code_bitsize);
+    // ~CodeDict() { std::cout << statistics() << std::endl; };
     void clear();
     bool contains(Bytes) const;
     Code get(Bytes) const;

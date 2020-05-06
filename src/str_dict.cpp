@@ -1,7 +1,6 @@
 #include "str_dict.h"
 
 #include <iostream>  // cerr, cout
-#include <sstream>
 #include <stdexcept>
 #include <vector>
 
@@ -91,11 +90,5 @@ StrDict::str() const {
 //! TODO: visualize stat in histogram
 string
 StrDict::statistics() const {
-    stringstream ss;
-    // ss << "Totally " << << " buckets\n";
-    // ss << empty << " buckets are empty; ";
-    // ss << occupied << " buckets contain elements; ";
-    // ss << "Current load factor " << << endl;
-    string ret = ss.str();
-    return ret;
+    return storage.statistics();
 }

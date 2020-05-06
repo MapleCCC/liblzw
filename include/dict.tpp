@@ -9,6 +9,7 @@
 
 #include "bitmap.h"
 #include "extra_except.h"
+#include "utils.tpp"
 
 // WARNING: template declaration and definition can't be separated into two
 // files.
@@ -49,8 +50,7 @@ class Dict {
     std::string str() const;
     std::vector<T> keys() const;
     std::vector<S> values() const;
-
-    // void statistics() const;
+    std::string statistics() const;
 
    private:
     unsigned size;
@@ -260,21 +260,32 @@ Dict<T, S>::contains_value(const S& value) const {
     return false;
 }
 
-// // FIXME
-// template <class T, class S>
-// void
-// Dict<T, S>::statistics() const {
-// #if COLLECT_STATISTICS_MODE == 1
-//     for (int i = 0; i < instance_count; i++) {
-//         cout << "Size: " << size_statistics.at(instance_count)
-//              << ", Capacity: " << capacity_statistics.at(instance_count)
-//              << ", Collisions: " << collision_statistics.at(instance_count)
-//              << endl;
-//     }
-// #else
-//     std::cout << "Collect-statistics-mode is not enabled" << std::endl;
-// #endif
-// }
+// If we use linked-list conllision resolution, we can easily compute the
+// collision statistics. However, if we use open address collision resolution,
+// it's difficult to get collision statistics.
+template <class T, class S>
+std::string
+Dict<T, S>::statistics() const {
+    unsigned empty = 0, occupied = 0, deviated = 0, index;
+    for (unsigned i = 0; i < capacity; i++) {
+        if (indexer.get(i)) {
+            occupied++;
+            index = hasher(slots[i].key) & (capacity - 1);
+            if (index != i) {
+                deviated++;
+            }
+        } else {
+            empty++;
+        }
+    }
+
+    std::string ret;
+    ret += "Totally " + int2str(capacity) + " slots.\n";
+    ret += "There are " + int2str(empty) + " empty slots.\n";
+    ret += "There are " + int2str(occupied) + " occupied slots.\n";
+    ret += "There are " + int2str(deviated) + " collided slots.\n";
+    return ret;
+}
 
 template <class T, class S>
 std::string
