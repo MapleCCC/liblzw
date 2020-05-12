@@ -1,0 +1,26 @@
+MAKEFLAGS+=.silent
+
+CXX=g++
+CXXFLAGS=--std=c++11 -static-libstdc++
+CXXFLAGS+=-Wall -Wextra
+
+BUILD_DIR=build
+
+SRC=lzw.cpp
+PROG=${BUILD_DIR}/lzw
+
+all: ${PROG}
+
+${PROG}: ${SRC}
+    ${CXX} ${CXXFLAGS} -g ${SRC} -o ${PROG}
+
+fast: ${SRC}
+    ${CXX} ${CXXFLAGS} -Ofast ${SRC} -o ${PROG}
+
+integrate-test: ${PROG}
+	pytest test.py
+
+clean:
+    rm -rf ${BUILD_DIR}
+
+.PHONY: all fast integrate-test clean
