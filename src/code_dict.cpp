@@ -1,6 +1,6 @@
 #include "code_dict.h"
 
-#include <iostream>  // cerr
+#include <iostream>  // cerr, cout
 #include <sstream>
 #include <stdexcept>
 
@@ -25,7 +25,7 @@ CodeDict::clear() {
     // cout << "Statistics: " << statistics() << endl;
 
     storage.clear();
-    // reverse after clear. Standard doesn't provide guarantee that calling
+    // Reserve after clear. Standard doesn't provide guarantee that calling
     // clear() doesn't change capacity. Ref:
     // https://stackoverflow.com/questions/18467624/what-does-the-standard-say-about-how-calling-clear-on-a-vector-changes-the-capac
     storage.reserve(capacity + 256 + 1);
