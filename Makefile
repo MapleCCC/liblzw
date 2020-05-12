@@ -25,6 +25,9 @@ CPPFLAGS=-I${INC_DIR}
 AR=llvm-ar
 ARFLAGS=crs
 
+ZIP_EXE="D:\Program Files\7-Zip\7z.exe"
+ZIP_FILENAME=xxxxxxxxx
+
 # TODO: out-of-source build
 
 # TODO: use concatenate_source_file to concat entry files, then compile, so that we can save all the hassle of setting up obscure Makefile
@@ -86,6 +89,8 @@ prof:
 
 concat:
 	concat lzw.cpp -I include -S src
+
+concat-build: concat # concated.cpp
 	# g++ -Ofast -static-libstdc++ --std=c++11 -Wall -Wextra concated.cpp -o build/lzw
 	g++ -pg -g -Ofast -static-libstdc++ --std=c++11 -Wall -Wextra concated.cpp -o build/lzw
 	# g++ -pg -g -static-libstdc++ --std=c++11 -Wall -Wextra concated.cpp -o build/lzw
@@ -98,6 +103,14 @@ reformat:
 clean:
 	rm -rf ${BUILD_DIR}/*
 
-zip:
+zip: concat
+	mkdir ${ZIP_FILENAME}
+	cp README.assignment.md ${ZIP_FILENAME}/README.md
+	cp test_integrate.py ${ZIP_FILENAME}/test.py
+	cp concated.cpp ${ZIP_FILENAME}/lzw.cpp
+	cp Makefile.assignment ${ZIP_FILENAME}/Makefile
+	${ZIP_EXE} a -tzip ${ZIP_FILENAME}.zip ${ZIP_FILENAME}
+	# python -m zipfile -c ${ZIP_FILENAME}.zip ${ZIP_FILENAME}/
+	rm -rf ${ZIP_FILENAME}
 
 .PHONY: all rebuild build-test unit-test integrate-test cov prof concat clean zip
