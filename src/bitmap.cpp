@@ -10,6 +10,9 @@ using namespace std;
 // Mind: we use little-endian, that is, the least significant bit of the byte
 // stores the smallest index
 
+// Current implementation is unsigned char array. Alternatively we could use a
+// big integer to implement. Some big int library needs to be built beforehand.
+
 Bitmap::Bitmap(unsigned size) {
     this->size = size;
     nbytes = ceil(size * 1.0 / 8);

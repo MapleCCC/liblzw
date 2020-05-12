@@ -43,6 +43,7 @@
 - Compare speed of LZW.py and liblzw
 - Wrap liblzw into CPython extension. Remove subprocess call overhead when testing using Python Hypothesis framework.
   - Consider using Cython to fast prototype CPython extension.
+- Use big int as bitmap underlying data structure instead of unsigned char array, and see if performance is better, or worse.
 
 
 ## Done
@@ -59,6 +60,7 @@
 - Outdo lzw_example_win.exe
 - Out-of-source build
 - Build static library: liblzw.a
+- Implement Dict::statistics()
 
 
 ## Archive

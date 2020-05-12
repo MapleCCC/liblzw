@@ -89,8 +89,8 @@ concat:
 	clang-format -i -style=file concated.cpp
 
 concat-build: concat # concated.cpp
-	# g++ -Ofast -static-libstdc++ --std=c++11 -Wall -Wextra concated.cpp -o build/lzw
-	g++ -pg -g -Ofast -static-libstdc++ --std=c++11 -Wall -Wextra concated.cpp -o build/lzw
+	g++ -Ofast -static-libstdc++ --std=c++11 -Wall -Wextra concated.cpp -o build/lzw
+	# g++ -pg -g -Ofast -static-libstdc++ --std=c++11 -Wall -Wextra concated.cpp -o build/lzw
 	# g++ -pg -g -static-libstdc++ --std=c++11 -Wall -Wextra concated.cpp -o build/lzw
 	# g++ --std=c++11 -static-libstdc++ -Wall -Wextra -g concated.cpp -o build/lzw
 
