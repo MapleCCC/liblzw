@@ -86,6 +86,7 @@ prof:
 
 concat:
 	concat lzw.cpp -I include -S src
+	clang-format -i -style=file concated.cpp
 
 concat-build: concat # concated.cpp
 	# g++ -Ofast -static-libstdc++ --std=c++11 -Wall -Wextra concated.cpp -o build/lzw
