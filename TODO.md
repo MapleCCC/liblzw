@@ -44,6 +44,7 @@
 - Wrap liblzw into CPython extension. Remove subprocess call overhead when testing using Python Hypothesis framework.
   - Consider using Cython to fast prototype CPython extension.
 - Use big int as bitmap underlying data structure instead of unsigned char array, and see if performance is better, or worse.
+- Add git tag "submission milestone"
 
 
 ## Done

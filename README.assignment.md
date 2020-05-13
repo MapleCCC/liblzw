@@ -115,39 +115,43 @@ It's the same with that of the compression algorithm! The total cost model for t
 
 ### Performance Analysis
 
+#### Rationale
+
 The algorithmic detail of LZW compression algorithm doesn't have large parameter tuning space or rich variants for twisting. The only performance improvement we can try to make is concentrated on the underlying data structure implementation of the code dict and the string dict. The exported interface consists of `dict.lookup`, `dict.add`, and `dict.membership_check`. Many data structure supports these three operations. When deciding which data structure to use, we want the cost to be as small as possible, because these three operations is invoked in nearly every iteration of the algorithm process. Three candidates are to be examined in detail:
 
-> #### Balanced Tree
+- Balanced Tree
 
-> Balanced tree has the advantages of being easy to implement, while having reasonable average performance bound for many operations. It's too mediocre for our demanding task.
+  Balanced tree has the advantages of being easy to implement, while having reasonable average performance bound for many operations. It's too mediocre for our demanding task.
 
-> #### Hash Table
+- Hash Table
 
-> Hash table, if implemented carefully, can exhibit excel performance in various frequent operations. The major drawback of hash table data structure is that it's space demanding, and its performance is sensitive to input data pattern. The good news is that we can tune the hashing function and collision resolution scheme to workaround skewed input data.
+  Hash table, if implemented carefully, can exhibit excel performance in various frequent operations. The major drawback of hash table data structure is that it's space demanding, and its performance is sensitive to input data pattern. The good news is that we can tune the hashing function and collision resolution scheme to workaround skewed input data.
 
-> #### Trie
+- Trie
 
-> Trie is a specialized data structure especially good at handling text related data. Its major drawback is that correct and efficient implementation needs some attention and care.
+  Trie is a specialized data structure especially good at handling text related data. Its major drawback is that correct and efficient implementation needs some attention and care.
+
+## Implementation Scheme
 
 We break the trade-off and decide to use hash table to implement the code dict and string dict. We adopt a relatively standard implementation scheme: dense array to store buckets and open address scheme as collision resolution scheme.
 
-For the collision resolution scheme, we choose the relatively easy to implement one - open address resolution. Double hashing is adopted to avoid cluster issues. The double hashing formula takes some inspirations from CPython's builtin dict data type implementation.
+For the collision resolution scheme, we choose the relatively easy to implement one - open address resolution. Double hashing is adopted to avoid cluster issues. The double hashing formula takes some inspirations from CPython's builtin `dict` data type implementation.
 
 For simplicity, we do not customize our own hashing functions. `std::hash` is used instead. This could serve as a minor optimization candidate for future.
 
 Ideally, the hash table implemented code dict and string dict exhibit $O(1)$ time complexity for all `dict.add`, `dict.lookup`, and `dict.membership_check` operations.
 
-### Hacks and Tricks
+## Hacks and Tricks
 
-#### Stream Style IO
+### Stream Style IO
 
 Instead of loading the whole file content into memory, which could lead to large memory footprint and hence resource pressure, our code adopts a more flexible IO method. We load input data in stream style. We read in data when needed and no too much more. This ensures that our code scales well with large input data size. Also our code is more memory space efficient.
 
-#### Reserve Capacity to Reduce Resizing Cost
+### Reserve Capacity to Reduce Resizing Cost
 
 A little trick we use here is to reserve sufficient space for the code dict and string dict at initialization. This effectively reduce the cost of resizing hash table, which is expensive, to say the least.
 
-#### Cached Incremental Hash State to Reduce Recomputation Cost
+### Cached Incremental Hash State to Reduce Recomputation Cost
 
 Deprecated.
 
