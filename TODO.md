@@ -44,6 +44,7 @@
 - Wrap liblzw into CPython extension. Remove subprocess call overhead when testing using Python Hypothesis framework.
   - Consider using Cython to fast prototype CPython extension.
 - Add git tag "submission milestone"
+- Update CMakeLists.txt
 
 
 ## Done
