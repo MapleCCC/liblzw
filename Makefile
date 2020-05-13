@@ -106,4 +106,4 @@ pdf:
 	pandoc -s -o README.assignment.pdf README.assignment.md
 	# pandoc -s -o pandoc.output.pdf README.assignment.md
 
-.PHONY: all rebuild build-test unit-test integrate-test cov prof concat clean zip pdf
+.PHONY: all rebuild build-test unit-test integrate-test cov prof concat clean pdf
