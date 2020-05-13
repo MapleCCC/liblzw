@@ -19,6 +19,8 @@ config = {
 def main(zipfilename):
     with TemporaryDirectory() as d:
         for k, v in config.items():
+            if not os.path.isfile(k):
+                raise FileNotFoundError(f"{k} is not found")
             shutil.copy(k, os.path.join(d, v))
         shutil.make_archive(zipfilename, "zip", d)
 
