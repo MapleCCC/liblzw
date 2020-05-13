@@ -12,6 +12,9 @@ make fast
 
 # if cl.exe is supported:
 cl lzw.cpp
+
+# if speed is desirable:
+cl /D "NDEBUG" /O2 lzw.cpp
 ```
 
 ## Usage
@@ -131,7 +134,7 @@ The algorithmic detail of LZW compression algorithm doesn't have large parameter
 
   Trie is a specialized data structure especially good at handling text related data. Its major drawback is that correct and efficient implementation needs some attention and care.
 
-## Implementation Scheme
+#### Implementation Scheme
 
 We break the trade-off and decide to use hash table to implement the code dict and string dict. We adopt a relatively standard implementation scheme: dense array to store buckets and open address scheme as collision resolution scheme.
 
@@ -155,6 +158,6 @@ A little trick we use here is to reserve sufficient space for the code dict and 
 
 Deprecated.
 
-#### Immutable Data Structure to Reduce Space Cost
+### Immutable Data Structure to Reduce Space Cost
 
 Deprecated.

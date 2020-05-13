@@ -45,6 +45,10 @@
   - Consider using Cython to fast prototype CPython extension.
 - Add git tag "submission milestone"
 - Update CMakeLists.txt
+- Remove sensitive information. The first commit.
+- Create script to replace LaTeX math text with image url. For render in GitHub.
+- Setup unit-test workflow. Include CI badge, about test suit passing status, and test coverage percentage.
+- Try C++ test frameworks.
 
 
 ## Done
