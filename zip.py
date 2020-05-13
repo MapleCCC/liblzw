@@ -7,7 +7,7 @@ from tempfile import TemporaryDirectory
 import click
 
 config = {
-    "README.assignment.md": "README.md",
+    "README.assignment.pdf": "README.pdf",
     "test_integrate.py": "test.py",
     "concated.cpp": "lzw.cpp",
     "Makefile.assignment": "Makefile",

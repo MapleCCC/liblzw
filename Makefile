@@ -101,4 +101,8 @@ reformat:
 clean:
 	rm -rf ${BUILD_DIR}/*
 
-.PHONY: all rebuild build-test unit-test integrate-test cov prof concat clean zip
+pdf:
+	pandoc -s -o README.assignment.pdf README.assignment.md
+	# pandoc -s -o pandoc.output.pdf README.assignment.md
+
+.PHONY: all rebuild build-test unit-test integrate-test cov prof concat clean zip pdf
