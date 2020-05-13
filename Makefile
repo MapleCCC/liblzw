@@ -99,11 +99,17 @@ reformat:
 	# WARNING: don't use globstar like "echo **/*.cpp **/*.c **/*.h" because it has some limitations and pitfalls, like nullglob problem and it can't match current directory
 	find ${SRC_DIR} ${INC_DIR} ${TEST_DIR} -type f -regextype posix-extended -regex ".*\.(c|cpp|h)" | xargs clang-format -i -style=file
 
+compare-branch:
+	git diff master assignment --compact-summary
+
+todo:
+	# ripgrep automatically skip undesired files and directories. Save the effort to manually exclude.
+	rg -ri TODO
+
 clean:
 	rm -rf ${BUILD_DIR}/*
 
 pdf:
 	pandoc -s -o README.assignment.pdf README.assignment.md
-	# pandoc -s -o pandoc.output.pdf README.assignment.md
 
 .PHONY: all rebuild build-test unit-test integrate-test cov prof concat clean pdf

@@ -46,6 +46,10 @@
 - Use big int as bitmap underlying data structure instead of unsigned char array, and see if performance is better, or worse.
 - Add git tag "submission milestone"
 - Update CMakeLists.txt
+- Remove sensitive information. The first commit.
+- Create script to replace LaTeX math text with image url. For render in GitHub.
+- Setup unit-test workflow. Include CI badge, about test suit passing status, and test coverage percentage.
+- Try C++ test frameworks.
 
 
 ## Done
