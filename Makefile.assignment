@@ -11,14 +11,17 @@ PROG=${BUILD_DIR}/lzw
 
 all: ${PROG}
 
-${PROG}: ${SRC}
+${PROG}: ${SRC} ${BUILD_DIR}
 	${CXX} ${CXXFLAGS} -g ${SRC} -o ${PROG}
 
-fast: ${SRC}
+fast: ${SRC} ${BUILD_DIR}
 	${CXX} ${CXXFLAGS} -Ofast ${SRC} -o ${PROG}
 
 integrate-test: ${PROG}
 	pytest test.py
+
+${BUILD_DIR}:
+	mkdir -p ${BUILD_DIR}
 
 clean:
 	rm -rf ${BUILD_DIR}
