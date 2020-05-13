@@ -4,6 +4,7 @@ SRC_DIR=src
 INC_DIR=include
 BUILD_DIR=build
 TEST_DIR=tests
+SCRIPTS_DIR=scripts
 
 SRCS=$(wildcard ${SRC_DIR}/*.cpp)
 OBJS=$(addprefix ${BUILD_DIR}/,$(notdir $(SRCS:.cpp=.o)))
@@ -46,7 +47,7 @@ rebuild: clean all
 build-test: ${TEST_PROGS}
 
 unit-test: build-test
-	./runall.py ${TEST_PROGS}
+	${SCRIPTS_DIR}/runall.py ${TEST_PROGS}
 
 integrate-test: ${BUILD_DIR}/lzw # ${PROGS}
 	pytest test_integrate.py
