@@ -17,6 +17,19 @@ ${PROG}: ${SRC} ${BUILD_DIR}
 fast: ${SRC} ${BUILD_DIR}
 	${CXX} ${CXXFLAGS} -Ofast ${SRC} -o ${PROG}
 
+# Can't put cl.exe commands in Makefile recipe unless we
+# set the Makefile variable `SHELL=cmd.exe`
+#
+# use-cl: ${SRC} ${BUILD_DIR}
+# 	cl /Fe${PROG} ${SRC}
+#
+# use-cl-fast: ${SRC} ${BUILD_DIR}
+# 	cl /D "NDEBUG" /O2 /Fe${PROG} ${SRC}
+#
+# check-shell:
+# 	echo $PATH
+# 	echo %PATH%
+
 integrate-test: ${PROG}
 	pytest test.py
 
