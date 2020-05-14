@@ -1,20 +1,22 @@
-# Assignment 3 - LZW Compression
+# LZW Compressor
 
 ## Compile
 
 ```bash
 # if g++.exe is supported:
-$ g++ --std=c++11 -static-libstdc++ -Wall -Wextra -g lzw.cpp -o lzw
+$ make
+# Compiled executable is in build/lzw.exe
 
 # if speed is desirable:
-$ g++ --std=c++11 -static-libstdc++ -Wall -Wextra -Ofast lzw.cpp -o lzw
+$ make fast
 
 # if cl.exe is supported:
-$ cl lzw.cpp
+$ mkdir build && cl /Fe"build/lzw.exe" lzw.cpp
+# Compiled executable is in build/lzw.exe
 
 # if speed is desirable:
 # compile in release mode
-$ cl /D "NDEBUG" /O2 lzw.cpp
+$ mkdir build && cl /D "NDEBUG" /O2 /Fe"build/lzw.exe" lzw.cpp
 ```
 
 ## Usage
@@ -46,6 +48,7 @@ $ lzw -d <lzw filename>
 
   $ python -m pip install -U pytest, hypothesis
   $ make integrate-test
+  # It makes very thorough testing. It currently take about ten to twenty seconds.
   ```
 
 ## Algorithmic Analysis
