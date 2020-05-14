@@ -4,35 +4,41 @@
 
 ```bash
 # if g++.exe is supported:
-make
+$ make
 # Compiled executable is in build/lzw.exe
 
 # if speed is desirable:
-make fast
+$ make fast
 
 # if cl.exe is supported:
-cl lzw.cpp
+$ cl lzw.cpp
 
 # if speed is desirable:
-cl /D "NDEBUG" /O2 lzw.cpp
+# compile in release mode
+$ cl /D "NDEBUG" /O2 lzw.cpp
 ```
 
 ## Usage
 
 ```bash
 # Compression
-lzw -c <lzw filename> <a list of files>
+$ lzw -c <lzw filename> <a list of files>
 
 # Decompression
-lzw -d <lzw filename>
+$ lzw -d <lzw filename>
 ```
 
 ## Test
 
+Python3.6+, Pytest and Hypothesis are needed for integrate test
+
 ```bash
-# Python3.6+, Pytest and Hypothesis are needed for integrate test
-pip install pytest, hypothesis
-make integrate-test
+# You can optionally create a virtual environment for isolation purpose
+$ python -m virtualenv .venv
+$ source .venv/Scripts/activate
+
+$ python -m pip install -U pytest, hypothesis
+$ make integrate-test
 ```
 
 ## Algorithmic Analysis
@@ -80,7 +86,7 @@ $$
 
 If the underlying data structure implementation of code dict is hash table, then $C(\mathrm{dict.memebership\_check})$ and $C(\mathrm{dict.add})$ are both $O(1)$ operations. The total cost is $O(N)$ then.
 
-For input data that has many repeated byte pattern, $M$ is not negligible compared to $N$. The largest possible $M$ comes from input consisting of single byte pattern. In such case, $M = O(\log N)$ (The detailed deduction process is delegated to the readers). The total cost is still $O(N)$.
+For input data that has many repeated byte pattern, $M$ is not negligible compared to $N$. The largest possible $M$ comes from input consisting of single byte pattern. In such case, $M = O(N - \sqrt{N}) = O(N)$ (The detailed deduction process is delegated to the readers). The total cost is still $O(N)$.
 
 We see that the time complexity of compression algorithm is not affected by the byte repetition pattern. It's always linear time. This nice property holds true as long as the underlying implementation of the code dict scales in sublinear factor.
 
