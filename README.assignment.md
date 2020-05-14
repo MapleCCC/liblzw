@@ -11,11 +11,12 @@ $ make
 $ make fast
 
 # if cl.exe is supported:
-$ cl lzw.cpp
+$ cl /Fe"build/lzw.exe" lzw.cpp
+# Compiled executable is in build/lzw.exe
 
 # if speed is desirable:
 # compile in release mode
-$ cl /D "NDEBUG" /O2 lzw.cpp
+$ cl /D "NDEBUG" /O2 /Fe"build/lzw.exe" lzw.cpp
 ```
 
 ## Usage
