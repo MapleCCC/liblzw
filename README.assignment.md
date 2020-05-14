@@ -11,12 +11,12 @@ $ make
 $ make fast
 
 # if cl.exe is supported:
-$ cl /Fe"build/lzw.exe" lzw.cpp
+$ mkdir build && cl /Fe"build/lzw.exe" lzw.cpp
 # Compiled executable is in build/lzw.exe
 
 # if speed is desirable:
 # compile in release mode
-$ cl /D "NDEBUG" /O2 /Fe"build/lzw.exe" lzw.cpp
+$ mkdir build && cl /D "NDEBUG" /O2 /Fe"build/lzw.exe" lzw.cpp
 ```
 
 ## Usage
@@ -40,6 +40,7 @@ $ source .venv/Scripts/activate
 
 $ python -m pip install -U pytest, hypothesis
 $ make integrate-test
+# It makes very thorough testing. It currently take about ten to twenty seconds.
 ```
 
 ## Algorithmic Analysis
