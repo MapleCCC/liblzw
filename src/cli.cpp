@@ -5,14 +5,12 @@
 #include <iostream>
 #include <vector>
 
-#include "code.h"
-#include "codec.h"
-#include "config.h"
-#include "lzwfile.h"
+#include "internal.h"
+
 using namespace std;
 
-void compress(const string& lzwfile, const vector<string>* header);
-void decompress(const string& lzwfile);
+int cli_compress(int argc, char** argv);
+int cli_decompress(int argc, char** argv);
 
 int
 cli(int argc, char** argv) {
@@ -21,45 +19,12 @@ cli(int argc, char** argv) {
         return EXIT_FAILURE;
     }
 
-    if (!strcmp(argv[1], "compress")) {
-        string lzwfile;
-        vector<string>* header = new vector<string>;
-        for (int i = 2; i < argc; i++) {
-            if (!strcmp(argv[i], "-o") || !strcmp(argv[i], "--output")) {
-                if (i == argc - 1) {
-                    cerr << "-o|--output option present but no value specified" << endl;
-                    return EXIT_FAILURE;
-                }
-                lzwfile = string(argv[++i]);
-            }
-            else {
-                header->push_back(string(argv[i]));
-            }
-        }
+    string subcommand(argv[1]);
 
-        if (lzwfile.empty()) {
-            lzwfile = string("compressed");
-        }
-
-        try {
-            compress(lzwfile, header);
-            delete header;
-        } catch (exception e) {
-            cerr << "During compression, catched exception: " << e.what()
-                 << endl;
-            return EXIT_FAILURE;
-        }
-    } else if (!strcmp(argv[1], "decompress")) {
-        for (int i = 2; i < argc; i++) {
-            string lzwfile(argv[i]);
-            try {
-                decompress(lzwfile);
-            } catch (exception e) {
-                cerr << "During compression, catched exception: " << e.what()
-                    << endl;
-                return EXIT_FAILURE;
-            }
-        }
+    if (subcommand == "compress") {
+        return cli_compress(argc, argv);
+    } else if (subcommand == "decompress") {
+        return cli_decompress(argc, argv);
     } else {
         cerr << "Invalid arguments" << endl;
         return EXIT_FAILURE;
@@ -68,31 +33,50 @@ cli(int argc, char** argv) {
     return EXIT_SUCCESS;
 }
 
-void
-compress(const string& lzwfile, const vector<string>* header) {
-    write_lzwfile_header(lzwfile, header);
-
-    FileEncoder file_encoder(CODE_BITSIZE);
-    lzwfile_codes_writer code_writer(lzwfile, CODE_BITSIZE);
-
-    for (unsigned i = 0; i < header->size(); i++) {
-        cout << "Compressing " << header->at(i) << endl;
-        file_encoder.encode_file(header->at(i), code_writer);
+int
+cli_compress(int argc, char** argv) {
+    string lzwfile;
+    vector<string>* header = new vector<string>;
+    for (int i = 2; i < argc; i++) {
+        if (!strcmp(argv[i], "-o") || !strcmp(argv[i], "--output")) {
+            if (i == argc - 1) {
+                cerr << "-o|--output option present but no value specified"
+                     << endl;
+                return EXIT_FAILURE;
+            }
+            lzwfile = string(argv[++i]);
+        } else {
+            header->push_back(string(argv[i]));
+        }
     }
-    cout << "Finish compression" << endl;
+
+    if (lzwfile.empty()) {
+        lzwfile = string("compressed");
+    }
+
+    try {
+        compress(lzwfile, header);
+        delete header;
+    } catch (exception e) {
+        cerr << "During compression, catched exception: " << e.what() << endl;
+        return EXIT_FAILURE;
+    }
+
+    return EXIT_SUCCESS;
 }
 
-void
-decompress(const string& lzwfile) {
-    vector<string>* header = read_lzwfile_header(lzwfile);
-    FileDecoder file_decoder(CODE_BITSIZE);
-    lzwfile_codes_reader code_reader(lzwfile, CODE_BITSIZE);
-
-    for (unsigned i = 0; i < header->size(); i++) {
-        cout << "Deflating " << header->at(i) << endl;
-        file_decoder.decode_file(header->at(i), code_reader);
+int
+cli_decompress(int argc, char** argv) {
+    for (int i = 2; i < argc; i++) {
+        string lzwfile(argv[i]);
+        try {
+            decompress(lzwfile);
+        } catch (exception e) {
+            cerr << "During compression, catched exception: " << e.what()
+                 << endl;
+            return EXIT_FAILURE;
+        }
     }
 
-    delete header;
-    cout << "Finish decompression" << endl;
+    return EXIT_SUCCESS;
 }
