@@ -113,4 +113,7 @@ pdf:
 	# TODO: use the command line Typora's builtin PDF export functionality usees to invoke pandoc under the hood. Use the style from Typora.
 	pandoc -s -o README.assignment.pdf README.assignment.md
 
-.PHONY: all rebuild build-test unit-test integrate-test cov prof concat clean pdf
+eqn:
+	eqn2imgurl README.raw.md -o README.md
+
+.PHONY: all rebuild build-test unit-test integrate-test cov prof concat clean pdf eqn

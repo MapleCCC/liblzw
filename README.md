@@ -77,40 +77,31 @@ LZW algorithm treats data as binary stream, regardless of its text encoding. Dur
 
 For each byte consumed by the algorithm, deciding upon whether the running word is in the code dict, the algorithm has **two** branches to go.
 
-If the new running word formed by appending the new byte at the end is in the code dict, the algorithm proceeds to $A$ branch, which basically do nothing, and continue to next iteration. On the other hand, if the new running word constituted by the new byte is not in the code dict, the algorithm goes to $B$ branch.
+If the new running word formed by appending the new byte at the end is in the code dict, the algorithm proceeds to ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;A) branch, which basically do nothing, and continue to next iteration. On the other hand, if the new running word constituted by the new byte is not in the code dict, the algorithm goes to ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;B) branch.
 
-In the $B$ branch, three things happen. First, the code in the code dict corresponding to the old running word (before the new byte is appended) is emitted. Then the new running word is entered into the code dict as a new string, and assigned a new code, ready to use in the future. Lastly, the running word is reset to contain only the new byte. The algorithm then proceeds to the next iteration.
+In the ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;B) branch, three things happen. First, the code in the code dict corresponding to the old running word (before the new byte is appended) is emitted. Then the new running word is entered into the code dict as a new string, and assigned a new code, ready to use in the future. Lastly, the running word is reset to contain only the new byte. The algorithm then proceeds to the next iteration.
 
 The cost model for these two branches are respectively:
 
-$$
-C_A = C(\mathrm{str.copy})
-$$
+![](https://latex.codecogs.com/svg.latex?\fn_cm&space;\small&space;C_A%20=%20C(\mathrm{str.copy}))
 
-$$
-C_B = C(\mathrm{dict.lookup}) + C(\mathrm{dict.add}) + C(\mathrm{str.copy})
-$$
+![](https://latex.codecogs.com/svg.latex?\fn_cm&space;\small&space;C_B%20=%20C(\mathrm{dict.lookup})%20%2B%20C(\mathrm{dict.add})%20%2B%20C(\mathrm{str.copy}))
 
-Suppose the source text byte length is $N$. Among the $N$ bytes consumed by the algorithm, there are $M$ bytes for whom the algorithm goes to branch A, and goes to branch $B$ for the other $N-M$ bytes.
+Suppose the source text byte length is ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;N). Among the ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;N) bytes consumed by the algorithm, there are ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;M) bytes for whom the algorithm goes to branch A, and goes to branch ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;B) for the other ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;N-M) bytes.
 
-For simplicity, we assume that $C(\mathrm{dict.lookup})$, $C(\mathrm{dict.add})$, $C(\mathrm{dict.membership\_check})$, $C(\mathrm{str.concatenate})$, and $C(\mathrm{str.copy})$ are fixed cost that don't vary upon different string sizes. This assumption is invalid/broken for large input, but that kind of case is very rare, so we are good with such hurtless simplification, as long as the strings are of reasonable lengths.
+For simplicity, we assume that ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(\mathrm{dict.lookup})), ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(\mathrm{dict.add})), ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(\mathrm{dict.membership\_check})), ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(\mathrm{str.concatenate})), and ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(\mathrm{str.copy})) are fixed cost that don't vary upon different string sizes. This assumption is invalid/broken for large input, but that kind of case is very rare, so we are good with such hurtless simplification, as long as the strings are of reasonable lengths.
 
 The total cost model of compression process can then be summarized as:
 
-$$
-C_{\mathrm{total}} = N * (C(\mathrm{str.concatenate}) + C(\mathrm{dict.membership\_check})) \\
-    + M * C(\mathrm{str.copy}) + (N - M) * (C(\mathrm{dict.lookup}) + C(\mathrm{dict.add}) + C(\mathrm{str.copy}))
-$$
+![](https://latex.codecogs.com/svg.latex?\fn_cm&space;\small&space;C_{\mathrm{total}}%20=%20N%20*%20(C(\mathrm{str.concatenate})%20%2B%20C(\mathrm{dict.membership\_check}))%20\\%20%20%20%20%20%2B%20M%20*%20C(\mathrm{str.copy})%20%2B%20(N%20-%20M)%20*%20(C(\mathrm{dict.lookup})%20%2B%20C(\mathrm{dict.add})%20%2B%20C(\mathrm{str.copy})))
 
-For input data that doesn't have many repeated byte pattern, $M$ is small compared to $N$ (i.e. $M \ll N$). The cost model approximates to:
+For input data that doesn't have many repeated byte pattern, ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;M) is small compared to ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;N) (i.e. ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;M%20\ll%20N)). The cost model approximates to:
 
-$$
-C_{\mathrm{total}} = N * (C(\mathrm{str.concatenate}) + C(\mathrm{dict.membership\_check}) + C(\mathrm{dict.lookup}) + C(\mathrm{dict.add}) + C(\mathrm{str.copy}))
-$$
+![](https://latex.codecogs.com/svg.latex?\fn_cm&space;\small&space;C_{\mathrm{total}}%20=%20N%20*%20(C(\mathrm{str.concatenate})%20%2B%20C(\mathrm{dict.membership\_check})%20%2B%20C(\mathrm{dict.lookup})%20%2B%20C(\mathrm{dict.add})%20%2B%20C(\mathrm{str.copy})))
 
-If the underlying data structure implementation of code dict is hash table, then $C(\mathrm{dict.memebership\_check})$ and $C(\mathrm{dict.add})$ are both $O(1)$ operations. The total cost is $O(N)$ then.
+If the underlying data structure implementation of code dict is hash table, then ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(\mathrm{dict.memebership\_check})) and ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(\mathrm{dict.add})) are both ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;O(1)) operations. The total cost is ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;O(N)) then.
 
-For input data that has many repeated byte pattern, $M$ is not negligible compared to $N$. The largest possible $M$ comes from input consisting of single byte pattern. In such case, $M = O(N - \sqrt{N}) = O(N)$ (The detailed deduction process is delegated to the readers). The total cost is still $O(N)$.
+For input data that has many repeated byte pattern, ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;M) is not negligible compared to ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;N). The largest possible ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;M) comes from input consisting of single byte pattern. In such case, ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;M%20=%20O(N%20-%20\sqrt{N})%20=%20O(N)) (The detailed deduction process is delegated to the readers). The total cost is still ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;O(N)).
 
 We see that the time complexity of compression algorithm is not affected by the byte repetition pattern. It's always linear time. This nice property holds true as long as the underlying implementation of the code dict scales in sublinear factor.
 
@@ -120,31 +111,25 @@ Contrary to the compression algorithm, LZW decompression algorithm consumes a st
 
 Deciding on whether the code can be found in the string dict, the algorithm has **two** branches to go.
 
-If the code currently consumed can be found in the string dict, the algorithm goes to branch $A$, where basically four things happen. First, the decoded string coresponding to the current code is lookuped in the string dict. The decoded string is emitted as byte data. Then a new string constructed by appending the first byte of the decoded string to the running word is added to the string dict, ready for future use. The running word is then reset to be the decoded string. The algorithm then goes on to the next iteration.
+If the code currently consumed can be found in the string dict, the algorithm goes to branch ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;A), where basically four things happen. First, the decoded string coresponding to the current code is lookuped in the string dict. The decoded string is emitted as byte data. Then a new string constructed by appending the first byte of the decoded string to the running word is added to the string dict, ready for future use. The running word is then reset to be the decoded string. The algorithm then goes on to the next iteration.
 
-On the other hand, if the code currently consumed is not present in the string dict, a special situation happens and needs special care. Algorithm goes to branch $B$, where three things happen. A new string constructed by appending the first byte of the running word to the running word is added to the string dict for future use. This new string is emitted as byte data. Then the running word is reset to be the new string. The algorithm then goes on to the next iteration.
+On the other hand, if the code currently consumed is not present in the string dict, a special situation happens and needs special care. Algorithm goes to branch ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;B), where three things happen. A new string constructed by appending the first byte of the running word to the running word is added to the string dict for future use. This new string is emitted as byte data. Then the running word is reset to be the new string. The algorithm then goes on to the next iteration.
 
 The cost model for these two branches is then:
 
-$$
-C_A = C(\mathrm{dict.lookup}) + C(\mathrm{str.concatenate}) + C(\mathrm{dict.add}) + C(\mathrm{str.copy})
-$$
+![](https://latex.codecogs.com/svg.latex?\fn_cm&space;\small&space;C_A%20=%20C(\mathrm{dict.lookup})%20%2B%20C(\mathrm{str.concatenate})%20%2B%20C(\mathrm{dict.add})%20%2B%20C(\mathrm{str.copy}))
 
-$$
-C_B = C(\mathrm{str.concatenate}) + C(\mathrm{dict.add}) + C(\mathrm{str.copy})
-$$
+![](https://latex.codecogs.com/svg.latex?\fn_cm&space;\small&space;C_B%20=%20C(\mathrm{str.concatenate})%20%2B%20C(\mathrm{dict.add})%20%2B%20C(\mathrm{str.copy}))
 
-Suppose the code stream length is $N$. Among the $N$ codes consumed by the algorithm, there are $M$ codes for whom the algorithm goes to branch A, and goes to branch $B$ for the other $N-M$ codes.
+Suppose the code stream length is ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;N). Among the ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;N) codes consumed by the algorithm, there are ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;M) codes for whom the algorithm goes to branch A, and goes to branch ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;B) for the other ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;N-M) codes.
 
-For simplicity, we assume that $C(\mathrm{dict.lookup})$, $C(\mathrm{dict.add})$, $C(\mathrm{dict.membership\_check})$, $C(\mathrm{str.concatenate})$, and $C(\mathrm{str.copy})$ are fixed cost that don't vary upon different string sizes. This assumption is invalid/broken for large input, but that kind of case is very rare, so we are good with such hurtless simplification, as long as the strings are of reasonable lengths.
+For simplicity, we assume that ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(\mathrm{dict.lookup})), ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(\mathrm{dict.add})), ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(\mathrm{dict.membership\_check})), ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(\mathrm{str.concatenate})), and ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(\mathrm{str.copy})) are fixed cost that don't vary upon different string sizes. This assumption is invalid/broken for large input, but that kind of case is very rare, so we are good with such hurtless simplification, as long as the strings are of reasonable lengths.
 
-The probability of going to branch $B$ is relatively rare, so the major cost comes from branch $A$. The total cost model for the decompression algorithm is then:
+The probability of going to branch ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;B) is relatively rare, so the major cost comes from branch ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;A). The total cost model for the decompression algorithm is then:
 
-$$
-C_{\mathrm{total}} = N * (C(\mathrm{dict.membership\_check}) +C(\mathrm{dict.lookup}) + C(\mathrm{str.concatenate}) + C(\mathrm{dict.add}) + C(\mathrm{str.copy}))
-$$
+![](https://latex.codecogs.com/svg.latex?\fn_cm&space;\small&space;C_{\mathrm{total}}%20=%20N%20*%20(C(\mathrm{dict.membership\_check})%20%2BC(\mathrm{dict.lookup})%20%2B%20C(\mathrm{str.concatenate})%20%2B%20C(\mathrm{dict.add})%20%2B%20C(\mathrm{str.copy})))
 
-It's the same with that of the compression algorithm! The total cost model for the decompression algorithm turns out to be identical to that of the compression algorithm! They are both linear $O(N)$. (under the precondition that the underlying implementation of string dict and code dict scales in sublinear factor)
+It's the same with that of the compression algorithm! The total cost model for the decompression algorithm turns out to be identical to that of the compression algorithm! They are both linear ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;O(N)). (under the precondition that the underlying implementation of string dict and code dict scales in sublinear factor)
 
 ### Performance Analysis
 
@@ -170,7 +155,7 @@ We break the trade-off and decide to use hash table to implement the code dict a
 
 For simplicity, we do not customize our own hashing functions. `std::hash` is used instead. This could serve as a minor optimization candidate for future.
 
-Ideally, the hash table implemented code dict and string dict exhibit $O(1)$ time complexity for all `dict.add`, `dict.lookup`, and `dict.membership_check` operations.
+Ideally, the hash table implemented code dict and string dict exhibit ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;O(1)) time complexity for all `dict.add`, `dict.lookup`, and `dict.membership_check` operations.
 
 ## Hacks and Tricks
 
