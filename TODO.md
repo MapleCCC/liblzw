@@ -67,6 +67,7 @@
 - Outdo lzw_example_win.exe
 - Out-of-source build
 - Build static library: liblzw.a
+- Improve CLI interface to be more user-friendly and intuitive.
 
 
 ## Archive

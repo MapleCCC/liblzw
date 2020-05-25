@@ -21,16 +21,26 @@ cli(int argc, char** argv) {
         return EXIT_FAILURE;
     }
 
-    if (!strcmp(argv[1], "-c")) {
-        if (argc < 4) {
-            cerr << "Too few arguments." << endl;
-            return EXIT_FAILURE;
-        }
-        string lzwfile(argv[2]);
+    if (!strcmp(argv[1], "compress")) {
+        string lzwfile;
         vector<string>* header = new vector<string>;
-        for (int i = 0; i < argc - 3; i++) {
-            header->push_back(string(argv[i + 3]));
+        for (int i = 2; i < argc; i++) {
+            if (!strcmp(argv[i], "-o") || !strcmp(argv[i], "--output")) {
+                if (i == argc - 1) {
+                    cerr << "-o|--output option present but no value specified" << endl;
+                    return EXIT_FAILURE;
+                }
+                lzwfile = string(argv[++i]);
+            }
+            else {
+                header->push_back(string(argv[i]));
+            }
         }
+
+        if (lzwfile.empty()) {
+            lzwfile = string("compressed");
+        }
+
         try {
             compress(lzwfile, header);
             delete header;
@@ -39,18 +49,16 @@ cli(int argc, char** argv) {
                  << endl;
             return EXIT_FAILURE;
         }
-    } else if (!strcmp(argv[1], "-d")) {
-        if (argc != 3) {
-            cerr << "Too many arguments." << endl;
-            return EXIT_FAILURE;
-        }
-        string lzwfile(argv[2]);
-        try {
-            decompress(lzwfile);
-        } catch (exception e) {
-            cerr << "During compression, catched exception: " << e.what()
-                 << endl;
-            return EXIT_FAILURE;
+    } else if (!strcmp(argv[1], "decompress")) {
+        for (int i = 2; i < argc; i++) {
+            string lzwfile(argv[i]);
+            try {
+                decompress(lzwfile);
+            } catch (exception e) {
+                cerr << "During compression, catched exception: " << e.what()
+                    << endl;
+                return EXIT_FAILURE;
+            }
         }
     } else {
         cerr << "Invalid arguments" << endl;
