@@ -1,6 +1,20 @@
 # LZW Compressor
 
-## Compile
+## Introduction
+
+LZW is an archive format that utilize power of LZW compression algorithm. LZW compression algorithm is a dictionary-based loseless algorithm. It's an old algorithm suitable for beginner to practice.
+
+Internal algorithm processes byte data. So it's applicable to any file types, besides text file. Although it may not be able to achieve substantial compression rate for some file types that are already compressed efficiently, such as PDF files and MP4 files. It treats data as byte stream, unaware of the text-level pattern, which makes it less compression-efficient compared to other more advanced compression algorithm.
+
+LZW compression algorithm is dynamic. It doesn't collect data statistics before hand. Instead, it learns the data pattern while conducting the compression, building a code table on the fly. The compression ratio approaches maximum after enough time. The algorithmic complexity is strictly linear to the size of the text. [A more in-depth algorithmic analysis can be found in the following sections.](#algorithmic-analysis)
+
+An alternative implementation that utilizes more efficient self-made customized `bitmap`, `dict` and `set` to replace C++ builtin general-purpose `std::bitset`, `std::unordered_map` and `std::set` can be found in the branch `assignment`. Future enhancement includes customized `hash` functions to replace builtin general-purpose `std::hash`.
+
+## Installation
+
+Pre-built binaries (Windows only) are available on the [Releases](https://github.com/MapleCCC/liblzw/releases/latest) page.
+
+## Build
 
 ```bash
 # if g++.exe is supported:
@@ -102,7 +116,7 @@ We see that the time complexity of compression algorithm is not affected by the 
 
 #### Decompression Algorithm Complexity
 
-Contrary to the compression algorithm,, LZW decompression algorithm consumes a stream of codes, decodes them on the fly, and emitted byte data. A string dict is built and maintained along with the process. Similar to the compression process, a running word is maintained during the process. The running word is empty at the beginning.
+Contrary to the compression algorithm, LZW decompression algorithm consumes a stream of codes, decodes them on the fly, and emitted byte data. A string dict is built and maintained along with the process. Similar to the compression process, a running word is maintained during the process. The running word is empty at the beginning.
 
 Deciding on whether the code can be found in the string dict, the algorithm has **two** branches to go.
 
