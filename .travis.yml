@@ -1,10 +1,17 @@
-language: minimal  # we need python, pip, clang-format, and g++.
-python:
-  - "3.6"
+language: cpp  # we need python, pip, clang-format, and g++.
+addons:
+  apt:
+    sources:
+      - deadsnakes # source required so it finds the package definition below
+    packages:
+      - python3.6
+      - python3-pip
+      - python-setuptools
 install:
-  - pip install -r requirements-test.txt
+  - python3 -m pip install -U pip
+  - python3 -m pip install -r requirements-test.txt
 script:
   - make concat-build
-  - pytest integrate_test.py
+  - python3 -m pytest integrate_test.py
 # after_success:
 #   - codecov
