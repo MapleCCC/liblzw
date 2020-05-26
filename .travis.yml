@@ -1,0 +1,10 @@
+language: minimal  # we need python, pip, clang-format, and g++.
+python:
+  - "3.6"
+install:
+  - pip install -r requirements-test.txt
+script:
+  - make concat-build
+  - pytest integrate_test.py
+# after_success:
+#   - codecov
