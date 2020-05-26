@@ -50,12 +50,12 @@ def test_integrate(l: List[bytes], tmp_path: Path) -> None:
         test_file.write_bytes(s)
 
     subprocess.run(
-        [EXECUTABLE, "-c", "a.lzw"] + [str(x) for x in test_files]
+        [EXECUTABLE, "compress", "-o", "a.lzw"] + [str(x) for x in test_files]
     ).check_returncode()
 
     map(methodcaller("unlink"), test_files)
 
-    subprocess.run([EXECUTABLE, "-d", "a.lzw"]).check_returncode()
+    subprocess.run([EXECUTABLE, "decompress", "a.lzw"]).check_returncode()
 
     for test_file, s in zip(test_files, l):
         assert test_file.read_bytes() == s
