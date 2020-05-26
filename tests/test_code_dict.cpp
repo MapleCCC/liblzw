@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "code_dict.h"
+
 using namespace std;
 
 int

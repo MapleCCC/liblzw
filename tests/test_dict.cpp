@@ -5,6 +5,7 @@
 #include "bytes.h"
 #include "code.h"
 #include "dict.tpp"
+
 using namespace std;
 
 #define assert(x)                                         \

@@ -6,6 +6,7 @@
 #include <stdexcept>
 
 #include "utils.tpp"
+
 using namespace std;
 
 //! Optimize Candidate: pre-cache INIT_STORAGE to save overhead.

@@ -2,6 +2,7 @@
 #include <iostream>
 
 #include "bitmap.h"
+
 using namespace std;
 
 int

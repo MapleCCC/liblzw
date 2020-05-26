@@ -3,6 +3,7 @@
 
 #include "bitarray.h"
 #include "bytes.h"
+
 using namespace std;
 
 int

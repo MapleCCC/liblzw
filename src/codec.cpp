@@ -3,6 +3,7 @@
 #include <fstream>
 #include <iostream>
 #include <stdexcept>
+
 using namespace std;
 
 LZWEncoder::LZWEncoder(unsigned code_bitsize) : code_dict(code_bitsize) {}
