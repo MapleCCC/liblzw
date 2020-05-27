@@ -96,6 +96,12 @@ Bitarray::from_int(int x, int bit_size = -1) {
 
 void
 Bitarray::push_bytes_back(Bytes bytes) {
+    if (size + bytes.length() * 8 > MAX_BIG_INT_BIT_SIZE) {
+        cerr << "Bitarray Overflow when Bitarray::push_bytes_back" << endl;
+        throw overflow_error(
+            "Bitarray Overflow when Bitarray::push_bytes_back");
+    }
+
     for (unsigned i = 0; i < bytes.length(); i++) {
         unsigned char byte = bytes[i];
         x = (x << 8) + byte;
