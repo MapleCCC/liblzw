@@ -40,7 +40,7 @@ test: unit-test integrate-test
 build-test: ${TEST_PROGS}
 
 unit-test: build-test
-	${SCRIPTS_DIR}/runall.py ${TEST_PROGS}
+	python3 ${SCRIPTS_DIR}/runall.py ${TEST_PROGS}
 
 ${BUILD_DIR}/%: ${TEST_DIR}/%.cpp
 	concat $< -o $(addprefix ${BUILD_DIR}/,$(notdir $<)) -I ${INC_DIR} -S ${SRC_DIR}
