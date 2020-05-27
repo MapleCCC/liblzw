@@ -16,7 +16,7 @@ from hypothesis.strategies import binary, lists
 # TODO: draw histogram to visualize speed vs text size. (time complexity)
 # TODO: update Pytest and plugins
 
-EXECUTABLE = os.path.join(os.getcwd(), "build", "lzw.exe")
+EXECUTABLE = os.path.join(os.getcwd(), "build", "lzw")
 
 # TODO: increase number of test files
 MAX_TEST_FILE_LEN = 100  # 10000
