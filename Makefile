@@ -1,9 +1,11 @@
 # TODO: out-of-source build
-# TODO: use concatenate_source_file to concat entry files, then compile, so that we can save all the hassle of setting up obscure Makefile
 # TODO: build static library
 # TODO: using vanilla GNU Make has no easy way to automatically specify files' dependencies from included headers
 
-MAKEFLAGS += .silent
+# MAKEFLAGS += .silent
+
+CXX=g++
+CXXFLAGS=--std=c++11 -static-libstdc++ -Wall -Wextra
 
 SRC_DIR=src
 INC_DIR=include
@@ -17,20 +19,19 @@ TEST_PROGS=$(addprefix ${BUILD_DIR}/,$(patsubst %.cpp,%,$(notdir $(wildcard ${TE
 
 all: build/lzw
 
-fast: lzw.cpp
-	mkdir -p build
-	g++ -Ofast -static-libstdc++ --std=c++11 -Wall -Wextra concated.cpp -o build/lzw
+fast: build/lzw.cpp
+	mkdir -p ${BUILD_DIR}
+	${CXX} ${CXXFLAGS} -Ofast $< -o build/lzw
 
-build/lzw: lzw.cpp
-	mkdir -p build
-	# g++ -Ofast -static-libstdc++ --std=c++11 -Wall -Wextra concated.cpp -o build/lzw
-	# g++ -pg -g -Ofast -static-libstdc++ --std=c++11 -Wall -Wextra concated.cpp -o build/lzw
-	# g++ -pg -g -static-libstdc++ --std=c++11 -Wall -Wextra concated.cpp -o build/lzw
-	g++ --std=c++11 -static-libstdc++ -Wall -Wextra -g concated.cpp -o build/lzw
+build/lzw: build/lzw.cpp
+	mkdir -p ${BUILD_DIR}
+	${CXX} ${CXXFLAGS} -g $< -o $@
 
-lzw.cpp: main.cpp ${SRCS} ${INCS}
-	concat main.cpp -o lzw.cpp -I include -S src
-	clang-format -i -style=file lzw.cpp
+build/lzw.cpp: main.cpp ${SRCS} ${INCS}
+	mkdir -p ${BUILD_DIR}
+	# use concatenate_source_file to concat entry files, then compile, so that we can save all the hassle of setting up obscure Makefile
+	concat $< -o $@ -I ${INC_DIR} -S ${SRC_DIR}
+	clang-format -i -style=file $@
 
 rebuild: clean all
 
@@ -38,10 +39,12 @@ test: unit-test integrate-test
 
 build-test: ${TEST_PROGS}
 
-# FIXME
-unit-test:
-# unit-test: build-test
-	# ${SCRIPTS_DIR}/runall.py ${TEST_PROGS}
+unit-test: build-test
+	${SCRIPTS_DIR}/runall.py ${TEST_PROGS}
+
+${BUILD_DIR}/%: ${TEST_DIR}/%.cpp
+	concat $< -o $(addprefix ${BUILD_DIR}/,$(notdir $<)) -I ${INC_DIR} -S ${SRC_DIR}
+	${CXX} ${CXXFLAGS} -g $(addprefix ${BUILD_DIR}/,$(notdir $<)) -o $@
 
 integrate-test: build/lzw
 	pytest test_integrate.py
@@ -50,6 +53,9 @@ cov:
 	# gcov ${SRCS}
 
 prof:
+	# mkdir -p ${BUILD_DIR}
+	# ${CXX} ${CXXFLAGS} -pg -g -Ofast build/lzw.cpp -o build/lzw
+	# ${CXX} ${CXXFLAGS} -pg -g build/lzw.cpp -o build/lzw
 	# gprof ${PROGS}.exe gmon.out > prof_result
 	# gprof -l ${PROGS}.exe gmon.out > prof_result
 	# code prof_result
