@@ -1,2 +1,4 @@
+click
+hypothesis
 pytest
 git+https://github.com/MapleCCC/Source-Concater
