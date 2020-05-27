@@ -36,14 +36,12 @@
 - Implement variants of LZW algorithm. E.g., code size, code table whether to reuse. Encode algorithm parameters to lzwfile and let decode logic automatically inspect it.
 - The canonical copy-assignment operator is expected to perform no action on self-assignment. Ref: https://en.cppreference.com/w/cpp/language/operators
 - Other overloaded operator also some of them expect no action performed on self-assignment. Ref: https://en.cppreference.com/w/cpp/language/operators
-- Write README. Elaborate on algorithmic details. Elaborate on analysis of computational complexity.
 - Use immutable data structure to improve space efficiency.
 - Use VSCode C/C++ extension's rename functionality to rename Code to int and Bytes to string.
 - Try to use and master VSCode C/C++ extension's debug functionality.
 - Compare speed of LZW.py and liblzw
 - Wrap liblzw into CPython extension. Remove subprocess call overhead when testing using Python Hypothesis framework.
   - Consider using Cython to fast prototype CPython extension.
-- Add git tag "submission milestone"
 - Update CMakeLists.txt
 - Remove sensitive information. The first commit.
 - Create script to replace LaTeX math text with image url. For render in GitHub.
@@ -68,6 +66,10 @@
 - Out-of-source build
 - Build static library: liblzw.a
 - Improve CLI interface to be more user-friendly and intuitive.
+- Write README. Elaborate on algorithmic details. Elaborate on analysis of computational complexity.
+- Add git tag "submission milestone"
+- Customize commit hook: process README.raw.md to README.md with all latex equation transformed to images.
+- Add Travis CI pipeline. Automatically compile and test.
 
 
 ## Archive
@@ -76,6 +78,7 @@
 - Reimplement Bytes and Bitarray data strcutre. Use more efficient implementation.
 - Use C++11 move semantic to improve performance in vector resize process.
 - Put short inline-able member functions to header
+- clangformat configuration about "using namespace" statement
 
 
 ## TIL

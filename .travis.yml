@@ -5,6 +5,6 @@ install:
   - pip install -r requirements-test.txt
 script:
   - make concat-build
-  - pytest integrate_test.py
+  - pytest test_integrate.py
 # after_success:
 #   - codecov
