@@ -1,3 +1,8 @@
+# TODO: out-of-source build
+# TODO: use concatenate_source_file to concat entry files, then compile, so that we can save all the hassle of setting up obscure Makefile
+# TODO: build static library
+# TODO: using vanilla GNU Make has no easy way to automatically specify files' dependencies from included headers
+
 MAKEFLAGS += .silent
 
 SRC_DIR=src
@@ -10,35 +15,11 @@ SRCS=$(wildcard ${SRC_DIR}/*.cpp)
 INCS=$(wildcard ${INC_DIR}/*.h)
 TEST_PROGS=$(addprefix ${BUILD_DIR}/,$(patsubst %.cpp,%,$(notdir $(wildcard ${TEST_DIR}/*.cpp))))
 
-# TODO: out-of-source build
-# TODO: use concatenate_source_file to concat entry files, then compile, so that we can save all the hassle of setting up obscure Makefile
-# TODO: build static library
-# TODO: using vanilla GNU Make has no easy way to automatically specify files' dependencies from included headers
-
 all: build/lzw
 
 fast: lzw.cpp
 	mkdir -p build
 	g++ -Ofast -static-libstdc++ --std=c++11 -Wall -Wextra concated.cpp -o build/lzw
-
-rebuild: clean all
-
-build-test: ${TEST_PROGS}
-
-# FIXME
-unit-test: build-test
-	${SCRIPTS_DIR}/runall.py ${TEST_PROGS}
-
-integrate-test: build/lzw
-	pytest test_integrate.py
-
-cov:
-	# gcov ${SRCS}
-
-prof:
-	# gprof ${PROGS}.exe gmon.out > prof_result
-	# gprof -l ${PROGS}.exe gmon.out > prof_result
-	# code prof_result
 
 build/lzw: lzw.cpp
 	mkdir -p build
@@ -51,6 +32,28 @@ lzw.cpp: main.cpp ${SRCS} ${INCS}
 	concat main.cpp -o lzw.cpp -I include -S src
 	clang-format -i -style=file lzw.cpp
 
+rebuild: clean all
+
+test: unit-test integrate-test
+
+build-test: ${TEST_PROGS}
+
+# FIXME
+unit-test:
+# unit-test: build-test
+	# ${SCRIPTS_DIR}/runall.py ${TEST_PROGS}
+
+integrate-test: build/lzw
+	pytest test_integrate.py
+
+cov:
+	# gcov ${SRCS}
+
+prof:
+	# gprof ${PROGS}.exe gmon.out > prof_result
+	# gprof -l ${PROGS}.exe gmon.out > prof_result
+	# code prof_result
+
 reformat:
 	# WARNING: don't use globstar like "echo **/*.cpp **/*.c **/*.h" because it has some limitations and pitfalls, like nullglob problem and it can't match current directory
 	find ${SRC_DIR} ${INC_DIR} ${TEST_DIR} -type f -regextype posix-extended -regex ".*\.(c|cpp|h)" | xargs clang-format -i -style=file
@@ -61,6 +64,10 @@ compare-branch:
 todo:
 	# ripgrep automatically skip undesired files and directories. Save the effort to manually exclude.
 	rg -ri TODO
+
+fixme:
+	# ripgrep automatically skip undesired files and directories. Save the effort to manually exclude.
+	rg -ri FIXME
 
 clean:
 	rm -rf build
@@ -75,4 +82,5 @@ eqn:
 release:
 
 
-.PHONY: all rebuild build-test unit-test integrate-test cov prof concat clean pdf eqn release
+.PHONY: all rebuild test build-test unit-test integrate-test cov prof
+.PHONY: reformat compare-branch todo fixme clean pdf eqn release
