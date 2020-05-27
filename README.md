@@ -1,5 +1,8 @@
 # LZW Compressor
 
+[![License](https://img.shields.io/github/license/MapleCCC/liblzw?color=00BFFF)](http://www.wtfpl.net/)
+[![travisci](https://www.travis-ci.com/MapleCCC/liblzw.svg?branch=master)](https://travis-ci.com/MapleCCC/liblzw)
+
 ## Introduction
 
 LZW is an archive format that utilize power of LZW compression algorithm. LZW compression algorithm is a dictionary-based loseless algorithm. It's an old algorithm suitable for beginner to practice.
