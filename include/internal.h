@@ -4,7 +4,8 @@
 #include <string>
 #include <vector>
 
-void compress(const std::string& lzwfile, const std::vector<std::string>* header);
+void compress(const std::string& lzwfile,
+              const std::vector<std::string>* header);
 void decompress(const std::string& lzwfile);
 
 #endif /* _INTERNAL_H_ */

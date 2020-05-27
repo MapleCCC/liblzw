@@ -46,6 +46,10 @@ $ lzw -c <lzw filename> <a list of files>
 $ lzw -d <lzw filename>
 ```
 
+## Development
+
+Contribution is welcome. Make sure to apply format specified in `.clang-format` file. Also add `scripts/pre-commit` to `.git/hooks` as pre-commit hook script.
+
 ## Test
 
 - Unit test
@@ -177,3 +181,9 @@ Deprecated.
 ### Immutable Data Structure to Reduce Space Cost
 
 Deprecated.
+
+## License
+
+[WTFPL 2.0](./LICENSE)
+
+[![WTFPL](http://www.wtfpl.net/wp-content/uploads/2012/12/wtfpl-badge-1.png)](http://www.wtfpl.net/)

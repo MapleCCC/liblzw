@@ -44,7 +44,6 @@
   - Consider using Cython to fast prototype CPython extension.
 - Update CMakeLists.txt
 - Remove sensitive information. The first commit.
-- Create script to replace LaTeX math text with image url. For render in GitHub.
 - Setup unit-test workflow. Include CI badge, about test suit passing status, and test coverage percentage.
 - Try C++ test frameworks.
 
@@ -70,6 +69,7 @@
 - Add git tag "submission milestone"
 - Customize commit hook: process README.raw.md to README.md with all latex equation transformed to images.
 - Add Travis CI pipeline. Automatically compile and test.
+- Create script to replace LaTeX math text with image url. For render in GitHub.
 
 
 ## Archive
