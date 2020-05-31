@@ -82,11 +82,11 @@ pdf:
 	# TODO: use the command line Typora's builtin PDF export functionality usees to invoke pandoc under the hood. Use the style from Typora.
 	pandoc -s -o README.assignment.pdf README.assignment.md
 
-eqn:
-	eqn2imgurl README.raw.md -o README.md
+transform-eqn:
+	python3 ${SCRIPTS_DIR}/eqn2imgurl.py README.raw.md -o README.md
 
 release:
 
 
 .PHONY: all rebuild test build-test unit-test integrate-test cov prof
-.PHONY: reformat compare-branch todo fixme clean pdf eqn release
+.PHONY: reformat compare-branch todo fixme clean pdf transform-eqn release
