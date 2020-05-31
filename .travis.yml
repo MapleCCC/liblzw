@@ -2,6 +2,7 @@ language: python  # we need python, pip, clang-format, and g++.
 python:
   - "3.6"
 install:
+  - pip install -r requirements.txt
   - pip install -r requirements-test.txt
 script:
   - make

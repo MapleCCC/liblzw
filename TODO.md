@@ -46,6 +46,9 @@
 - Remove sensitive information. The first commit.
 - Setup unit-test workflow. Include CI badge, about test suit passing status, and test coverage percentage.
 - Try C++ test frameworks.
+- Add GitHub badge about release version.
+- Add GitHub badge about LOC (lines of code), or SLOC.
+- Add GitHub badge about "this repo uses sementic versioning".
 
 
 ## Done
