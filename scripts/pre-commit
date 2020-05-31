@@ -1,3 +1,0 @@
-#!/bin/sh
-make eqn
-git add README

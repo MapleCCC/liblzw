@@ -48,7 +48,27 @@ $ lzw -d <lzw filename>
 
 ## Development
 
-Contribution is welcome. Make sure to apply format specified in `.clang-format` file. Also add `scripts/pre-commit` to `.git/hooks` as pre-commit hook script.
+Contribution is welcome. When commiting new code, make sure to apply format specified in `.clang-format` config file. Also remember to add `scripts/pre-commit.py` to `.git/hooks/pre-commit` as pre-commit hook script.
+
+```bash
+git clone https://github.com/MapleCCC/liblzw.git
+cp scripts/pre-commit.py .git/hooks/pre-commit
+```
+
+The pre-commit hook script basically does two things:
+
+1. Format staged C/C++ code
+
+2. Transform LaTeX math equation in `README.raw.md` to image url in `README`
+
+Besides relying on the pre-commit hook script, you can manually format code and transform math equations in README
+
+```bash
+make reformat
+make transform-eqn
+```
+
+The advantages of pre-commit hook script, compared to manual triggering scripts, is that it's convenient and un-disruptive, as it only introduces changes to staged files, not all files in the repo.
 
 ## Test
 
