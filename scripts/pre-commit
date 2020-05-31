@@ -1,3 +1,3 @@
 #!/bin/sh
 make eqn
-git add README.md
+git add README

@@ -67,7 +67,7 @@
 - Improve CLI interface to be more user-friendly and intuitive.
 - Write README. Elaborate on algorithmic details. Elaborate on analysis of computational complexity.
 - Add git tag "submission milestone"
-- Customize commit hook: process README.raw.md to README.md with all latex equation transformed to images.
+- Customize commit hook: process README.raw.md to README with all latex equation transformed to images.
 - Add Travis CI pipeline. Automatically compile and test.
 - Create script to replace LaTeX math text with image url. For render in GitHub.
 
