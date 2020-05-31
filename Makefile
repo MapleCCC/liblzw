@@ -83,7 +83,7 @@ pdf:
 	pandoc -s -o README.assignment.pdf README.assignment.md
 
 transform-eqn:
-	python3 ${SCRIPTS_DIR}/eqn2imgurl.py README.raw.md -o README
+	python3 ${SCRIPTS_DIR}/eqn2imgurl.py README.raw.md -o README.md
 
 # TODO
 release:

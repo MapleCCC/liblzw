@@ -2,7 +2,7 @@
 
 # This pre-commit hook script basically does two things:
 # 1. Format staged C/C++ code
-# 2. Transform LaTeX math equation in README.raw.md to image url in README
+# 2. Transform LaTeX math equation in README.raw.md to image url in README.md
 
 # TODO: search in google with query: "git status machine readable"
 
@@ -89,15 +89,15 @@ def main():
     except CalledProcessError:
         raise RuntimeError("Format staged C/C++ code failed!")
 
-    # 2. Transform LaTeX math equation in README.raw.md to image url in README
+    # 2. Transform LaTeX math equation in README.raw.md to image url in README.md
     try:
         if "README.raw.md" in filepaths:
             subprocess.run(
-                ["python", "scripts/eqn2imgurl.py", "README.raw.md", "-o", "README"],
+                ["python", "scripts/eqn2imgurl.py", "README.raw.md", "-o", "README.md"],
             ).check_returncode()
-            subprocess.run(["git", "add", "README"]).check_returncode()
+            subprocess.run(["git", "add", "README.md"]).check_returncode()
     except CalledProcessError:
-        raise RuntimeError("Transform math equation to image url in README failed!")
+        raise RuntimeError("Transform math equation to image url in README.md failed!")
 
 
 if __name__ == "__main__":

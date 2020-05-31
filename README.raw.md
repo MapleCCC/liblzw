@@ -59,9 +59,9 @@ The pre-commit hook script basically does two things:
 
 1. Format staged C/C++ code
 
-2. Transform LaTeX math equation in `README.raw.md` to image url in `README`
+2. Transform LaTeX math equation in `README.raw.md` to image url in `README.md`
 
-Besides relying on the pre-commit hook script, you can manually format code and transform math equations in README
+Besides relying on the pre-commit hook script, you can manually format code and transform math equations in README.md
 
 ```bash
 make reformat
