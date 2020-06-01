@@ -52,14 +52,14 @@ def block_math_repl(matchobj: Match) -> AnyStr:
 @click.argument("file")
 @click.argument("encoding", default="utf-8")
 @click.option("-o", "--output")
-@click.option("-i", "--in-place", default=False)
-@click.option("-p", "--print", "print_to_stdout", default=False)
+@click.option("-i", "--in-place", is_flag=True, default=False)
+@click.option("-p", "--print", "print_to_stdout", is_flag=True, default=False)
 def main(
     file: str, encoding: str, output: str, in_place: bool, print_to_stdout: bool
 ) -> None:
     if len(list(filter(None, (output, in_place, print_to_stdout)))) > 1:
         raise ConflictOptionsError(
-            "--output and --in-place are mutually exclusive options"
+            "--output, --in-place, and --print-to-stdout are mutually exclusive options"
         )
 
     in_file = Path(file)
