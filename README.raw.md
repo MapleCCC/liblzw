@@ -40,10 +40,10 @@ $ mkdir build && cl /D "NDEBUG" /O2 /Fe"build/lzw.exe" lzw.cpp
 
 ```bash
 # Compression
-$ lzw -c <lzw filename> <a list of files>
+$ lzw compress -o <lzw filename> <a list of files>
 
 # Decompression
-$ lzw -d <lzw filename>
+$ lzw decompress <lzw filename>
 ```
 
 ## Development
