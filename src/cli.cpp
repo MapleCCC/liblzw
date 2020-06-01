@@ -14,7 +14,7 @@ int cli_decompress(int argc, char** argv);
 
 int
 cli(int argc, char** argv) {
-    if (argc <= 2) {
+    if (argc <= 1) {
         cerr << "Too few arguments." << endl;
         return EXIT_FAILURE;
     }
@@ -25,6 +25,15 @@ cli(int argc, char** argv) {
         return cli_compress(argc, argv);
     } else if (subcommand == "decompress") {
         return cli_decompress(argc, argv);
+    } else if (subcommand == "-h" || subcommand == "--help") {
+        cout << "Usage:" << endl
+             << "" << endl
+             << "# Compression" << endl
+             << "$ lzw compress [-o|--output <ARCHIVE>] <FILES>..." << endl
+             << "" << endl
+             << "# Decompression" << endl
+             << "$ lzw decompress <ARCHIVE> " << endl
+             << endl;
     } else {
         cerr << "Invalid arguments" << endl;
         return EXIT_FAILURE;

@@ -39,11 +39,17 @@ $ mkdir build && cl /D "NDEBUG" /O2 /Fe"build/lzw.exe" lzw.cpp
 ## Usage
 
 ```bash
+# Get Help Message
+$ lzw --help
+'''
+Usage:
+
 # Compression
-$ lzw compress -o <lzw filename> <a list of files>
+$ lzw compress [-o|--output <ARCHIVE>] <FILES>...
 
 # Decompression
-$ lzw decompress <lzw filename>
+$ lzw decompress <ARCHIVE>
+'''
 ```
 
 ## Development
