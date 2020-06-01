@@ -47,6 +47,8 @@
 - State least supported C++ versions in README.
 - Consider deploying [auto-changelog-hook](https://github.com/MartinSeeler/auto-changelog-hook)
 - Consider align README.md big title to the center of the page.
+- Add instructions to build dynamic library / shared library in README
+- In pre-commit hook script, use black and isort as Python moduel instead of invoke as subprocess, to reduce subprocess call overhead.
 
 
 ## Archive

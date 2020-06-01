@@ -89,6 +89,8 @@ prof: | ${BUILD_DIR}
 reformat:
 	# WARNING: don't use globstar like "echo **/*.cpp **/*.c **/*.h" because it has some limitations and pitfalls, like nullglob problem and it can't match current directory
 	find ${SRC_DIR} ${INC_DIR} ${TEST_DIR} -type f -regextype posix-extended -regex ".*\.(c|cpp|h)" | xargs clang-format -i -style=file
+	isort -y
+	black .
 
 compare-branch:
 	git diff master assignment --compact-summary

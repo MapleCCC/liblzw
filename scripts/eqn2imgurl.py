@@ -19,6 +19,7 @@ BLOCK_EQUATION_PATTERN = re.compile(r"\$\$(.+?)\$\$", re.DOTALL)
 
 RENDER_SERVER_HOST_URL = "https://latex.codecogs.com/"
 
+# TODO: what kind of img format is suitable?
 RENDER_IMG_FORMAT = "svg"
 
 GLOBAL_RENDER_CONFIG = r"\fn_cm&space;\small&space;"
