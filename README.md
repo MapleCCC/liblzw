@@ -4,6 +4,7 @@
 [![travisci](https://www.travis-ci.com/MapleCCC/liblzw.svg?branch=master)](https://travis-ci.com/MapleCCC/liblzw)
 [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/MapleCCC/liblzw)](https://github.com/MapleCCC/liblzw/releases/latest)
 [![Semantic release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
+[![LOC](https://sloc.xyz/github/MapleCCC/liblzw)](https://sloc.xyz/github/MapleCCC/liblzw)
 
 ## Introduction
 
