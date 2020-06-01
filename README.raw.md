@@ -36,6 +36,17 @@ $ mkdir build && cl /Fe"build/lzw.exe" lzw.cpp
 $ mkdir build && cl /D "NDEBUG" /O2 /Fe"build/lzw.exe" lzw.cpp
 ```
 
+Alternatively, you can build as a static library for embedding in other applications.
+
+```bash
+# Build static library
+$ make build-lib
+# Compiled library is in build/liblzw.a
+
+# Build dynamic library
+[...]
+```
+
 ## Usage
 
 ```bash

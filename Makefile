@@ -6,6 +6,10 @@ MAKEFLAGS += .silent
 
 CXX=g++
 CXXFLAGS=--std=c++11 -static-libstdc++ -Wall -Wextra
+CPPFLAGS=-I${INC_DIR}
+
+AR=ar
+ARFLAGS=crs
 
 SRC_DIR=src
 INC_DIR=include
@@ -15,6 +19,8 @@ SCRIPTS_DIR=scripts
 
 SRCS=$(wildcard ${SRC_DIR}/*.cpp)
 INCS=$(wildcard ${INC_DIR}/*.h)
+OBJS=$(addprefix ${BUILD_DIR}/,$(notdir $(SRCS:.cpp=.o)))
+DEPS=$(OBJS:.o=.d)
 TEST_PROGS=$(addprefix ${BUILD_DIR}/,$(patsubst %.cpp,%,$(notdir $(wildcard ${TEST_DIR}/*.cpp))))
 
 all: build/lzw
@@ -34,6 +40,27 @@ build/lzw.cpp: main.cpp ${SRCS} ${INCS}
 	clang-format -i -style=file $@
 
 rebuild: clean all
+
+build-lib: ${BUILD_DIR}/liblzw.a
+
+${BUILD_DIR}/liblzw.a: ${OBJS}
+	${AR} ${ARFLAGS} $@ $^
+
+-include ${DEPS}
+
+generate-deps: ${DEPS}
+
+${BUILD_DIR}/%.d: ${SRC_DIR}/%.cpp
+	mkdir -p ${BUILD_DIR}
+	@set -e; rm -f $@; \
+	$(CXX) -MM $< $(CXXFLAGS) $(CPPFLAGS) > $@.$$$$; \
+	sed 's,\($*\)\.o[ :]*,${BUILD_DIR}/\1.o $@ : ,g' < $@.$$$$ > $@; \
+	rm -f $@.$$$$
+
+${BUILD_DIR}/%.o: ${SRC_DIR}/%.cpp
+	mkdir -p ${BUILD_DIR}
+	${CXX} -c -o $@ $< ${CXXFLAGS} ${CPPFLAGS}
+	# ${CXX} -MM $< ${CXXFLAGS} ${CPPFLAGS} > ${BUILD_DIR}/$*.d
 
 test: unit-test integrate-test
 
