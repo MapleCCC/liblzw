@@ -79,6 +79,11 @@ def get_staged_files() -> Iterable[str]:
 
 
 def get_file_status(filepath: str):
+    # Add non-existent file check/guard, because `git status --porcelain` has
+    # similar output for both unmodified file and non-existent file
+    if not os.path.exists(filepath):
+        raise FileNotFoundError(f"Can't get status of non-existent file: {filepath}")
+
     cmpl_proc = subprocess.run(
         ["git", "status", "--porcelain", "--no-renames", "--", filepath],
         capture_output=True,
