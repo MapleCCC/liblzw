@@ -72,7 +72,7 @@ ${BUILD_DIR}/%: ${TEST_DIR}/%.cpp
 	${CXX} ${CXXFLAGS} -g $(addprefix ${BUILD_DIR}/,$(notdir $<)) -o $@
 
 integrate-test: build/lzw
-	pytest test_integrate.py
+	pytest ${TEST_DIR}/test_integrate.py
 
 # TODO
 cov:
