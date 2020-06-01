@@ -23,7 +23,7 @@ RENDER_IMG_FORMAT = "svg"
 GLOBAL_RENDER_CONFIG = r"\fn_cm&space;\small&space;"
 
 
-def ConflictOptionsError(Exception):
+class ConflictOptionsError(Exception):
     pass
 
 
@@ -53,12 +53,16 @@ def block_math_repl(matchobj: Match) -> AnyStr:
 @click.argument("encoding", default="utf-8")
 @click.option("-o", "--output")
 @click.option("-i", "--in-place", default=False)
-def main(file: str, encoding: str, output: str, in_place: bool) -> None:
-    if output is not None and in_place:
-        raise ConflictOptionsError("--output and --in-place are mutually exclusive options")
+@click.option("-p", "--print", "print_to_stdout", default=False)
+def main(
+    file: str, encoding: str, output: str, in_place: bool, print_to_stdout: bool
+) -> None:
+    if len(list(filter(None, (output, in_place, print_to_stdout)))) > 1:
+        raise ConflictOptionsError(
+            "--output and --in-place are mutually exclusive options"
+        )
 
     in_file = Path(file)
-    out_file = in_file if in_place else Path(output)
 
     content = in_file.read_text(encoding)
 
@@ -67,7 +71,16 @@ def main(file: str, encoding: str, output: str, in_place: bool) -> None:
     intermediate = re.sub(BLOCK_EQUATION_PATTERN, block_math_repl, content)
     new_content = re.sub(INLINE_EQUATION_PATTERN, inline_math_repl, intermediate)
 
-    out_file.write_text(new_content, encoding)
+    if in_place:
+        in_file.write_text(new_content, encoding)
+    elif output is not None:
+        Path(output).write_text(new_content, encoding)
+    elif print_to_stdout:
+        print(new_content)
+    else:
+        raise RuntimeError(
+            "You need to specify one of --output, --in-place, or --print"
+        )
 
 
 if __name__ == "__main__":
