@@ -2,7 +2,7 @@
 # TODO: build static library
 # TODO: using vanilla GNU Make has no easy way to automatically specify files' dependencies from included headers
 
-# MAKEFLAGS += .silent
+MAKEFLAGS += .silent
 
 CXX=g++
 CXXFLAGS=--std=c++11 -static-libstdc++ -Wall -Wextra
@@ -89,5 +89,9 @@ transform-eqn:
 release:
 
 
+update-pre-commit-hook-script:
+	cp scripts/pre-commit.py .git/hooks/pre-commit
+
 .PHONY: all rebuild test build-test unit-test integrate-test cov prof
 .PHONY: reformat compare-branch todo fixme clean pdf transform-eqn release
+.PHONY: update-pre-commit-hook-script

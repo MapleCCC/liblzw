@@ -70,6 +70,8 @@ def get_staged_files() -> Iterable[str]:
 
         #     yield filepath
 
+        # FIXME: for simplicity, we don't handle partially staged files.
+        # Future improvement is needed.
         if line[:2] in ("M ", "A "):
             yield line[3:]
 

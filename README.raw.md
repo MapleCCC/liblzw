@@ -7,11 +7,11 @@
 
 LZW is an archive format that utilize power of LZW compression algorithm. LZW compression algorithm is a dictionary-based loseless algorithm. It's an old algorithm suitable for beginner to practice.
 
-Internal algorithm processes byte data. So it's applicable to any file types, besides text file. Although it may not be able to achieve substantial compression rate for some file types that are already compressed efficiently, such as PDF files and MP4 files. It treats data as byte stream, unaware of the text-level pattern, which makes it less compression-efficient compared to other more advanced compression algorithm.
+Internal algorithm processes byte data. So it's applicable to any file types, besides text file. Although it may not be able to achieve substantial compression rate for some file types that are already compressed efficiently, such as PDF files and MP4 files. It treats data as byte stream, unaware of the text-level pattern, which makes it less compression-efficient compared to other more advanced compression algorithms.
 
 LZW compression algorithm is dynamic. It doesn't collect data statistics before hand. Instead, it learns the data pattern while conducting the compression, building a code table on the fly. The compression ratio approaches maximum after enough time. The algorithmic complexity is strictly linear to the size of the text. [A more in-depth algorithmic analysis can be found in the following sections.](#algorithmic-analysis)
 
-An alternative implementation that utilizes more efficient self-made customized `bitmap`, `dict` and `set` to replace C++ builtin general-purpose `std::bitset`, `std::unordered_map` and `std::set` can be found in the branch `assignment`. Future enhancement includes customized `hash` functions to replace builtin general-purpose `std::hash`.
+An alternative implementation that utilizes more efficient self-made customized `bitmap`, `dict` and `set` to replace C++ builtin general-purpose `std::bitset`, `std::unordered_map` and `std::set` can be found in the branch [`assignment`](https://github.com/MapleCCC/liblzw/tree/assignment). Future enhancement includes customized `hash` functions to replace builtin general-purpose `std::hash`.
 
 ## Installation
 
@@ -57,21 +57,21 @@ $ lzw decompress <ARCHIVE>
 Contribution is welcome. When commiting new code, make sure to apply format specified in `.clang-format` config file. Also remember to add `scripts/pre-commit.py` to `.git/hooks/pre-commit` as pre-commit hook script.
 
 ```bash
-git clone https://github.com/MapleCCC/liblzw.git
-cp scripts/pre-commit.py .git/hooks/pre-commit
+$ git clone https://github.com/MapleCCC/liblzw.git
+$ cp scripts/pre-commit.py .git/hooks/pre-commit
 ```
 
 The pre-commit hook script basically does two things:
 
 1. Format staged C/C++ code
 
-2. Transform LaTeX math equation in `README.raw.md` to image url in `README.md`
+2. Transform `LaTeX` math equation in `README.raw.md` to image url in `README.md`
 
-Besides relying on the pre-commit hook script, you can manually format code and transform math equations in README.md
+Besides relying on the pre-commit hook script, you can manually format code and transform math equations in `README.md`.
 
 ```bash
-make reformat
-make transform-eqn
+$ make reformat
+$ make transform-eqn
 ```
 
 The advantages of pre-commit hook script, compared to manual triggering scripts, is that it's convenient and un-disruptive, as it only introduces changes to staged files, not all files in the repo.
@@ -126,19 +126,19 @@ $$
 
 Suppose the source text byte length is $N$. Among the $N$ bytes consumed by the algorithm, there are $M$ bytes for whom the algorithm goes to branch A, and goes to branch $B$ for the other $N-M$ bytes.
 
-For simplicity, we assume that $C(\mathrm{dict.lookup})$, $C(\mathrm{dict.add})$, $C(\mathrm{dict.membership\_check})$, $C(\mathrm{str.concatenate})$, and $C(\mathrm{str.copy})$ are fixed cost that don't vary upon different string sizes. This assumption is invalid/broken for large input, but that kind of case is very rare, so we are good with such hurtless simplification, as long as the strings are of reasonable lengths.
+For simplicity, we assume that $C(\mathrm{dict.lookup})$, $C(\mathrm{dict.add})$, $C(\mathrm{dict.membership-check})$, $C(\mathrm{str.concatenate})$, and $C(\mathrm{str.copy})$ are fixed cost that don't vary upon different string sizes. This assumption is invalid/broken for large input, but that kind of case is very rare, so we are good with such hurtless simplification, as long as the strings are of reasonable lengths.
 
 The total cost model of compression process can then be summarized as:
 
 $$
-C_{\mathrm{total}} = N * (C(\mathrm{str.concatenate}) + C(\mathrm{dict.membership\_check})) \\
+C_{\mathrm{total}} = N * (C(\mathrm{str.concatenate}) + C(\mathrm{dict.membership-check})) \\
     + M * C(\mathrm{str.copy}) + (N - M) * (C(\mathrm{dict.lookup}) + C(\mathrm{dict.add}) + C(\mathrm{str.copy}))
 $$
 
 For input data that doesn't have many repeated byte pattern, $M$ is small compared to $N$ (i.e. $M \ll N$). The cost model approximates to:
 
 $$
-C_{\mathrm{total}} = N * (C(\mathrm{str.concatenate}) + C(\mathrm{dict.membership\_check}) + C(\mathrm{dict.lookup}) + C(\mathrm{dict.add}) + C(\mathrm{str.copy}))
+C_{\mathrm{total}} = N * (C(\mathrm{str.concatenate}) + C(\mathrm{dict.membership-check}) + C(\mathrm{dict.lookup}) + C(\mathrm{dict.add}) + C(\mathrm{str.copy}))
 $$
 
 If the underlying data structure implementation of code dict is hash table, then $C(\mathrm{dict.memebership\_check})$ and $C(\mathrm{dict.add})$ are both $O(1)$ operations. The total cost is $O(N)$ then.
@@ -169,12 +169,12 @@ $$
 
 Suppose the code stream length is $N$. Among the $N$ codes consumed by the algorithm, there are $M$ codes for whom the algorithm goes to branch A, and goes to branch $B$ for the other $N-M$ codes.
 
-For simplicity, we assume that $C(\mathrm{dict.lookup})$, $C(\mathrm{dict.add})$, $C(\mathrm{dict.membership\_check})$, $C(\mathrm{str.concatenate})$, and $C(\mathrm{str.copy})$ are fixed cost that don't vary upon different string sizes. This assumption is invalid/broken for large input, but that kind of case is very rare, so we are good with such hurtless simplification, as long as the strings are of reasonable lengths.
+For simplicity, we assume that $C(\mathrm{dict.lookup})$, $C(\mathrm{dict.add})$, $C(\mathrm{dict.membership-check})$, $C(\mathrm{str.concatenate})$, and $C(\mathrm{str.copy})$ are fixed cost that don't vary upon different string sizes. This assumption is invalid/broken for large input, but that kind of case is very rare, so we are good with such hurtless simplification, as long as the strings are of reasonable lengths.
 
 The probability of going to branch $B$ is relatively rare, so the major cost comes from branch $A$. The total cost model for the decompression algorithm is then:
 
 $$
-C_{\mathrm{total}} = N * (C(\mathrm{dict.membership\_check}) +C(\mathrm{dict.lookup}) + C(\mathrm{str.concatenate}) + C(\mathrm{dict.add}) + C(\mathrm{str.copy}))
+C_{\mathrm{total}} = N * (C(\mathrm{dict.membership-check}) +C(\mathrm{dict.lookup}) + C(\mathrm{str.concatenate}) + C(\mathrm{dict.add}) + C(\mathrm{str.copy}))
 $$
 
 It's the same with that of the compression algorithm! The total cost model for the decompression algorithm turns out to be identical to that of the compression algorithm! They are both linear $O(N)$. (under the precondition that the underlying implementation of string dict and code dict scales in sublinear factor)

@@ -65,11 +65,12 @@ cli_compress(int argc, char** argv) {
 
     try {
         compress(lzwfile, header);
-        delete header;
     } catch (exception e) {
         cerr << "During compression, catched exception: " << e.what() << endl;
         return EXIT_FAILURE;
     }
+
+    delete header;
 
     return EXIT_SUCCESS;
 }
