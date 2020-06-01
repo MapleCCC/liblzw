@@ -76,9 +76,11 @@ ${BUILD_DIR}/%: ${TEST_DIR}/%.cpp
 integrate-test: build/lzw
 	pytest test_integrate.py
 
+# TODO
 cov:
 	# gcov ${SRCS}
 
+# TODO
 prof:
 	# mkdir -p ${BUILD_DIR}
 	# ${CXX} ${CXXFLAGS} -pg -g -Ofast build/lzw.cpp -o build/lzw
@@ -107,18 +109,14 @@ clean:
 
 pdf:
 	# TODO: use the command line Typora's builtin PDF export functionality usees to invoke pandoc under the hood. Use the style from Typora.
-	pandoc -s -o README.assignment.pdf README.assignment.md
+	pandoc -s -o README.pdf README.md
 
 transform-eqn:
 	python3 ${SCRIPTS_DIR}/eqn2imgurl.py README.raw.md -o README.md
 
-# TODO
-release:
+install-pre-commit-hook-script:
+	cp ${SCRIPTS_DIR}/pre-commit.py .git/hooks/pre-commit
 
-
-update-pre-commit-hook-script:
-	cp scripts/pre-commit.py .git/hooks/pre-commit
-
-.PHONY: all rebuild test build-test unit-test integrate-test cov prof
-.PHONY: reformat compare-branch todo fixme clean pdf transform-eqn release
-.PHONY: update-pre-commit-hook-script
+.PHONY: all fast rebuild build-lib test build-test unit-test integrate-test cov prof
+.PHONY: reformat compare-branch todo fixme clean pdf transform-eqn
+.PHONY: install-pre-commit-hook-script

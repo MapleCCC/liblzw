@@ -2,6 +2,8 @@
 
 [![License](https://img.shields.io/github/license/MapleCCC/liblzw?color=00BFFF)](http://www.wtfpl.net/)
 [![travisci](https://www.travis-ci.com/MapleCCC/liblzw.svg?branch=master)](https://travis-ci.com/MapleCCC/liblzw)
+[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/MapleCCC/liblzw)](https://github.com/MapleCCC/liblzw/releases/latest)
+[![Semantic release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
 ## Introduction
 
@@ -19,15 +21,24 @@ Pre-built binaries (Windows only) are available on the [Releases](https://github
 
 ## Build
 
+Prerequisites: Git, Python3.6+, `pip`, and a modern C++ compiler: `g++` or `cl`.
+
 ```bash
-# if g++.exe is supported:
+$ git clone https://github.com/MapleCCC/liblzw.git
+
+$ cd liblzw
+
+# Install basic build requirements
+$ pip install -r requirements
+
+# if g++ is available:
 $ make
-# Compiled executable is in build/lzw.exe
+# Compiled executable is in build/lzw
 
 # if speed is desirable:
 $ make fast
 
-# if cl.exe is supported:
+# if on Windows platform and cl.exe is available:
 $ mkdir build && cl /Fe"build/lzw.exe" lzw.cpp
 # Compiled executable is in build/lzw.exe
 
@@ -68,8 +79,19 @@ $ lzw decompress <ARCHIVE>
 Contribution is welcome. When commiting new code, make sure to apply format specified in `.clang-format` config file. Also remember to add `scripts/pre-commit.py` to `.git/hooks/pre-commit` as pre-commit hook script.
 
 ```bash
+# Clone the repository to local environment
 $ git clone https://github.com/MapleCCC/liblzw.git
-$ cp scripts/pre-commit.py .git/hooks/pre-commit
+
+$ cd liblzw
+
+# Install basic build requirements
+$ pip install -r requirements.txt
+
+# Install dev requirements
+$ pip install -r requirements-dev.txt
+
+# Install pre-commit hook script
+$ make install-pre-commit-hook-script
 ```
 
 The pre-commit hook script basically does two things:
@@ -81,7 +103,10 @@ The pre-commit hook script basically does two things:
 Besides relying on the pre-commit hook script, you can manually format code and transform math equations in `README.md`.
 
 ```bash
+# Format C/C++ code under the working directory
 $ make reformat
+
+# Transform LaTeX math equations to image urls in README.md
 $ make transform-eqn
 ```
 
@@ -137,19 +162,19 @@ $$
 
 Suppose the source text byte length is $N$. Among the $N$ bytes consumed by the algorithm, there are $M$ bytes for whom the algorithm goes to branch A, and goes to branch $B$ for the other $N-M$ bytes.
 
-For simplicity, we assume that $C(\mathrm{dict.lookup})$, $C(\mathrm{dict.add})$, $C(\mathrm{dict.membership-check})$, $C(\mathrm{str.concatenate})$, and $C(\mathrm{str.copy})$ are fixed cost that don't vary upon different string sizes. This assumption is invalid/broken for large input, but that kind of case is very rare, so we are good with such hurtless simplification, as long as the strings are of reasonable lengths.
+For simplicity, we assume that $C(\mathrm{dict.lookup})$, $C(\mathrm{dict.add})$, $C(\mathrm{dict.membership\_check})$, $C(\mathrm{str.concatenate})$, and $C(\mathrm{str.copy})$ are fixed cost that don't vary upon different string sizes. This assumption is invalid/broken for large input, but that kind of case is very rare, so we are good with such hurtless simplification, as long as the strings are of reasonable lengths.
 
 The total cost model of compression process can then be summarized as:
 
 $$
-C_{\mathrm{total}} = N * (C(\mathrm{str.concatenate}) + C(\mathrm{dict.membership-check})) \\
+C_{\mathrm{total}} = N * (C(\mathrm{str.concatenate}) + C(\mathrm{dict.membership\_check})) \\
     + M * C(\mathrm{str.copy}) + (N - M) * (C(\mathrm{dict.lookup}) + C(\mathrm{dict.add}) + C(\mathrm{str.copy}))
 $$
 
 For input data that doesn't have many repeated byte pattern, $M$ is small compared to $N$ (i.e. $M \ll N$). The cost model approximates to:
 
 $$
-C_{\mathrm{total}} = N * (C(\mathrm{str.concatenate}) + C(\mathrm{dict.membership-check}) + C(\mathrm{dict.lookup}) + C(\mathrm{dict.add}) + C(\mathrm{str.copy}))
+C_{\mathrm{total}} = N * (C(\mathrm{str.concatenate}) + C(\mathrm{dict.membership\_check}) + C(\mathrm{dict.lookup}) + C(\mathrm{dict.add}) + C(\mathrm{str.copy}))
 $$
 
 If the underlying data structure implementation of code dict is hash table, then $C(\mathrm{dict.memebership\_check})$ and $C(\mathrm{dict.add})$ are both $O(1)$ operations. The total cost is $O(N)$ then.
@@ -180,12 +205,12 @@ $$
 
 Suppose the code stream length is $N$. Among the $N$ codes consumed by the algorithm, there are $M$ codes for whom the algorithm goes to branch A, and goes to branch $B$ for the other $N-M$ codes.
 
-For simplicity, we assume that $C(\mathrm{dict.lookup})$, $C(\mathrm{dict.add})$, $C(\mathrm{dict.membership-check})$, $C(\mathrm{str.concatenate})$, and $C(\mathrm{str.copy})$ are fixed cost that don't vary upon different string sizes. This assumption is invalid/broken for large input, but that kind of case is very rare, so we are good with such hurtless simplification, as long as the strings are of reasonable lengths.
+For simplicity, we assume that $C(\mathrm{dict.lookup})$, $C(\mathrm{dict.add})$, $C(\mathrm{dict.membership\_check})$, $C(\mathrm{str.concatenate})$, and $C(\mathrm{str.copy})$ are fixed cost that don't vary upon different string sizes. This assumption is invalid/broken for large input, but that kind of case is very rare, so we are good with such hurtless simplification, as long as the strings are of reasonable lengths.
 
 The probability of going to branch $B$ is relatively rare, so the major cost comes from branch $A$. The total cost model for the decompression algorithm is then:
 
 $$
-C_{\mathrm{total}} = N * (C(\mathrm{dict.membership-check}) +C(\mathrm{dict.lookup}) + C(\mathrm{str.concatenate}) + C(\mathrm{dict.add}) + C(\mathrm{str.copy}))
+C_{\mathrm{total}} = N * (C(\mathrm{dict.membership\_check}) +C(\mathrm{dict.lookup}) + C(\mathrm{str.concatenate}) + C(\mathrm{dict.add}) + C(\mathrm{str.copy}))
 $$
 
 It's the same with that of the compression algorithm! The total cost model for the decompression algorithm turns out to be identical to that of the compression algorithm! They are both linear $O(N)$. (under the precondition that the underlying implementation of string dict and code dict scales in sublinear factor)

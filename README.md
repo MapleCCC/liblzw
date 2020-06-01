@@ -2,6 +2,8 @@
 
 [![License](https://img.shields.io/github/license/MapleCCC/liblzw?color=00BFFF)](http://www.wtfpl.net/)
 [![travisci](https://www.travis-ci.com/MapleCCC/liblzw.svg?branch=master)](https://travis-ci.com/MapleCCC/liblzw)
+[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/MapleCCC/liblzw)](https://github.com/MapleCCC/liblzw/releases/latest)
+[![Semantic release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
 ## Introduction
 
@@ -19,21 +21,41 @@ Pre-built binaries (Windows only) are available on the [Releases](https://github
 
 ## Build
 
+Prerequisites: Git, Python3.6+, `pip`, and a modern C++ compiler: `g++` or `cl`.
+
 ```bash
-# if g++.exe is supported:
+$ git clone https://github.com/MapleCCC/liblzw.git
+
+$ cd liblzw
+
+# Install basic build requirements
+$ pip install -r requirements
+
+# if g++ is available:
 $ make
-# Compiled executable is in build/lzw.exe
+# Compiled executable is in build/lzw
 
 # if speed is desirable:
 $ make fast
 
-# if cl.exe is supported:
+# if on Windows platform and cl.exe is available:
 $ mkdir build && cl /Fe"build/lzw.exe" lzw.cpp
 # Compiled executable is in build/lzw.exe
 
 # if speed is desirable:
 # compile in release mode
 $ mkdir build && cl /D "NDEBUG" /O2 /Fe"build/lzw.exe" lzw.cpp
+```
+
+Alternatively, you can build as a static library for embedding in other applications.
+
+```bash
+# Build static library
+$ make build-lib
+# Compiled library is in build/liblzw.a
+
+# Build dynamic library
+[...]
 ```
 
 ## Usage
@@ -57,8 +79,19 @@ $ lzw decompress <ARCHIVE>
 Contribution is welcome. When commiting new code, make sure to apply format specified in `.clang-format` config file. Also remember to add `scripts/pre-commit.py` to `.git/hooks/pre-commit` as pre-commit hook script.
 
 ```bash
+# Clone the repository to local environment
 $ git clone https://github.com/MapleCCC/liblzw.git
-$ cp scripts/pre-commit.py .git/hooks/pre-commit
+
+$ cd liblzw
+
+# Install basic build requirements
+$ pip install -r requirements.txt
+
+# Install dev requirements
+$ pip install -r requirements-dev.txt
+
+# Install pre-commit hook script
+$ make install-pre-commit-hook-script
 ```
 
 The pre-commit hook script basically does two things:
@@ -70,7 +103,10 @@ The pre-commit hook script basically does two things:
 Besides relying on the pre-commit hook script, you can manually format code and transform math equations in `README.md`.
 
 ```bash
+# Format C/C++ code under the working directory
 $ make reformat
+
+# Transform LaTeX math equations to image urls in README.md
 $ make transform-eqn
 ```
 
@@ -122,15 +158,15 @@ The cost model for these two branches are respectively:
 
 Suppose the source text byte length is ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;N). Among the ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;N) bytes consumed by the algorithm, there are ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;M) bytes for whom the algorithm goes to branch A, and goes to branch ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;B) for the other ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;N-M) bytes.
 
-For simplicity, we assume that ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(\mathrm{dict.lookup})), ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(\mathrm{dict.add})), ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(\mathrm{dict.membership-check})), ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(\mathrm{str.concatenate})), and ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(\mathrm{str.copy})) are fixed cost that don't vary upon different string sizes. This assumption is invalid/broken for large input, but that kind of case is very rare, so we are good with such hurtless simplification, as long as the strings are of reasonable lengths.
+For simplicity, we assume that ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(\mathrm{dict.lookup})), ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(\mathrm{dict.add})), ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(\mathrm{dict.membership\_check})), ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(\mathrm{str.concatenate})), and ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(\mathrm{str.copy})) are fixed cost that don't vary upon different string sizes. This assumption is invalid/broken for large input, but that kind of case is very rare, so we are good with such hurtless simplification, as long as the strings are of reasonable lengths.
 
 The total cost model of compression process can then be summarized as:
 
-![](https://latex.codecogs.com/svg.latex?\fn_cm&space;\small&space;C_{\mathrm{total}}%20=%20N%20*%20(C(\mathrm{str.concatenate})%20%2B%20C(\mathrm{dict.membership-check}))%20\\%20%20%20%20%20%2B%20M%20*%20C(\mathrm{str.copy})%20%2B%20(N%20-%20M)%20*%20(C(\mathrm{dict.lookup})%20%2B%20C(\mathrm{dict.add})%20%2B%20C(\mathrm{str.copy})))
+![](https://latex.codecogs.com/svg.latex?\fn_cm&space;\small&space;C_{\mathrm{total}}%20=%20N%20*%20(C(\mathrm{str.concatenate})%20%2B%20C(\mathrm{dict.membership\_check}))%20\\%20%20%20%20%20%2B%20M%20*%20C(\mathrm{str.copy})%20%2B%20(N%20-%20M)%20*%20(C(\mathrm{dict.lookup})%20%2B%20C(\mathrm{dict.add})%20%2B%20C(\mathrm{str.copy})))
 
 For input data that doesn't have many repeated byte pattern, ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;M) is small compared to ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;N) (i.e. ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;M%20\ll%20N)). The cost model approximates to:
 
-![](https://latex.codecogs.com/svg.latex?\fn_cm&space;\small&space;C_{\mathrm{total}}%20=%20N%20*%20(C(\mathrm{str.concatenate})%20%2B%20C(\mathrm{dict.membership-check})%20%2B%20C(\mathrm{dict.lookup})%20%2B%20C(\mathrm{dict.add})%20%2B%20C(\mathrm{str.copy})))
+![](https://latex.codecogs.com/svg.latex?\fn_cm&space;\small&space;C_{\mathrm{total}}%20=%20N%20*%20(C(\mathrm{str.concatenate})%20%2B%20C(\mathrm{dict.membership\_check})%20%2B%20C(\mathrm{dict.lookup})%20%2B%20C(\mathrm{dict.add})%20%2B%20C(\mathrm{str.copy})))
 
 If the underlying data structure implementation of code dict is hash table, then ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(\mathrm{dict.memebership\_check})) and ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(\mathrm{dict.add})) are both ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;O(1)) operations. The total cost is ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;O(N)) then.
 
@@ -156,11 +192,11 @@ The cost model for these two branches is then:
 
 Suppose the code stream length is ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;N). Among the ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;N) codes consumed by the algorithm, there are ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;M) codes for whom the algorithm goes to branch A, and goes to branch ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;B) for the other ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;N-M) codes.
 
-For simplicity, we assume that ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(\mathrm{dict.lookup})), ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(\mathrm{dict.add})), ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(\mathrm{dict.membership-check})), ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(\mathrm{str.concatenate})), and ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(\mathrm{str.copy})) are fixed cost that don't vary upon different string sizes. This assumption is invalid/broken for large input, but that kind of case is very rare, so we are good with such hurtless simplification, as long as the strings are of reasonable lengths.
+For simplicity, we assume that ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(\mathrm{dict.lookup})), ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(\mathrm{dict.add})), ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(\mathrm{dict.membership\_check})), ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(\mathrm{str.concatenate})), and ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(\mathrm{str.copy})) are fixed cost that don't vary upon different string sizes. This assumption is invalid/broken for large input, but that kind of case is very rare, so we are good with such hurtless simplification, as long as the strings are of reasonable lengths.
 
 The probability of going to branch ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;B) is relatively rare, so the major cost comes from branch ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;A). The total cost model for the decompression algorithm is then:
 
-![](https://latex.codecogs.com/svg.latex?\fn_cm&space;\small&space;C_{\mathrm{total}}%20=%20N%20*%20(C(\mathrm{dict.membership-check})%20%2BC(\mathrm{dict.lookup})%20%2B%20C(\mathrm{str.concatenate})%20%2B%20C(\mathrm{dict.add})%20%2B%20C(\mathrm{str.copy})))
+![](https://latex.codecogs.com/svg.latex?\fn_cm&space;\small&space;C_{\mathrm{total}}%20=%20N%20*%20(C(\mathrm{dict.membership\_check})%20%2BC(\mathrm{dict.lookup})%20%2B%20C(\mathrm{str.concatenate})%20%2B%20C(\mathrm{dict.add})%20%2B%20C(\mathrm{str.copy})))
 
 It's the same with that of the compression algorithm! The total cost model for the decompression algorithm turns out to be identical to that of the compression algorithm! They are both linear ![](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;O(N)). (under the precondition that the underlying implementation of string dict and code dict scales in sublinear factor)
 
