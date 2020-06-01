@@ -30,7 +30,7 @@ class ConflictOptionsError(Exception):
 def cleanup(string: str) -> str:
     string = string.strip()
     string = string.replace("\n", " ")
-    escaped = urllib.parse.quote(string, safe=r"/\{}()=*")  # type: ignore
+    escaped = urllib.parse.quote(string, safe=r"/{}()=*")  # type: ignore
     return escaped
 
 
