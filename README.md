@@ -150,40 +150,40 @@ LZW algorithm treats data as binary stream, regardless of its text encoding. Dur
 
 For each byte consumed by the algorithm, deciding upon whether the running word is in the code dict, the algorithm has **two** branches to go.
 
-If the new running word formed by appending the new byte at the end is in the code dict, the algorithm proceeds to ![A](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;A) branch, which basically do nothing, and continue to next iteration. On the other hand, if the new running word constituted by the new byte is not in the code dict, the algorithm goes to ![B](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;B) branch.
+If the new running word formed by appending the new byte at the end is in the code dict, the algorithm proceeds to [![A](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;A)](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;A) branch, which basically do nothing, and continue to next iteration. On the other hand, if the new running word constituted by the new byte is not in the code dict, the algorithm goes to [![B](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;B)](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;B) branch.
 
-In the ![B](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;B) branch, three things happen. First, the code in the code dict corresponding to the old running word (before the new byte is appended) is emitted. Then the new running word is entered into the code dict as a new string, and assigned a new code, ready to use in the future. Lastly, the running word is reset to contain only the new byte. The algorithm then proceeds to the next iteration.
+In the [![B](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;B)](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;B) branch, three things happen. First, the code in the code dict corresponding to the old running word (before the new byte is appended) is emitted. Then the new running word is entered into the code dict as a new string, and assigned a new code, ready to use in the future. Lastly, the running word is reset to contain only the new byte. The algorithm then proceeds to the next iteration.
 
 The cost model for these two branches are respectively:
 
-![
+[![
 C_A = C(\mathrm{str.copy})
-](https://latex.codecogs.com/svg.latex?\fn_cm&space;\small&space;C_A%20=%20C(%5Cmathrm{str.copy}))
+](https://latex.codecogs.com/svg.latex?\fn_cm&space;\small&space;C_A%20=%20C(%5Cmathrm{str.copy}))](https://latex.codecogs.com/svg.latex?\fn_cm&space;\small&space;C_A%20=%20C(%5Cmathrm{str.copy}))
 
-![
+[![
 C_B = C(\mathrm{dict.lookup}) + C(\mathrm{dict.add}) + C(\mathrm{str.copy})
-](https://latex.codecogs.com/svg.latex?\fn_cm&space;\small&space;C_B%20=%20C(%5Cmathrm{dict.lookup})%20%2B%20C(%5Cmathrm{dict.add})%20%2B%20C(%5Cmathrm{str.copy}))
+](https://latex.codecogs.com/svg.latex?\fn_cm&space;\small&space;C_B%20=%20C(%5Cmathrm{dict.lookup})%20%2B%20C(%5Cmathrm{dict.add})%20%2B%20C(%5Cmathrm{str.copy}))](https://latex.codecogs.com/svg.latex?\fn_cm&space;\small&space;C_B%20=%20C(%5Cmathrm{dict.lookup})%20%2B%20C(%5Cmathrm{dict.add})%20%2B%20C(%5Cmathrm{str.copy}))
 
-Suppose the source text byte length is ![N](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;N). Among the ![N](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;N) bytes consumed by the algorithm, there are ![M](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;M) bytes for whom the algorithm goes to branch A, and goes to branch ![B](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;B) for the other ![N-M](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;N-M) bytes.
+Suppose the source text byte length is [![N](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;N)](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;N). Among the [![N](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;N)](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;N) bytes consumed by the algorithm, there are [![M](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;M)](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;M) bytes for whom the algorithm goes to branch A, and goes to branch [![B](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;B)](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;B) for the other [![N-M](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;N-M)](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;N-M) bytes.
 
-For simplicity, we assume that ![C(\mathrm{dict.lookup})](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(%5Cmathrm{dict.lookup})), ![C(\mathrm{dict.add})](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(%5Cmathrm{dict.add})), ![C(\mathrm{dict.membership\_check})](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(%5Cmathrm{dict.membership%5C_check})), ![C(\mathrm{str.concatenate})](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(%5Cmathrm{str.concatenate})), and ![C(\mathrm{str.copy})](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(%5Cmathrm{str.copy})) are fixed cost that don't vary upon different string sizes. This assumption is invalid/broken for large input, but that kind of case is very rare, so we are good with such hurtless simplification, as long as the strings are of reasonable lengths.
+For simplicity, we assume that [![C(\mathrm{dict.lookup})](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(%5Cmathrm{dict.lookup}))](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(%5Cmathrm{dict.lookup})), [![C(\mathrm{dict.add})](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(%5Cmathrm{dict.add}))](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(%5Cmathrm{dict.add})), [![C(\mathrm{dict.membership\_check})](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(%5Cmathrm{dict.membership%5C_check}))](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(%5Cmathrm{dict.membership%5C_check})), [![C(\mathrm{str.concatenate})](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(%5Cmathrm{str.concatenate}))](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(%5Cmathrm{str.concatenate})), and [![C(\mathrm{str.copy})](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(%5Cmathrm{str.copy}))](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(%5Cmathrm{str.copy})) are fixed cost that don't vary upon different string sizes. This assumption is invalid/broken for large input, but that kind of case is very rare, so we are good with such hurtless simplification, as long as the strings are of reasonable lengths.
 
 The total cost model of compression process can then be summarized as:
 
-![
+[![
 C_{\mathrm{total}} = N * (C(\mathrm{str.concatenate}) + C(\mathrm{dict.membership\_check})) \\
     + M * C(\mathrm{str.copy}) + (N - M) * (C(\mathrm{dict.lookup}) + C(\mathrm{dict.add}) + C(\mathrm{str.copy}))
-](https://latex.codecogs.com/svg.latex?\fn_cm&space;\small&space;C_{%5Cmathrm{total}}%20=%20N%20*%20(C(%5Cmathrm{str.concatenate})%20%2B%20C(%5Cmathrm{dict.membership%5C_check}))%20%5C%5C%20%20%20%20%20%2B%20M%20*%20C(%5Cmathrm{str.copy})%20%2B%20(N%20-%20M)%20*%20(C(%5Cmathrm{dict.lookup})%20%2B%20C(%5Cmathrm{dict.add})%20%2B%20C(%5Cmathrm{str.copy})))
+](https://latex.codecogs.com/svg.latex?\fn_cm&space;\small&space;C_{%5Cmathrm{total}}%20=%20N%20*%20(C(%5Cmathrm{str.concatenate})%20%2B%20C(%5Cmathrm{dict.membership%5C_check}))%20%5C%5C%20%20%20%20%20%2B%20M%20*%20C(%5Cmathrm{str.copy})%20%2B%20(N%20-%20M)%20*%20(C(%5Cmathrm{dict.lookup})%20%2B%20C(%5Cmathrm{dict.add})%20%2B%20C(%5Cmathrm{str.copy})))](https://latex.codecogs.com/svg.latex?\fn_cm&space;\small&space;C_{%5Cmathrm{total}}%20=%20N%20*%20(C(%5Cmathrm{str.concatenate})%20%2B%20C(%5Cmathrm{dict.membership%5C_check}))%20%5C%5C%20%20%20%20%20%2B%20M%20*%20C(%5Cmathrm{str.copy})%20%2B%20(N%20-%20M)%20*%20(C(%5Cmathrm{dict.lookup})%20%2B%20C(%5Cmathrm{dict.add})%20%2B%20C(%5Cmathrm{str.copy})))
 
-For input data that doesn't have many repeated byte pattern, ![M](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;M) is small compared to ![N](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;N) (i.e. ![M \ll N](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;M%20%5Cll%20N)). The cost model approximates to:
+For input data that doesn't have many repeated byte pattern, [![M](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;M)](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;M) is small compared to [![N](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;N)](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;N) (i.e. [![M \ll N](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;M%20%5Cll%20N)](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;M%20%5Cll%20N)). The cost model approximates to:
 
-![
+[![
 C_{\mathrm{total}} = N * (C(\mathrm{str.concatenate}) + C(\mathrm{dict.membership\_check}) + C(\mathrm{dict.lookup}) + C(\mathrm{dict.add}) + C(\mathrm{str.copy}))
-](https://latex.codecogs.com/svg.latex?\fn_cm&space;\small&space;C_{%5Cmathrm{total}}%20=%20N%20*%20(C(%5Cmathrm{str.concatenate})%20%2B%20C(%5Cmathrm{dict.membership%5C_check})%20%2B%20C(%5Cmathrm{dict.lookup})%20%2B%20C(%5Cmathrm{dict.add})%20%2B%20C(%5Cmathrm{str.copy})))
+](https://latex.codecogs.com/svg.latex?\fn_cm&space;\small&space;C_{%5Cmathrm{total}}%20=%20N%20*%20(C(%5Cmathrm{str.concatenate})%20%2B%20C(%5Cmathrm{dict.membership%5C_check})%20%2B%20C(%5Cmathrm{dict.lookup})%20%2B%20C(%5Cmathrm{dict.add})%20%2B%20C(%5Cmathrm{str.copy})))](https://latex.codecogs.com/svg.latex?\fn_cm&space;\small&space;C_{%5Cmathrm{total}}%20=%20N%20*%20(C(%5Cmathrm{str.concatenate})%20%2B%20C(%5Cmathrm{dict.membership%5C_check})%20%2B%20C(%5Cmathrm{dict.lookup})%20%2B%20C(%5Cmathrm{dict.add})%20%2B%20C(%5Cmathrm{str.copy})))
 
-If the underlying data structure implementation of code dict is hash table, then ![C(\mathrm{dict.memebership\_check})](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(%5Cmathrm{dict.memebership%5C_check})) and ![C(\mathrm{dict.add})](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(%5Cmathrm{dict.add})) are both ![O(1)](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;O(1)) operations. The total cost is ![O(N)](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;O(N)) then.
+If the underlying data structure implementation of code dict is hash table, then [![C(\mathrm{dict.memebership\_check})](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(%5Cmathrm{dict.memebership%5C_check}))](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(%5Cmathrm{dict.memebership%5C_check})) and [![C(\mathrm{dict.add})](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(%5Cmathrm{dict.add}))](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(%5Cmathrm{dict.add})) are both [![O(1)](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;O(1))](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;O(1)) operations. The total cost is [![O(N)](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;O(N))](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;O(N)) then.
 
-For input data that has many repeated byte pattern, ![M](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;M) is not negligible compared to ![N](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;N). The largest possible ![M](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;M) comes from input consisting of single byte pattern. In such case, ![M = O(N - \sqrt{N}) = O(N)](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;M%20=%20O(N%20-%20%5Csqrt{N})%20=%20O(N)) (The detailed deduction process is delegated to the readers). The total cost is still ![O(N)](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;O(N)).
+For input data that has many repeated byte pattern, [![M](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;M)](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;M) is not negligible compared to [![N](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;N)](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;N). The largest possible [![M](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;M)](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;M) comes from input consisting of single byte pattern. In such case, [![M = O(N - \sqrt{N}) = O(N)](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;M%20=%20O(N%20-%20%5Csqrt{N})%20=%20O(N))](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;M%20=%20O(N%20-%20%5Csqrt{N})%20=%20O(N)) (The detailed deduction process is delegated to the readers). The total cost is still [![O(N)](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;O(N))](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;O(N)).
 
 We see that the time complexity of compression algorithm is not affected by the byte repetition pattern. It's always linear time. This nice property holds true as long as the underlying implementation of the code dict scales in sublinear factor.
 
@@ -193,31 +193,31 @@ Contrary to the compression algorithm, LZW decompression algorithm consumes a st
 
 Deciding on whether the code can be found in the string dict, the algorithm has **two** branches to go.
 
-If the code currently consumed can be found in the string dict, the algorithm goes to branch ![A](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;A), where basically four things happen. First, the decoded string coresponding to the current code is lookuped in the string dict. The decoded string is emitted as byte data. Then a new string constructed by appending the first byte of the decoded string to the running word is added to the string dict, ready for future use. The running word is then reset to be the decoded string. The algorithm then goes on to the next iteration.
+If the code currently consumed can be found in the string dict, the algorithm goes to branch [![A](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;A)](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;A), where basically four things happen. First, the decoded string coresponding to the current code is lookuped in the string dict. The decoded string is emitted as byte data. Then a new string constructed by appending the first byte of the decoded string to the running word is added to the string dict, ready for future use. The running word is then reset to be the decoded string. The algorithm then goes on to the next iteration.
 
-On the other hand, if the code currently consumed is not present in the string dict, a special situation happens and needs special care. Algorithm goes to branch ![B](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;B), where three things happen. A new string constructed by appending the first byte of the running word to the running word is added to the string dict for future use. This new string is emitted as byte data. Then the running word is reset to be the new string. The algorithm then goes on to the next iteration.
+On the other hand, if the code currently consumed is not present in the string dict, a special situation happens and needs special care. Algorithm goes to branch [![B](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;B)](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;B), where three things happen. A new string constructed by appending the first byte of the running word to the running word is added to the string dict for future use. This new string is emitted as byte data. Then the running word is reset to be the new string. The algorithm then goes on to the next iteration.
 
 The cost model for these two branches is then:
 
-![
+[![
 C_A = C(\mathrm{dict.lookup}) + C(\mathrm{str.concatenate}) + C(\mathrm{dict.add}) + C(\mathrm{str.copy})
-](https://latex.codecogs.com/svg.latex?\fn_cm&space;\small&space;C_A%20=%20C(%5Cmathrm{dict.lookup})%20%2B%20C(%5Cmathrm{str.concatenate})%20%2B%20C(%5Cmathrm{dict.add})%20%2B%20C(%5Cmathrm{str.copy}))
+](https://latex.codecogs.com/svg.latex?\fn_cm&space;\small&space;C_A%20=%20C(%5Cmathrm{dict.lookup})%20%2B%20C(%5Cmathrm{str.concatenate})%20%2B%20C(%5Cmathrm{dict.add})%20%2B%20C(%5Cmathrm{str.copy}))](https://latex.codecogs.com/svg.latex?\fn_cm&space;\small&space;C_A%20=%20C(%5Cmathrm{dict.lookup})%20%2B%20C(%5Cmathrm{str.concatenate})%20%2B%20C(%5Cmathrm{dict.add})%20%2B%20C(%5Cmathrm{str.copy}))
 
-![
+[![
 C_B = C(\mathrm{str.concatenate}) + C(\mathrm{dict.add}) + C(\mathrm{str.copy})
-](https://latex.codecogs.com/svg.latex?\fn_cm&space;\small&space;C_B%20=%20C(%5Cmathrm{str.concatenate})%20%2B%20C(%5Cmathrm{dict.add})%20%2B%20C(%5Cmathrm{str.copy}))
+](https://latex.codecogs.com/svg.latex?\fn_cm&space;\small&space;C_B%20=%20C(%5Cmathrm{str.concatenate})%20%2B%20C(%5Cmathrm{dict.add})%20%2B%20C(%5Cmathrm{str.copy}))](https://latex.codecogs.com/svg.latex?\fn_cm&space;\small&space;C_B%20=%20C(%5Cmathrm{str.concatenate})%20%2B%20C(%5Cmathrm{dict.add})%20%2B%20C(%5Cmathrm{str.copy}))
 
-Suppose the code stream length is ![N](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;N). Among the ![N](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;N) codes consumed by the algorithm, there are ![M](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;M) codes for whom the algorithm goes to branch A, and goes to branch ![B](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;B) for the other ![N-M](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;N-M) codes.
+Suppose the code stream length is [![N](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;N)](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;N). Among the [![N](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;N)](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;N) codes consumed by the algorithm, there are [![M](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;M)](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;M) codes for whom the algorithm goes to branch A, and goes to branch [![B](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;B)](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;B) for the other [![N-M](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;N-M)](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;N-M) codes.
 
-For simplicity, we assume that ![C(\mathrm{dict.lookup})](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(%5Cmathrm{dict.lookup})), ![C(\mathrm{dict.add})](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(%5Cmathrm{dict.add})), ![C(\mathrm{dict.membership\_check})](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(%5Cmathrm{dict.membership%5C_check})), ![C(\mathrm{str.concatenate})](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(%5Cmathrm{str.concatenate})), and ![C(\mathrm{str.copy})](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(%5Cmathrm{str.copy})) are fixed cost that don't vary upon different string sizes. This assumption is invalid/broken for large input, but that kind of case is very rare, so we are good with such hurtless simplification, as long as the strings are of reasonable lengths.
+For simplicity, we assume that [![C(\mathrm{dict.lookup})](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(%5Cmathrm{dict.lookup}))](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(%5Cmathrm{dict.lookup})), [![C(\mathrm{dict.add})](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(%5Cmathrm{dict.add}))](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(%5Cmathrm{dict.add})), [![C(\mathrm{dict.membership\_check})](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(%5Cmathrm{dict.membership%5C_check}))](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(%5Cmathrm{dict.membership%5C_check})), [![C(\mathrm{str.concatenate})](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(%5Cmathrm{str.concatenate}))](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(%5Cmathrm{str.concatenate})), and [![C(\mathrm{str.copy})](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(%5Cmathrm{str.copy}))](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;C(%5Cmathrm{str.copy})) are fixed cost that don't vary upon different string sizes. This assumption is invalid/broken for large input, but that kind of case is very rare, so we are good with such hurtless simplification, as long as the strings are of reasonable lengths.
 
-The probability of going to branch ![B](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;B) is relatively rare, so the major cost comes from branch ![A](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;A). The total cost model for the decompression algorithm is then:
+The probability of going to branch [![B](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;B)](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;B) is relatively rare, so the major cost comes from branch [![A](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;A)](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;A). The total cost model for the decompression algorithm is then:
 
-![
+[![
 C_{\mathrm{total}} = N * (C(\mathrm{dict.membership\_check}) +C(\mathrm{dict.lookup}) + C(\mathrm{str.concatenate}) + C(\mathrm{dict.add}) + C(\mathrm{str.copy}))
-](https://latex.codecogs.com/svg.latex?\fn_cm&space;\small&space;C_{%5Cmathrm{total}}%20=%20N%20*%20(C(%5Cmathrm{dict.membership%5C_check})%20%2BC(%5Cmathrm{dict.lookup})%20%2B%20C(%5Cmathrm{str.concatenate})%20%2B%20C(%5Cmathrm{dict.add})%20%2B%20C(%5Cmathrm{str.copy})))
+](https://latex.codecogs.com/svg.latex?\fn_cm&space;\small&space;C_{%5Cmathrm{total}}%20=%20N%20*%20(C(%5Cmathrm{dict.membership%5C_check})%20%2BC(%5Cmathrm{dict.lookup})%20%2B%20C(%5Cmathrm{str.concatenate})%20%2B%20C(%5Cmathrm{dict.add})%20%2B%20C(%5Cmathrm{str.copy})))](https://latex.codecogs.com/svg.latex?\fn_cm&space;\small&space;C_{%5Cmathrm{total}}%20=%20N%20*%20(C(%5Cmathrm{dict.membership%5C_check})%20%2BC(%5Cmathrm{dict.lookup})%20%2B%20C(%5Cmathrm{str.concatenate})%20%2B%20C(%5Cmathrm{dict.add})%20%2B%20C(%5Cmathrm{str.copy})))
 
-It's the same with that of the compression algorithm! The total cost model for the decompression algorithm turns out to be identical to that of the compression algorithm! They are both linear ![O(N)](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;O(N)). (under the precondition that the underlying implementation of string dict and code dict scales in sublinear factor)
+It's the same with that of the compression algorithm! The total cost model for the decompression algorithm turns out to be identical to that of the compression algorithm! They are both linear [![O(N)](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;O(N))](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;O(N)). (under the precondition that the underlying implementation of string dict and code dict scales in sublinear factor)
 
 ### Performance Analysis
 
@@ -243,7 +243,7 @@ We break the trade-off and decide to use hash table to implement the code dict a
 
 For simplicity, we do not customize our own hashing functions. `std::hash` is used instead. This could serve as a minor optimization candidate for future.
 
-Ideally, the hash table implemented code dict and string dict exhibit ![O(1)](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;O(1)) time complexity for all `dict.add`, `dict.lookup`, and `dict.membership_check` operations.
+Ideally, the hash table implemented code dict and string dict exhibit [![O(1)](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;O(1))](https://latex.codecogs.com/svg.latex?\inline&space;\fn_cm&space;\small&space;O(1)) time complexity for all `dict.add`, `dict.lookup`, and `dict.membership_check` operations.
 
 ## Hacks and Tricks
 
@@ -269,79 +269,6 @@ Deprecated.
 
 [![WTFPL](http://www.wtfpl.net/wp-content/uploads/2012/12/wtfpl-badge-1.png)](http://www.wtfpl.net/)
 
-
-## TODO
-
-<details open>
-<summary>TODO</summary>
-
-## TODO
-
-- Performance improvement. Profile to find performance hotspots. Use more advanced data structure to replace the naive hash table implementation.
-- Investigate hash table statistics (e.g., load factor, hit/miss rate, collision count)
-- Use more efficient hash algorithm for string data structure
-- Use more efficient hash table design algorithm. (cf. TAOCP Vol.3)
-- Consider use `.hpp` instead of `.h`
-- Add `const` modifier to member function that doesn't change member variables.
-- Choose semantic exception type
-- Use custom exceptions instead of lazily using `runtime_error` for every error places.
-- Inline member function
-- Add `const` modifier to parameter
-- Add print to `cerr` before throwing exception
-- Use Pass-by-reference for some parameters
-- Use command `nm` to check object files' symbols.
-- Add imported name as comment beside include directive
-- Remove unused includes.
-- Add unit test for all interface. Calculate test coverage with `gcov`.
-- Build shared/dynamic library
-- Add `inline` keyword to some short functions
-- Acquire empirical statistics of hash table collision condition.
-- Use optimization flag to compile before making performance benchmark.
-- Remove dead codes, outdated comments. Cleanup.
-- Consider separate template declaration and definition, refer to https://stackoverflow.com/questions/495021/why-can-templates-only-be-implemented-in-the-header-file
-- Consider use bitmap to implement Bitarray, for improving performance.
-- Use pytest-subtesthack.
-- Check for memory leak. (e.g. unmatched new-delete, malloc-free) Or use automatic tool, like valgrind.
-- Add \[SCOPE\] before every entry in TODO.md
-- Project idea: script to auto-generate Makefile
-  - Turn out that `g++ -M` can do the job.
-- Restructure project layout. `#include "lzw/utils.h"` instead of `#include "utils.h"`
-- Use `std::copy`, `std::hash`, `std::move`, `std::memcpy`, `std::map`, `std::swap`.
-- Implement variants of LZW algorithm. E.g., code size, code table whether to reuse. Encode algorithm parameters to lzwfile and let decode logic automatically inspect it.
-- The canonical copy-assignment operator is expected to perform no action on self-assignment. Ref: https://en.cppreference.com/w/cpp/language/operators
-- Other overloaded operator also some of them expect no action performed on self-assignment. Ref: https://en.cppreference.com/w/cpp/language/operators
-- Use immutable data structure to improve space efficiency.
-- Use VSCode C/C++ extension's rename functionality to rename `Code` to `int` and `Bytes` to `string`.
-- Try to use and master VSCode C/C++ extension's debug functionality.
-- Compare speed of LZW.py and liblzw
-- Wrap liblzw into CPython extension. Remove subprocess call overhead when testing using Python Hypothesis framework.
-  - Consider using Cython to fast prototype CPython extension.
-- Update CMakeLists.txt
-- Setup unit-test workflow. Include CI badge, about test suit passing status, and test coverage percentage.
-- Try C++ test frameworks.
-- Add GitHub badge about LOC (lines of code), or SLOC.
-- Add GitHub badge about "this repo uses sementic versioning".
-- State least supported C++ versions in README.
-- Consider deploying [auto-changelog-hook](https://github.com/MartinSeeler/auto-changelog-hook)
-- Consider align README.md big title to the center of the page.
-
-
-## Archive
-
-- Use `std::bitset` to replace self-made bitmap data structure.
-- Reimplement `Bytes` and `Bitarray` data strcutre. Use more efficient implementation.
-- Use C++11 move semantic to improve performance in vector resize process.
-- Put short inline-able member functions to header
-- clangformat configuration about `using namespace` statement
-- Add CUHK academic honesty header
-
-
-## TIL
-
-- Remeber to use flag `-static-libstdc++` when compiling C++ in MinGW Windows environment.
-- gcc's -I option "add the directory dir to the list of directories to be searched for header files. Directories named by -I are searched before the standard system include directories.", refer to: https://gcc.gnu.org/onlinedocs/gcc-4.9.2/gcc/Preprocessor-Options.html#Preprocessor-Options
-
-</details>
 
 ## CHANGELOG
 

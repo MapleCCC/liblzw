@@ -11,6 +11,7 @@ import click
 pprint = PrettyPrinter().pprint
 
 # TODO: handle case when inline equation spans multiple lines.
+# TODO: improve regular expression so that inline equation pattern doesn't match block equations
 
 # Use + instead of * because we don't want to match $$
 INLINE_EQUATION_PATTERN = re.compile(r"\$(.+?)\$")
@@ -27,25 +28,27 @@ class ConflictOptionsError(Exception):
     pass
 
 
-def cleanup(string: str) -> str:
-    string = string.strip()
-    string = string.replace("\n", " ")
-    escaped = urllib.parse.quote(string, safe=r"/{}()=*")  # type: ignore
+def preprocess(math_expr: str) -> str:
+    math_expr = math_expr.strip()
+    math_expr = math_expr.replace("\n", " ")
+    escaped = urllib.parse.quote(math_expr, safe=r"/{}()=*")  # type: ignore
     return escaped
 
 
 def inline_math_repl(matchobj: Match) -> AnyStr:
     math_expr = matchobj.group(1)
-    cleaned = cleanup(math_expr)
+    preprocessed = preprocess(math_expr)
     render_config = r"\inline&space;" + GLOBAL_RENDER_CONFIG
-    return f"![{math_expr}]({RENDER_SERVER_HOST_URL}{RENDER_IMG_FORMAT}.latex?{render_config}{cleaned})"
+    link = f"{RENDER_SERVER_HOST_URL}{RENDER_IMG_FORMAT}.latex?{render_config}{preprocessed}"
+    return f"[![{math_expr}]({link})]({link})"
 
 
 def block_math_repl(matchobj: Match) -> AnyStr:
     math_expr = matchobj.group(1)
-    cleaned = cleanup(math_expr)
+    preprocessed = preprocess(math_expr)
     render_config = GLOBAL_RENDER_CONFIG
-    return f"![{math_expr}]({RENDER_SERVER_HOST_URL}{RENDER_IMG_FORMAT}.latex?{render_config}{cleaned})"
+    link = f"{RENDER_SERVER_HOST_URL}{RENDER_IMG_FORMAT}.latex?{render_config}{preprocessed}"
+    return f"[![{math_expr}]({link})]({link})"
 
 
 @click.command()
