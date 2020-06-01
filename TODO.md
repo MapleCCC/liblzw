@@ -45,6 +45,8 @@
 - Add GitHub badge about LOC (lines of code), or SLOC.
 - Add GitHub badge about "this repo uses sementic versioning".
 - State least supported C++ versions in README.
+- Consider deploying [auto-changelog-hook](https://github.com/MartinSeeler/auto-changelog-hook)
+- Consider align README.md big title to the center of the page.
 
 
 ## Archive

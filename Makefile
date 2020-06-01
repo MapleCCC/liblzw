@@ -111,9 +111,13 @@ pdf:
 transform-eqn:
 	python3 ${SCRIPTS_DIR}/eqn2imgurl.py README.raw.md -o README.md
 
+# Alternatively, changelog can be renamed release-note
+changelog:
+	git shortlog
+
 install-pre-commit-hook-script:
 	cp ${SCRIPTS_DIR}/pre-commit.py .git/hooks/pre-commit
 
 .PHONY: all fast rebuild build-lib generate-deps test build-test unit-test
 .PHONY: integrate-test cov prof reformat compare-branch todo fixme clean
-.PHONY: pdf transform-eqn install-pre-commit-hook-script
+.PHONY: pdf transform-eqn changelog install-pre-commit-hook-script
