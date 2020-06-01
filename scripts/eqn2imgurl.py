@@ -35,17 +35,17 @@ def cleanup(string: str) -> str:
 
 
 def inline_math_repl(matchobj: Match) -> AnyStr:
-    math_exp = matchobj.group(1)
-    cleaned = cleanup(math_exp)
+    math_expr = matchobj.group(1)
+    cleaned = cleanup(math_expr)
     render_config = r"\inline&space;" + GLOBAL_RENDER_CONFIG
-    return f"![]({RENDER_SERVER_HOST_URL}{RENDER_IMG_FORMAT}.latex?{render_config}{cleaned})"
+    return f"![{math_expr}]({RENDER_SERVER_HOST_URL}{RENDER_IMG_FORMAT}.latex?{render_config}{cleaned})"
 
 
 def block_math_repl(matchobj: Match) -> AnyStr:
-    math_exp = matchobj.group(1)
-    cleaned = cleanup(math_exp)
+    math_expr = matchobj.group(1)
+    cleaned = cleanup(math_expr)
     render_config = GLOBAL_RENDER_CONFIG
-    return f"![]({RENDER_SERVER_HOST_URL}{RENDER_IMG_FORMAT}.latex?{render_config}{cleaned})"
+    return f"![{math_expr}]({RENDER_SERVER_HOST_URL}{RENDER_IMG_FORMAT}.latex?{render_config}{cleaned})"
 
 
 @click.command()
