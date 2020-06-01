@@ -25,19 +25,19 @@ TEST_PROGS=$(addprefix ${BUILD_DIR}/,$(patsubst %.cpp,%,$(notdir $(wildcard ${TE
 
 all: build/lzw
 
-fast: build/lzw.cpp
-	mkdir -p ${BUILD_DIR}
+fast: build/lzw.cpp | ${BUILD_DIR}
 	${CXX} ${CXXFLAGS} -Ofast $< -o build/lzw
 
-build/lzw: build/lzw.cpp
-	mkdir -p ${BUILD_DIR}
+build/lzw: build/lzw.cpp | ${BUILD_DIR}
 	${CXX} ${CXXFLAGS} -g $< -o $@
 
-build/lzw.cpp: main.cpp ${SRCS} ${INCS}
-	mkdir -p ${BUILD_DIR}
+build/lzw.cpp: main.cpp ${SRCS} ${INCS} | ${BUILD_DIR}
 	# use concatenate_source_file to concat entry files, then compile, so that we can save all the hassle of setting up obscure Makefile
 	concat $< -o $@ -I ${INC_DIR} -S ${SRC_DIR}
 	clang-format -i -style=file $@
+
+${BUILD_DIR}:
+	mkdir -p $@
 
 rebuild: clean all
 
@@ -50,15 +50,13 @@ ${BUILD_DIR}/liblzw.a: ${OBJS}
 
 generate-deps: ${DEPS}
 
-${BUILD_DIR}/%.d: ${SRC_DIR}/%.cpp
-	mkdir -p ${BUILD_DIR}
+${BUILD_DIR}/%.d: ${SRC_DIR}/%.cpp | ${BUILD_DIR}
 	@set -e; rm -f $@; \
 	$(CXX) -MM $< $(CXXFLAGS) $(CPPFLAGS) > $@.$$$$; \
 	sed 's,\($*\)\.o[ :]*,${BUILD_DIR}/\1.o $@ : ,g' < $@.$$$$ > $@; \
 	rm -f $@.$$$$
 
-${BUILD_DIR}/%.o: ${SRC_DIR}/%.cpp
-	mkdir -p ${BUILD_DIR}
+${BUILD_DIR}/%.o: ${SRC_DIR}/%.cpp | ${BUILD_DIR}
 	${CXX} -c -o $@ $< ${CXXFLAGS} ${CPPFLAGS}
 	# ${CXX} -MM $< ${CXXFLAGS} ${CPPFLAGS} > ${BUILD_DIR}/$*.d
 
@@ -81,8 +79,7 @@ cov:
 	# gcov ${SRCS}
 
 # TODO
-prof:
-	# mkdir -p ${BUILD_DIR}
+prof: | ${BUILD_DIR}
 	# ${CXX} ${CXXFLAGS} -pg -g -Ofast build/lzw.cpp -o build/lzw
 	# ${CXX} ${CXXFLAGS} -pg -g build/lzw.cpp -o build/lzw
 	# gprof ${PROGS}.exe gmon.out > prof_result

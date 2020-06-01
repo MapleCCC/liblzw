@@ -25,3 +25,4 @@
 - Remove sensitive information. The first commit.
 - Add unit test for bitmap data structure.
 - Add GitHub badge about release version.
+- Utilize Makefile syntax (order-only prerequisites) to specify that some directory need to pre-exist
