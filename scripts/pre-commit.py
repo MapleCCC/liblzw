@@ -118,12 +118,10 @@ def transform_readme() -> str:
 
 
 def main():
-    filepaths = list(get_staged_files())
-
     # 1. Format staged C/C++ code
     try:
 
-        for filepath in filepaths:
+        for filepath in get_staged_files():
             ext = get_filename_extension(filepath)
             if ext in CLANG_FORMAT_APPLICABLE_FILE_EXTENSIONS:
                 subprocess.run(
@@ -138,21 +136,21 @@ def main():
         new_readme_text = ""
 
         # 2. Transform LaTeX math equation in README.raw.md to image url in README.md
-        if "README.raw.md" in filepaths:
+        if get_file_status("README.raw.md") in ("M ", "  "):
             new_readme_text = transform_readme()
         else:
-            new_readme_text = Path("README.md").read_text(encoding="utf-8")
+            old_readme_text = Path("README.md").read_text(encoding="utf-8")
+            stripped = old_readme_text[:old_readme_text.find("## TODO")]
+            new_readme_text = stripped
 
         # 3. Append content of TODO.md and CHANGELOG.md to README.md
         if get_file_status("TODO.md") in ("M ", "  "):
             todo_text = Path("TODO.md").read_text(encoding="utf-8")
-            new_readme_text += (
-                f"\n<details>\n<summary>TODO</summary>\n\n{todo_text}\n</details>\n"
-            )
+            new_readme_text += f"\n## TODO\n\n<details open>\n<summary>TODO</summary>\n\n{todo_text}\n</details>\n"
 
         if get_file_status("CHANGELOG.md") in ("M ", "  "):
             changelog_text = Path("CHANGELOG.md").read_text(encoding="utf-8")
-            new_readme_text += f"\n<details>\n<summary>CHANGELOG</summary>\n\n{changelog_text}\n</details>\n"
+            new_readme_text += f"\n## CHANGELOG\n\n<details open>\n<summary>CHANGELOG</summary>\n\n{changelog_text}\n</details>\n"
 
         Path("README.md").write_text(new_readme_text, encoding="utf-8")
 
