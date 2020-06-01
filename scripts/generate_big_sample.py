@@ -1,6 +1,6 @@
 from random import sample
-from LZW.utils import ascii2byte
 
+from LZW.utils import ascii2byte
 
 # All possible one-length bytes
 VALID_CHARSET = [ascii2byte(i) for i in range(256)]

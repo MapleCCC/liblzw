@@ -117,6 +117,6 @@ transform-eqn:
 install-pre-commit-hook-script:
 	cp ${SCRIPTS_DIR}/pre-commit.py .git/hooks/pre-commit
 
-.PHONY: all fast rebuild build-lib test build-test unit-test integrate-test cov prof
-.PHONY: reformat compare-branch todo fixme clean pdf transform-eqn
-.PHONY: install-pre-commit-hook-script
+.PHONY: all fast rebuild build-lib generate-deps test build-test unit-test
+.PHONY: integrate-test cov prof reformat compare-branch todo fixme clean
+.PHONY: pdf transform-eqn install-pre-commit-hook-script

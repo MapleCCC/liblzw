@@ -1,0 +1,27 @@
+## Changelog
+
+- Multiple inclusion guard
+- Template class can't separate declaration and definition into two files.
+- Don't use `using namespace std;` in header files
+- Don't use `malloc` in C++. It can't correctly handle class initialization.
+- [str_dict] Add `str_cache` to reduce string membership check from `O(n)` to `O(1)`
+- Use `.tpp` as extension for templates
+- Use `std::string` and specialized `std::hash\<std::string\>` function object to replace wrapper type `Bytes`.
+- Use int and specialized `std::hash\<int\>` function object ot replace wrapper type `Code`.
+- Use `std::unordered_map` to replace self-made `dict` data structure.
+- Use `std::set` to replace self-made `set` data structure.
+- Use `std::hash`
+- Outdo lzw_example_win.exe
+- Out-of-source build
+- Build static library: liblzw.a
+- Improve CLI interface to be more user-friendly and intuitive.
+- Write README. Elaborate on algorithmic details. Elaborate on analysis of computational complexity.
+- Add git tag "submission milestone"
+- Customize commit hook: process README.raw.md to README.md with all latex equation transformed to images.
+- Add Travis CI pipeline. Automatically compile and test.
+- Create script to replace LaTeX math text with image url. For render in GitHub.
+- Release prebuild binary (static library, cli executable) and version-tagged source tarball.
+- Push to GitHub upstream.
+- Remove sensitive information. The first commit.
+- Add unit test for bitmap data structure.
+- Add GitHub badge about release version.

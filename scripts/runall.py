@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
-import click
 import subprocess
 from typing import List
+
+import click
 
 
 @click.command()

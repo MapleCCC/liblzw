@@ -17,7 +17,7 @@ An alternative implementation that utilizes more efficient self-made customized 
 
 ## Installation
 
-Pre-built binaries (Windows only) are available on the [Releases](https://github.com/MapleCCC/liblzw/releases/latest) page.
+Pre-built binaries (Windows only) are available on the [Releases](https://github.com/MapleCCC/liblzw/releases/latest) page. Release version conforms to [semantic versioning convention](https://semver.org/).
 
 ## Build
 
@@ -77,6 +77,8 @@ $ lzw decompress <ARCHIVE>
 ## Development
 
 Contribution is welcome. When commiting new code, make sure to apply format specified in `.clang-format` config file. Also remember to add `scripts/pre-commit.py` to `.git/hooks/pre-commit` as pre-commit hook script.
+
+Prerequisites: Git, Python3.6+, `pip`, and a modern C++ compiler: `g++` or `cl`.
 
 ```bash
 # Clone the repository to local environment
