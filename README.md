@@ -96,13 +96,15 @@ $ pip install -r requirements-dev.txt
 $ make install-pre-commit-hook-script
 ```
 
-The pre-commit hook script basically does three things:
+The pre-commit hook script basically does four things:
 
 1. Format staged C/C++ code
 
-2. Transform `LaTeX` math equation in `README.raw.md` to image url in `README.md`
+2. Format staged Python code
 
-3. Append content of `TODO.md` and `CHANGELOG.md` to `README.md`
+3. Transform `LaTeX` math equation in `README.raw.md` to image url in `README.md`
+
+4. Append content of `TODO.md` and `CHANGELOG.md` to `README.md`
 
 Besides relying on the pre-commit hook script, you can manually format code and transform math equations in `README.md`.
 

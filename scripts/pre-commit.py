@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 
-# This pre-commit hook script basically does three things:
+# This pre-commit hook script basically does four things:
 # 1. Format staged C/C++ code
-# 2. Transform LaTeX math equation in README.raw.md to image url in README.md
-# 3. Append content of TODO.md and CHANGELOG.md to README.md
+# 2. Format staged Python code
+# 3. Transform LaTeX math equation in README.raw.md to image url in README.md
+# 4. Append content of TODO.md and CHANGELOG.md to README.md
 
 # TODO: search in google with query: "git status machine readable"
 
@@ -12,6 +13,14 @@ import subprocess
 from pathlib import Path
 from subprocess import CalledProcessError
 from typing import Iterable, Tuple
+
+# TODO: use black and isort as Python moduel instead of invoke as subprocess, to
+# reduce subprocess call overhead.
+# import black
+# import isort
+# import sys
+# from isort.hooks import git_hook
+# sys.exit(git_hook(strict=True, modify=True))
 
 CLANG_FORMAT_APPLICABLE_FILE_EXTENSIONS = {
     "c",
@@ -137,18 +146,33 @@ def main():
     except CalledProcessError:
         raise RuntimeError("Format staged C/C++ code failed!")
 
+    # 2. Format staged Python code
+    try:
+
+        for filepath in get_staged_files():
+            ext = get_filename_extension(filepath)
+            if ext == "py":
+                # TODO: use black and isort as Python moduel instead of invoke
+                # as subprocess, to reduce subprocess call overhead.
+                subprocess.run(["isort", filepath]).check_returncode()
+                subprocess.run(["black", filepath]).check_returncode()
+                subprocess.run(["git", "add", filepath]).check_returncode()
+
+    except CalledProcessError:
+        raise RuntimeError("Format staged Python code failed!")
+
     try:
         new_readme_text = ""
 
-        # 2. Transform LaTeX math equation in README.raw.md to image url in README.md
+        # 3. Transform LaTeX math equation in README.raw.md to image url in README.md
         if get_file_status("README.raw.md") in ("M ", "  "):
             new_readme_text = transform_readme()
         else:
             old_readme_text = Path("README.md").read_text(encoding="utf-8")
-            stripped = old_readme_text[:old_readme_text.find("## TODO")]
+            stripped = old_readme_text[: old_readme_text.find("## TODO")]
             new_readme_text = stripped
 
-        # 3. Append content of TODO.md and CHANGELOG.md to README.md
+        # 4. Append content of TODO.md and CHANGELOG.md to README.md
         if get_file_status("TODO.md") in ("M ", "  "):
             todo_text = Path("TODO.md").read_text(encoding="utf-8")
             new_readme_text += f"\n## TODO\n\n<details open>\n<summary>TODO</summary>\n\n{todo_text}\n</details>\n"
