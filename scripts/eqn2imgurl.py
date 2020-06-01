@@ -35,20 +35,27 @@ def preprocess(math_expr: str) -> str:
     return escaped
 
 
-def inline_math_repl(matchobj: Match) -> AnyStr:
+def math_repl(matchobj: Match, mode="inline") -> AnyStr:
+    if mode == "inline":
+        render_config = r"\inline&space;" + GLOBAL_RENDER_CONFIG
+    elif mode == "block":
+        render_config = GLOBAL_RENDER_CONFIG
+    else:
+        raise ValueError("Invalid mode")
+
     math_expr = matchobj.group(1)
     preprocessed = preprocess(math_expr)
-    render_config = r"\inline&space;" + GLOBAL_RENDER_CONFIG
     link = f"{RENDER_SERVER_HOST_URL}{RENDER_IMG_FORMAT}.latex?{render_config}{preprocessed}"
-    return f"[![{math_expr}]({link})]({link})"
+    img_struct = f"![{math_expr}]({link})"
+    return f"[{img_struct}]({link})"
+
+
+def inline_math_repl(matchobj: Match) -> AnyStr:
+    return math_repl(matchobj, mode="inline")
 
 
 def block_math_repl(matchobj: Match) -> AnyStr:
-    math_expr = matchobj.group(1)
-    preprocessed = preprocess(math_expr)
-    render_config = GLOBAL_RENDER_CONFIG
-    link = f"{RENDER_SERVER_HOST_URL}{RENDER_IMG_FORMAT}.latex?{render_config}{preprocessed}"
-    return f"[![{math_expr}]({link})]({link})"
+    return math_repl(matchobj, mode="block")
 
 
 @click.command()
