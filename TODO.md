@@ -43,7 +43,7 @@
 - Setup unit-test workflow. Include CI badge, about test suit passing status, and test coverage percentage.
 - Try C++ test frameworks.
 - Add GitHub badge about LOC (lines of code), or SLOC.
-- Add GitHub badge about "this repo uses sementic versioning".
+- Add GitHub badge about "this repo uses semantic versioning".
 - State least supported C++ versions in README.
 - Consider deploying [auto-changelog-hook](https://github.com/MartinSeeler/auto-changelog-hook)
 - Consider align README.md big title to the center of the page.

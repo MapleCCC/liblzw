@@ -6,8 +6,8 @@
 - Don't use `malloc` in C++. It can't correctly handle class initialization.
 - [str_dict] Add `str_cache` to reduce string membership check from `O(n)` to `O(1)`
 - Use `.tpp` as extension for templates
-- Use `std::string` and specialized `std::hash\<std::string\>` function object to replace wrapper type `Bytes`.
-- Use int and specialized `std::hash\<int\>` function object ot replace wrapper type `Code`.
+- Use `std::string` and specialized `std::hash<std::string>` function object to replace wrapper type `Bytes`.
+- Use int and specialized `std::hash<int>` function object ot replace wrapper type `Code`.
 - Use `std::unordered_map` to replace self-made `dict` data structure.
 - Use `std::set` to replace self-made `set` data structure.
 - Use `std::hash`

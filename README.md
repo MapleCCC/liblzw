@@ -8,7 +8,7 @@
 
 ## Introduction
 
-LZW is an archive format that utilize power of LZW compression algorithm. LZW compression algorithm is a dictionary-based loseless algorithm. It's an old algorithm suitable for beginner to practice.
+LZW is an archive format that utilizes power of LZW compression algorithm. LZW compression algorithm is a dictionary-based loseless algorithm. It's an old algorithm suitable for beginner to practice.
 
 Internal algorithm processes byte data. So it's applicable to any file types, besides text file. Although it may not be able to achieve substantial compression rate for some file types that are already compressed efficiently, such as PDF files and MP4 files. It treats data as byte stream, unaware of the text-level pattern, which makes it less compression-efficient compared to other more advanced compression algorithms.
 
@@ -18,7 +18,7 @@ An alternative implementation that utilizes more efficient self-made customized 
 
 ## Installation
 
-Pre-built binaries (Windows only) are available on the [Releases](https://github.com/MapleCCC/liblzw/releases/latest) page. Release version conforms to [semantic versioning convention](https://semver.org/).
+Pre-built binaries (Windows only) are available on the [Releases](https://github.com/MapleCCC/liblzw/releases/latest) page. Release version conforms to the [semantic versioning convention](https://semver.org/).
 
 ## Build
 
@@ -110,14 +110,14 @@ The pre-commit hook script basically does four things:
 Besides relying on the pre-commit hook script, you can manually format code and transform math equations in `README.md`.
 
 ```bash
-# Format C/C++ code under the working directory
+# Format C/C++ and Python code under the working directory
 $ make reformat
 
 # Transform LaTeX math equations to image urls in README.md
 $ make transform-eqn
 ```
 
-The advantages of pre-commit hook script, compared to manual triggering scripts, is that it's convenient and un-disruptive, as it only introduces changes to staged files, not all files in the repo.
+The advantages of pre-commit hook script, compared to manual triggering scripts, is that it's convenient and un-disruptive, as it only introduces changes to staged files, instead of to all the files in the repo.
 
 ## Test
 
@@ -145,7 +145,7 @@ The advantages of pre-commit hook script, compared to manual triggering scripts,
 
 ### Complexity Analysis
 
-Before talking about performance, we first conduct some complexity analysis first. This help us understand the internal structure of the problem, and which and how various parts of the task contribute to the performance hotspots.
+Before talking about performance, we first conduct some complexity analysis. This help us understand the internal structure of the problem, and which and how various parts of the task contribute to the performance hotspots.
 
 #### Compression Algorithm Complexity
 
@@ -323,7 +323,7 @@ Deprecated.
 - Setup unit-test workflow. Include CI badge, about test suit passing status, and test coverage percentage.
 - Try C++ test frameworks.
 - Add GitHub badge about LOC (lines of code), or SLOC.
-- Add GitHub badge about "this repo uses sementic versioning".
+- Add GitHub badge about "this repo uses semantic versioning".
 - State least supported C++ versions in README.
 - Consider deploying [auto-changelog-hook](https://github.com/MartinSeeler/auto-changelog-hook)
 - Consider align README.md big title to the center of the page.
@@ -361,8 +361,8 @@ Deprecated.
 - Don't use `malloc` in C++. It can't correctly handle class initialization.
 - [str_dict] Add `str_cache` to reduce string membership check from `O(n)` to `O(1)`
 - Use `.tpp` as extension for templates
-- Use `std::string` and specialized `std::hash\<std::string\>` function object to replace wrapper type `Bytes`.
-- Use int and specialized `std::hash\<int\>` function object ot replace wrapper type `Code`.
+- Use `std::string` and specialized `std::hash<std::string>` function object to replace wrapper type `Bytes`.
+- Use int and specialized `std::hash<int>` function object ot replace wrapper type `Code`.
 - Use `std::unordered_map` to replace self-made `dict` data structure.
 - Use `std::set` to replace self-made `set` data structure.
 - Use `std::hash`
