@@ -6,6 +6,31 @@
 [![Semantic release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 [![LOC](https://sloc.xyz/github/MapleCCC/liblzw)](https://sloc.xyz/github/MapleCCC/liblzw)
 
+## Table of Contents
+
+* [LZW Compressor](#lzw-compressor)
+  * [Introduction](#introduction)
+  * [Installation](#installation)
+  * [Build](#build)
+  * [Usage](#usage)
+  * [Development](#development)
+  * [Test](#test)
+  * [Algorithmic Analysis](#algorithmic-analysis)
+    * [Complexity Analysis](#complexity-analysis)
+      * [Compression Algorithm Complexity](#compression-algorithm-complexity)
+      * [Decompression Algorithm Complexity](#decompression-algorithm-complexity)
+    * [Performance Analysis](#performance-analysis)
+      * [Rationale](#rationale)
+      * [Implementation Scheme](#implementation-scheme)
+  * [Hacks and Tricks](#hacks-and-tricks)
+    * [Stream Style IO](#stream-style-io)
+    * [Reserve Capacity to Reduce Resizing Cost](#reserve-capacity-to-reduce-resizing-cost)
+    * [Cached Incremental Hash State to Reduce Recomputation Cost](#cached-incremental-hash-state-to-reduce-recomputation-cost)
+    * [Immutable Data Structure to Reduce Space Cost](#immutable-data-structure-to-reduce-space-cost)
+  * [License](#license)
+
+<!-- TOC created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc.go) -->
+
 ## Introduction
 
 LZW is an archive format that utilizes power of LZW compression algorithm. LZW compression algorithm is a dictionary-based loseless algorithm. It's an old algorithm suitable for beginner to practice.
@@ -329,6 +354,7 @@ Deprecated.
 - Consider align README.md big title to the center of the page.
 - Add instructions to build dynamic library / shared library in README
 - In pre-commit hook script, use black and isort as Python moduel instead of invoke as subprocess, to reduce subprocess call overhead.
+- In pre-commit hook script, re-generate README TOC and insert.
 
 
 ## Archive
