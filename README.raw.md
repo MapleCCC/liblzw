@@ -82,7 +82,11 @@ $ lzw decompress <ARCHIVE>
 
 ## Development
 
-Contribution is welcome. When commiting new code, make sure to apply format specified in `.clang-format` config file. Also remember to add `scripts/pre-commit.py` to `.git/hooks/pre-commit` as pre-commit hook script.
+Contribution is welcome.
+
+- When commiting new code, make sure to apply format specified in `.clang-format` config file.
+- Don't directly modify `README.md`. It's automatically generated from the template `README.raw.md`. If you want to add something to README, modify the template `README.raw.md` instead.
+- Also remember to add `scripts/pre-commit.py` to `.git/hooks/pre-commit` as pre-commit hook script.
 
 Prerequisites: Git, Python3.6+, `pip`, `npm`, and a modern C++ compiler: `g++` or `cl`.
 

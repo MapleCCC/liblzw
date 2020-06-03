@@ -31,11 +31,9 @@
   - [Cached Incremental Hash State to Reduce Recomputation Cost](#cached-incremental-hash-state-to-reduce-recomputation-cost)
   - [Immutable Data Structure to Reduce Space Cost](#immutable-data-structure-to-reduce-space-cost)
 - [License](#license)
-- [TODO](#todo)
-- [TODO](#todo-1)
-- [Archive](#archive)
-- [TIL](#til)
-- [CHANGELOG](#changelog)
+- [Todo](#todo)
+  - [Archive](#archive)
+  - [TIL](#til)
 - [Changelog](#changelog)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -111,7 +109,11 @@ $ lzw decompress <ARCHIVE>
 
 ## Development
 
-Contribution is welcome. When commiting new code, make sure to apply format specified in `.clang-format` config file. Also remember to add `scripts/pre-commit.py` to `.git/hooks/pre-commit` as pre-commit hook script.
+Contribution is welcome.
+
+- When commiting new code, make sure to apply format specified in `.clang-format` config file.
+- Don't directly modify `README.md`. It's automatically generated from the template `README.raw.md`. If you want to add something to README, modify the template `README.raw.md` instead.
+- Also remember to add `scripts/pre-commit.py` to `.git/hooks/pre-commit` as pre-commit hook script.
 
 Prerequisites: Git, Python3.6+, `pip`, `npm`, and a modern C++ compiler: `g++` or `cl`.
 
@@ -310,12 +312,10 @@ Deprecated.
 [![WTFPL](http://www.wtfpl.net/wp-content/uploads/2012/12/wtfpl-badge-1.png)](http://www.wtfpl.net/)
 
 
-## TODO
+## Todo
 
 <details open>
 <summary>details</summary>
-
-## TODO
 
 - Performance improvement. Profile to find performance hotspots. Use more advanced data structure to replace the naive hash table implementation.
 - Investigate hash table statistics (e.g., load factor, hit/miss rate, collision count)
@@ -368,7 +368,7 @@ Deprecated.
 - In pre-commit hook script, use black and isort as Python moduel instead of invoke as subprocess, to reduce subprocess call overhead.
 
 
-## Archive
+### Archive
 
 - Use `std::bitset` to replace self-made bitmap data structure.
 - Reimplement `Bytes` and `Bitarray` data strcutre. Use more efficient implementation.
@@ -378,19 +378,17 @@ Deprecated.
 - Add CUHK academic honesty header
 
 
-## TIL
+### TIL
 
 - Remeber to use flag `-static-libstdc++` when compiling C++ in MinGW Windows environment.
 - gcc's -I option "add the directory dir to the list of directories to be searched for header files. Directories named by -I are searched before the standard system include directories.", refer to: https://gcc.gnu.org/onlinedocs/gcc-4.9.2/gcc/Preprocessor-Options.html#Preprocessor-Options
 
 </details>
 
-## CHANGELOG
+## Changelog
 
 <details open>
 <summary>details</summary>
-
-## Changelog
 
 - Multiple inclusion guard
 - Template class can't separate declaration and definition into two files.

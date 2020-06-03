@@ -1,5 +1,3 @@
-## TODO
-
 - Performance improvement. Profile to find performance hotspots. Use more advanced data structure to replace the naive hash table implementation.
 - Investigate hash table statistics (e.g., load factor, hit/miss rate, collision count)
 - Use more efficient hash algorithm for string data structure
@@ -51,7 +49,7 @@
 - In pre-commit hook script, use black and isort as Python moduel instead of invoke as subprocess, to reduce subprocess call overhead.
 
 
-## Archive
+### Archive
 
 - Use `std::bitset` to replace self-made bitmap data structure.
 - Reimplement `Bytes` and `Bitarray` data strcutre. Use more efficient implementation.
@@ -61,7 +59,7 @@
 - Add CUHK academic honesty header
 
 
-## TIL
+### TIL
 
 - Remeber to use flag `-static-libstdc++` when compiling C++ in MinGW Windows environment.
 - gcc's -I option "add the directory dir to the list of directories to be searched for header files. Directories named by -I are searched before the standard system include directories.", refer to: https://gcc.gnu.org/onlinedocs/gcc-4.9.2/gcc/Preprocessor-Options.html#Preprocessor-Options

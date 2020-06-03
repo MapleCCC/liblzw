@@ -1,5 +1,3 @@
-## Changelog
-
 - Multiple inclusion guard
 - Template class can't separate declaration and definition into two files.
 - Don't use `using namespace std;` in header files

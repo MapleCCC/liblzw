@@ -238,3 +238,4 @@ static
 
 *.gcno
 
+node_modules/

@@ -176,11 +176,11 @@ def main():
         # 4. Append content of TODO.md and CHANGELOG.md to README.md
         if get_file_status("TODO.md") in ("M ", "  "):
             todo_text = Path("TODO.md").read_text(encoding="utf-8")
-            new_readme_text += f"\n## TODO\n\n<details open>\n<summary>details</summary>\n\n{todo_text}\n</details>\n"
+            new_readme_text += f"\n## Todo\n\n<details open>\n<summary>details</summary>\n\n{todo_text}\n</details>\n"
 
         if get_file_status("CHANGELOG.md") in ("M ", "  "):
             changelog_text = Path("CHANGELOG.md").read_text(encoding="utf-8")
-            new_readme_text += f"\n## CHANGELOG\n\n<details open>\n<summary>details</summary>\n\n{changelog_text}\n</details>\n"
+            new_readme_text += f"\n## Changelog\n\n<details open>\n<summary>details</summary>\n\n{changelog_text}\n</details>\n"
 
         Path("README.md").write_text(new_readme_text, encoding="utf-8")
 
@@ -191,7 +191,7 @@ def main():
             NPX_EXECUTABLE = "npx.cmd"
         else:
             NPX_EXECUTABLE = "npx"
-        subprocess.run([NPX_EXECUTABLE, "doctoc", "README.md"]).check_returncode()
+        subprocess.run([NPX_EXECUTABLE, "doctoc", "README.md", "--github"]).check_returncode()
 
         subprocess.run(["git", "add", "README.md"]).check_returncode()
 
