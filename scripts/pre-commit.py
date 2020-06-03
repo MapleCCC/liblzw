@@ -5,6 +5,7 @@
 # 2. Format staged Python code
 # 3. Transform LaTeX math equation in README.raw.md to image url in README.md
 # 4. Append content of TODO.md and CHANGELOG.md to README.md
+# 5. Generate TOC for README.md
 
 # TODO: search in google with query: "git status machine readable"
 
@@ -182,6 +183,15 @@ def main():
             new_readme_text += f"\n## CHANGELOG\n\n<details open>\n<summary>details</summary>\n\n{changelog_text}\n</details>\n"
 
         Path("README.md").write_text(new_readme_text, encoding="utf-8")
+
+        # 5. Generate TOC for README.md
+
+        # TODO: use finer grained detection of operating system
+        if os.name == "nt":
+            NPX_EXECUTABLE = "npx.cmd"
+        else:
+            NPX_EXECUTABLE = "npx"
+        subprocess.run([NPX_EXECUTABLE, "doctoc", "README.md"]).check_returncode()
 
         subprocess.run(["git", "add", "README.md"]).check_returncode()
 

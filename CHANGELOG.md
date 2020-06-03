@@ -26,3 +26,4 @@
 - Add unit test for bitmap data structure.
 - Add GitHub badge about release version.
 - Utilize Makefile syntax (order-only prerequisites) to specify that some directory need to pre-exist
+- In pre-commit hook script, re-generate README TOC and insert.

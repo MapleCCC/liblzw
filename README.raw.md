@@ -6,30 +6,10 @@
 [![Semantic release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 [![LOC](https://sloc.xyz/github/MapleCCC/liblzw)](https://sloc.xyz/github/MapleCCC/liblzw)
 
-## Table of Contents
+## Table of Content
 
-* [LZW Compressor](#lzw-compressor)
-  * [Introduction](#introduction)
-  * [Installation](#installation)
-  * [Build](#build)
-  * [Usage](#usage)
-  * [Development](#development)
-  * [Test](#test)
-  * [Algorithmic Analysis](#algorithmic-analysis)
-    * [Complexity Analysis](#complexity-analysis)
-      * [Compression Algorithm Complexity](#compression-algorithm-complexity)
-      * [Decompression Algorithm Complexity](#decompression-algorithm-complexity)
-    * [Performance Analysis](#performance-analysis)
-      * [Rationale](#rationale)
-      * [Implementation Scheme](#implementation-scheme)
-  * [Hacks and Tricks](#hacks-and-tricks)
-    * [Stream Style IO](#stream-style-io)
-    * [Reserve Capacity to Reduce Resizing Cost](#reserve-capacity-to-reduce-resizing-cost)
-    * [Cached Incremental Hash State to Reduce Recomputation Cost](#cached-incremental-hash-state-to-reduce-recomputation-cost)
-    * [Immutable Data Structure to Reduce Space Cost](#immutable-data-structure-to-reduce-space-cost)
-  * [License](#license)
-
-<!-- TOC created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc.go) -->
+<!-- START doctoc -->
+<!-- END doctoc -->
 
 ## Overview
 
@@ -104,7 +84,7 @@ $ lzw decompress <ARCHIVE>
 
 Contribution is welcome. When commiting new code, make sure to apply format specified in `.clang-format` config file. Also remember to add `scripts/pre-commit.py` to `.git/hooks/pre-commit` as pre-commit hook script.
 
-Prerequisites: Git, Python3.6+, `pip`, and a modern C++ compiler: `g++` or `cl`.
+Prerequisites: Git, Python3.6+, `pip`, `npm`, and a modern C++ compiler: `g++` or `cl`.
 
 ```bash
 # Clone the repository to local environment
@@ -117,6 +97,7 @@ $ pip install -r requirements.txt
 
 # Install dev requirements
 $ pip install -r requirements-dev.txt
+$ npm install
 
 # Install pre-commit hook script
 $ make install-pre-commit-hook-script
@@ -131,6 +112,8 @@ The pre-commit hook script basically does four things:
 3. Transform `LaTeX` math equation in `README.raw.md` to image url in `README.md`
 
 4. Append content of `TODO.md` and `CHANGELOG.md` to `README.md`
+
+5. Generate TOC for `README.md`
 
 Besides relying on the pre-commit hook script, you can manually format code and transform math equations in `README.md`.
 
