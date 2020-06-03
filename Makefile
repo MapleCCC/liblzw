@@ -97,11 +97,11 @@ compare-branch:
 
 todo:
 	# ripgrep automatically skip undesired files and directories. Save the effort to manually exclude.
-	rg -ri TODO
+	rg TODO
 
 fixme:
 	# ripgrep automatically skip undesired files and directories. Save the effort to manually exclude.
-	rg -ri FIXME
+	rg FIXME
 
 clean:
 	rm -rf build
