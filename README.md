@@ -31,7 +31,7 @@
 
 <!-- TOC created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc.go) -->
 
-## Introduction
+## Overview
 
 LZW is an archive format that utilizes power of LZW compression algorithm. LZW compression algorithm is a dictionary-based loseless algorithm. It's an old algorithm suitable for beginner to practice.
 
@@ -301,7 +301,7 @@ Deprecated.
 ## TODO
 
 <details open>
-<summary>TODO</summary>
+<summary>details</summary>
 
 ## TODO
 
@@ -377,7 +377,7 @@ Deprecated.
 ## CHANGELOG
 
 <details open>
-<summary>CHANGELOG</summary>
+<summary>details</summary>
 
 ## Changelog
 
