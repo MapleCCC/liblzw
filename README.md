@@ -61,6 +61,10 @@ $ git clone https://github.com/MapleCCC/liblzw.git
 
 $ cd liblzw
 
+# You can optionally create a virtual environment for isolation purpose
+$ python -m virtualenv .venv
+$ source .venv/Scripts/activate
+
 # Install basic build requirements
 $ pip install -r requirements
 
@@ -122,6 +126,10 @@ Prerequisites: Git, Python3.6+, `pip`, `npm`, and a modern C++ compiler: `g++` o
 $ git clone https://github.com/MapleCCC/liblzw.git
 
 $ cd liblzw
+
+# You can optionally create a virtual environment for isolation purpose
+$ python -m virtualenv .venv
+$ source .venv/Scripts/activate
 
 # Install basic build requirements
 $ pip install -r requirements.txt
